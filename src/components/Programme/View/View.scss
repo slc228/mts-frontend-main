@@ -1,0 +1,137 @@
+@import "../../../config/constant.scss";
+
+.view {
+  position: relative;
+  .view-date-selector {
+    position: absolute;
+    z-index: 1;
+    right: 10px;
+    top: 10px
+  }
+  .region-rank {
+     position: absolute;
+     z-index: 1;
+     overflow: hidden;
+     right: 10px;
+     top: 10px;
+     width: 100px;
+     height: 200px;
+     .region-rank-item {
+       width: 100px;
+       font-size: 16px;
+       line-height: 20px;
+       height: 20px;
+     }
+   }
+  .view-wrap {
+
+    .latest-info {
+      width: 95%;
+      margin-left: 5%;
+      height: 100%;
+      overflow: hidden;
+      .theme {
+        color: black;
+        font-size: 16px;
+        font-weight: bolder;
+        margin: 10px 0px;
+        width: 100%;
+        text-align: center;
+      }
+      .summary {
+        border: 1px solid #2f54eb;
+        margin-right: 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+        line-height: 30px;
+        height: 30px;
+      }
+      .latest-info-item-group {
+        display: flex;
+        height: 80%;
+        margin-right: 20px;
+        align-items: center;
+        justify-items: center;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        .latest-info-item {
+          background: white;
+          height: 30%;
+          width: 24%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          border-radius: 5px;
+          border: 1px solid #2f54eb;
+          padding: 5px;
+          .title {
+            height: 25px;
+            white-space: nowrap;
+            color: #2f54eb;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+          .content {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+          }
+        }
+      }
+      .latest-info-item {
+        //background: rgba(255,255,255,0.95);
+        /*&:before {
+          content: '';
+          display: inline-block;
+          border-right: 10px solid #2f54eb;
+          border-left: 10px solid white;
+          border-top: 10px solid white;
+          border-bottom: 10px solid white;
+          background-color: #2f54eb;
+          position: absolute;
+          left: -20px;
+          top: 15px;
+        }
+        position: relative;
+        border: 1px solid #2f54eb;
+        width: 95%;
+        height: 50px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        .title {
+          color: #2f54eb;
+          padding: 0px 10px ;
+          width: 20%;
+          float: left;
+          white-space: nowrap;
+          line-height: 50px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        .content {
+          white-space: nowrap;
+          display: inline-block;
+          width: 75%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          line-height: 50px;
+        }*/
+      }
+    }
+  }
+  .dots {
+
+  }
+  .ant-carousel-vertical .slick-dots li button {
+    background: $default-blue;
+  }
+  .ant-carousel .slick-dots li.slick-active button {
+    background: $default-dark-blue;
+  }
+  .carousel-item {
+    //background: #100c2A;
+    background: white;
+    overflow: hidden;
+  }
+}

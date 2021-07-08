@@ -1,0 +1,20 @@
+@import "../../config/constant.scss";
+
+.mts-app-wrap {
+  width: 100%;
+  min-height: 100%;
+  min-width: 1000px;
+  .mts-app-body {
+  }
+  .mts-footer {
+    height: 50px;
+    background: $default-dark-blue;
+    color: white;
+    line-height: 50px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+html body #root {
+  height: 100%;
+}

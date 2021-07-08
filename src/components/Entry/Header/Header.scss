@@ -1,0 +1,67 @@
+@import "../../../config/constant.scss";
+
+.mts-header-container {
+  width: 100%;
+  min-width: 1000px;
+
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu{
+    margin: 0;
+    width: 120px;
+    text-align: center;
+    height: 50px;
+    border-bottom: none;
+    box-sizing: content-box;
+  }
+  .ant-menu-horizontal > .ant-menu-item a {
+    color: white;
+  }
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-active, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-active, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-open, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-open, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected {
+    border-bottom: none;
+    background: $default-light-blue;
+  }
+  .link {
+    font-size: 16px;
+    color: white;
+  }
+  .mts-header {
+    width: 100%;
+    position: sticky;
+    z-index: 1;
+    line-height: 50px;
+    background-color: $default-blue;
+    color: white;
+    height: 50px;
+    margin-bottom: 0;
+    box-sizing: content-box;
+    border-bottom: none;
+  }
+  .user-menu {
+    color: #ffffff99;
+    font-size: 16px;
+    width: 50px;
+    float: right;
+    margin-right: 20px;
+  }
+  .top-bar {
+    height: 50px;
+    background-color: $default-dark-blue;
+    color: white;
+    line-height: 50px;
+    .title {
+      font-size: 25px;
+      font-weight: bolder;
+      padding: 0 20px;
+    }
+    .username {
+      float: right;
+      font-size: 16px;
+    }
+    .logout {
+      float: right;
+      font-size: 16px;
+      text-decoration: underline;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+  }
+}

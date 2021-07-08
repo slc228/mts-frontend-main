@@ -1,0 +1,53 @@
+@import "../../../config/constant";
+
+.mts-multi-filter-radios {
+  span {
+    font-size: 16px;
+  }
+}
+.mts-multi-filter-container{
+  font-size: 16px;
+  .criteria {
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    .criteria-attr {
+      font-size: 16px;
+      display: inline-block;
+      width: 100px;
+    }
+  }
+  padding: 32px;
+  margin: 0 auto;
+  width: 80%;
+  min-width: 800px;
+  .mts-multi-filter-input {
+    margin-bottom: 16px;
+  }
+  .ant-form-item {
+    margin-bottom: 8px;
+    .ant-form-item-label {
+      text-align: center;
+    }
+    .mts-multi-filter-radios {
+      margin-left: 20px;
+    }
+    .mts-multi-filter-date-picker {
+      position: absolute;
+      right: 0;
+    }
+  }
+  .divider {
+    margin: 4px;
+  }
+  .mts-multi-filter-buttons-wrapper {
+    display: flex;
+    margin-top: 16px;
+    justify-content: center;
+    .mts-multi-filter-button {
+      width: 150px;
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+  }
+}

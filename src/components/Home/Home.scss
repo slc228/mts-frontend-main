@@ -1,0 +1,95 @@
+@import "../../config/constant";
+
+.home-wrap {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  .loading {
+    font-size: 100px;
+    display: block;
+    text-align: center;
+    margin-top: 150px;
+  }
+  .title {
+    font-size: 40px;
+    margin-top: 30px;
+    font-weight: bolder;
+    color: $default-light-blue;
+    z-index: 2;
+  }
+  .home-card {
+    width: 44%;
+    min-height: 500px;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    font-size: 18px;
+    .ant-card-head {
+      font-size: 20px;
+      font-weight: bolder;
+      color: $default-dark-blue;
+    }
+    .ant-card-body {
+      padding: 10px 20px;
+    }
+  }
+  .item {
+    font-size: 18px;
+    line-height: 40px;
+    cursor: pointer;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    .subtitle {
+      display: inline-block;
+      max-width: 80%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      float: left;
+    }
+    .subtitle2 {
+      display: inline-block;
+      max-width: 80%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      float: left;
+    }
+    .addr {
+      color: $default-light-blue;
+      font-size: 14px;
+      display: inline-block;
+      margin-left: 10px;
+    }
+    .addr2 {
+      color: $default-light-blue;
+      font-size: 14px;
+      display: inline-block;
+      margin: 0 5px
+    }
+    .content2 {
+      color: gray;
+      font-size: 16px;
+    }
+    .content {
+      //text-indent: 16px;
+      display: -webkit-box;
+      height: 45px;
+      color: gray;
+      font-size: 16px;
+      line-height: 20px;
+      width: 100%;
+      white-space: normal;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      background: whitesmoke;
+      -webkit-line-clamp: 2;
+      padding: 5px;
+    }
+  }
+
+}

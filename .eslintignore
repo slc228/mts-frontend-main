@@ -1,0 +1,13 @@
+# default path
+
+node_modules
+scripts
+config
+build
+electron.js
+node
+
+*.ts
+*.tsx
+
+# Add other ignored path here

@@ -1,0 +1,18 @@
+.view-wrap {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 10px;
+  background: whitesmoke;
+  .main-chart {
+    height: 100%;
+    width: 60%;
+  }
+  .left-chart, .right-chart {
+    height: 100%;
+    width: 20%;
+    .sub-item {
+      height: 50%;
+    }
+  }
+}

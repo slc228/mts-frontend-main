@@ -1,0 +1,18 @@
+@import "../../config/constant.scss";
+
+.admin-sider-wrap {
+  padding: 5px;
+  border-right: 1px solid #f5f5f5ff;
+  background: $default-blue;
+  .ant-menu {
+    background: $default-blue;
+    border: none;
+    color: white;
+    font-size: 16px;
+  }
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background: $default-light-blue;
+  color: white;
+}

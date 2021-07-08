@@ -1,0 +1,26 @@
+@import "../../config/constant";
+
+.login-wrap {
+  height: 100%;
+  display: flex;
+  background: $default-blue;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  .login-tabs {
+    position: relative;
+    opacity: 0.95;
+    width: 400px;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    .login-form {
+      margin: 16px;
+    }
+  }
+}
+.mts-title {
+  color: #00000085;
+  text-align: center;
+  font-weight: bolder;
+}

@@ -1,0 +1,24 @@
+.origin-form {
+  width: 90%;
+  margin: 30px auto;
+  background: white;
+  padding: 16px;
+  height: 90%;
+  .origin-table {
+    height: 90%;
+    overflow: auto;
+  }
+  .origin-new {
+    margin-bottom: 10px;
+    .origin-name { width: 150px; }
+    .origin-addr { width: calc(100% - 250px); }
+    button { width: 100px; }
+  }
+}
+.origin-wrap {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
