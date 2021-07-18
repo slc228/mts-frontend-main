@@ -1,6 +1,6 @@
 import moment from 'moment';
-import requests from '../../requests';
 import qs from 'qs';
+import requests from '../../requests';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -18,15 +18,9 @@ const getOverallData = async (keyword, source, startPublishedDay, endPublishedDa
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {
     dataSize: rawResult.hitNumber,
-    data: rawResult.dataContent ? rawResult.dataContent.map((item) => ({
-      source: item.fromType,
-      addr: item.resource,
-      url: item.webpageUrl,
-      sensi: item.cflag,
-      publishedDay: moment(item.publishedDay).format(DATE_FORMAT),
-      ...item,
-    })) : [],
+    data: rawResult.dataContent ? rawResult.dataContent : [],
   };
+  console.log(result.data);
   return result;
 };
 

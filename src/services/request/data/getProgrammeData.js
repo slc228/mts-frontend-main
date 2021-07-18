@@ -1,6 +1,6 @@
 import moment from 'moment';
-import requests from '../../requests';
 import qs from 'qs';
+import requests from '../../requests';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -19,14 +19,7 @@ const getProgrammeData = async (fid, keyword, source, startPublishedDay, endPubl
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {
     dataSize: rawResult.hitNumber,
-    data: rawResult.dataContent ? rawResult.dataContent.map((item) => ({
-      source: item.fromType,
-      addr: item.resource,
-      url: item.webpageUrl,
-      sensi: item.cflag,
-      publishedDay: moment(item.publishedDay).add(8, 'hours').format(DATE_FORMAT),
-      ...item,
-    })) : [],
+    data: rawResult.dataContent ? rawResult.dataContent : [],
   };
   return result;
 };

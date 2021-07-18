@@ -1,6 +1,6 @@
 import moment from 'moment';
-import requests from '../../requests';
 import qs from 'qs';
+import requests from '../../requests';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -12,9 +12,10 @@ const getOverallDataWithObject = async (keyword, source, startPublishedDay, endP
     fromType: source,
     cflag: sensi,
     page: pageId,
-    keywords: keywords ? JSON.stringify(keywords) : "[]",
+    keywords: keywords ? JSON.stringify(keywords) : '[]',
   };
   console.log(keyword);
+  console.log(keywords);
   const url = encodeURI(`${requests.getOverallDataWithObject.url}?${qs.stringify(params)}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
   const response = await fetch(url, { method: requests.getOverallDataWithObject.method });
   const rawResult = response.status === 200 ? await response.json() : {};

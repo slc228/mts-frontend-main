@@ -1,10 +1,10 @@
-import getSensitiveWord from "./request/data/getSensitiveWord";
+import getSensitiveWord from './request/data/getSensitiveWord';
 
 const domain1 = 'http://192.168.0.19:8082';
 const domain2 = 'http://localhost:3000/api';
 const domain3 = 'http://localhost:8082';
 const domain4 = 'http://202.120.40.69:28082';
-const curDomain = domain3;
+const curDomain = domain4;
 
 const requests = {
   getTopics: { url: `${curDomain}/data/getTags`, method: 'GET' },
@@ -40,7 +40,7 @@ const requests = {
   getProgrammeSentimentTrend: { url: `${curDomain}/data/sentimentTrendCount`, method: 'GET' },
 
   getSensitiveType: { url: `${curDomain}/data/textAlert`, method: 'POST' },
-  getSensitiveData: { url: `${curDomain}/data/sensitiveCount`, method: 'GET'},
+  getSensitiveData: { url: `${curDomain}/data/sensitiveCount`, method: 'GET' },
   get48AmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount3`, method: 'GET' },
   getActiveWeiboUser: { url: `${curDomain}/data/getActivateUser`, method: 'GET' },
   getWeiboUserData: { url: `${curDomain}/data/globalSearch/searchByUser`, method: 'GET' },
@@ -54,6 +54,11 @@ const requests = {
   getEventKeyWordByFid: { url: `${curDomain}/data/eventKeyWordByFid`, method: 'POST' },
   getHotArticle: { url: `${curDomain}/data/getHotArticle`, method: 'GET' },
   getWeiboUsers: { url: `${curDomain}/data/searchByWeiboUser`, method: 'GET' },
+  addWeiboUser: { url: `${curDomain}/data/addWeiboUser`, method: 'GET' },
+  getFangAnMonitor: { url: `${curDomain}/data/getFangAnMonitor`, method: 'GET' },
+  getWeiboByid: { url: `${curDomain}/data/getWeiboByid`, method: 'GET' },
+  getWeiboListByid: { url: `${curDomain}/data/getWeiboListByid`, method: 'GET' },
+  searchBriefWeiboUser: { url: `${curDomain}/data/searchBriefWeiboUser`, method: 'GET' },
 };
 
 export default requests;

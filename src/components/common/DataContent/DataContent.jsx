@@ -28,8 +28,7 @@ class DataContent extends React.Component {
       isKeyword: false,
       slice: content,
     }];
-    const sensitiveWord = result1.map((item) => item.sw);
-    const keyWord = result2.map((item) => item.kw);
+    const sensitiveWord = Array.isArray(result1) ? result1.map((item) => item.sw) : [];
     sensitiveWord.forEach((word) => {
       const newContentSlice = [];
       contentSlice.forEach((item) => {
@@ -54,6 +53,7 @@ class DataContent extends React.Component {
       });
       contentSlice = newContentSlice;
     });
+    const keyWord = Array.isArray(result2) ? result2.map((item) => item.kw) : [];
     keyWord.forEach((word) => {
       const newContentSlice = [];
       contentSlice.forEach((item) => {
@@ -78,7 +78,7 @@ class DataContent extends React.Component {
       });
       contentSlice = newContentSlice;
     });
-    console.log(contentSlice);
+
     this.setState({ contentSlice });
     /* let prevEnd = 0;
     result.forEach(item => {

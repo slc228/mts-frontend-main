@@ -14,10 +14,9 @@ const getWeiboUsers = async (fid, WeiboUserForSearch) => {
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {
     dataSize: rawResult.hitNumber,
-    data: rawResult.WeiboUserContent ? rawResult.WeiboUserContent.map((item) => ({
+    data: rawResult.Content ? rawResult.Content.map((item) => ({
       id: item.id,
       nickname: item.nickname,
-      isadded: item.isadded,
     })) : [],
   };
   return result;

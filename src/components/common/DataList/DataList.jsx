@@ -36,8 +36,8 @@ class DataList extends React.Component {
       }, */
       {
         title: '站点',
-        dataIndex: 'source',
-        key: 'source',
+        dataIndex: 'fromType',
+        key: 'fromType',
         render: this.renderSource,
         width: 100,
       },
@@ -80,8 +80,8 @@ class DataList extends React.Component {
       },
       {
         title: '操作',
-        dataIndex: 'url',
-        key: 'url',
+        dataIndex: 'webpageUrl',
+        key: 'webpageUrl',
         render: this.renderAddr,
         width: 100,
       },
@@ -99,7 +99,6 @@ class DataList extends React.Component {
   renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'));
 
   renderSource = (text) => {
-    console.log(text);
     const options = Lodash.find(criteria, { name: 'source' })?.options || [];
     return Lodash.find(options, { value: text })?.label || '';
   };

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Lodash from 'lodash';
 import moment from 'moment';
-import { Form, Input, Layout, Button } from 'antd';
+import { Form, Input, Layout, Button, Divider, List } from 'antd';
 import { SearchOutlined, LeftOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -37,78 +37,14 @@ class Overall extends Component {
       data: {},
       loading: false,
       src: undefined,
+      keywords: [],
     };
   }
 
   getCriteria = () => {
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId } = this.state;
-    const criteria = { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId };
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, keywords } = this.state;
+    const criteria = { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, keywords };
     return JSON.stringify(criteria);
-  };
-
-  handleSearch = async () => {
-    await this.setState({ loading: true });
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, data } = this.state;
-    const params = [keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId];
-    this.props.onOverallPathChange({ path: '/result' });
-    const result = await getOverallData(...params);
-    const newData = { ...data };
-    newData[this.getCriteria()] = result;
-    this.setState({
-      loading: false,
-      data: newData,
-    });
-    this.getContentTag();
-    this.getContentEmotion();
-    this.getSensitiveType();
-  };
-
-  getSensitiveType = async () => {
-    const criteria = this.getCriteria();
-    const contents = this.state.data[criteria]?.data.map((item) => item.content);
-    const tagResult = await getSensitiveType(contents);
-    const newData = { ...this.state.data };
-    const tags = tagResult.result;
-    newData[criteria].data = [...newData[criteria].data];
-    newData[criteria].data.forEach((item, index) => {
-      const tag = tags[index.toString()];
-      item.sensitiveType = tag || '';
-    });
-    this.setState({
-      data: newData,
-    });
-  };
-
-  getContentEmotion = async () => {
-    const criteria = this.getCriteria();
-    const contents = this.state.data[criteria]?.data.map((item) => item.content);
-    const tagResult = await getContentEmotion(contents, undefined);
-    const newData = { ...this.state.data };
-    const tags = tagResult.result;
-    newData[criteria].data = [...newData[criteria].data];
-    newData[criteria].data.forEach((item, index) => {
-      const tag = tags[index.toString()];
-      item.emotion = tag || '';
-    });
-    this.setState({
-      data: newData,
-    });
-  };
-
-  getContentTag = async () => {
-    const criteria = this.getCriteria();
-    const contents = this.state.data[criteria]?.data.map((item) => item.content);
-    const tagResult = await getContentTag(contents, undefined);
-    const newData = { ...this.state.data };
-    const tags = tagResult.result;
-    newData[criteria].data = [...newData[criteria].data];
-    newData[criteria].data.forEach((item, index) => {
-      const tag = tags[index.toString()];
-      item.tag = tag || '';
-    });
-    this.setState({
-      data: newData,
-    });
   };
 
   handleDateChange = (moments) => {
@@ -151,26 +87,26 @@ class Overall extends Component {
           break;
       }
     }
-    this.handleSearch();
+    this.handleSearchWithObject();
   };
 
   handlePageChange = (pageId) => {
     this.setState({ pageId }, () => {
-      this.handleSearch();
+      this.handleSearchWithObject();
     });
   };
 
   handlePageSizeChange = (current, pageSize) => {
     this.setState({ pageSize, pageId: 0 }, () => {
-      this.handleSearch();
+      this.handleSearchWithObject();
     });
   };
 
-  handleSearchWithObject = async (keywordObject) => {
+  handleSearchWithObject = async () => {
     await this.setState({ loading: true });
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, data } = this.state;
-    const params = [keywordObject.keyWord, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, keywordObject.Keywords];
-    /* this.props.onOverallPathChange({ path: '/result' }); */
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, data, keywords } = this.state;
+    const params = [keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, keywords];
+    this.props.onOverallPathChange({ path: '/result' });
     const result = await getOverallDataWithObject(...params);
     const newData = { ...data };
     newData[this.getCriteria()] = result;
@@ -178,14 +114,11 @@ class Overall extends Component {
       loading: false,
       data: newData,
     });
-    this.getContentTag();
-    this.getContentEmotion();
-    this.getSensitiveType();
   };
 
   handleKeywordChange = (keywordObject) => {
-    this.setState({ keyWord: keywordObject.keyWord }, () => {
-      this.handleSearchWithObject(keywordObject);
+    this.setState({ keyword: keywordObject.keyWord, keywords: keywordObject.Keywords }, () => {
+      this.handleSearchWithObject();
     });
   };
 
@@ -218,11 +151,51 @@ class Overall extends Component {
     const data = this.state.data[criteria]?.data || [];
     const dataSize = this.state.data[criteria]?.dataSize || 0;
     const { src } = this.state;
-
+    const dataList = [
+      'Racing car sprays burning fuel into crowd.',
+      'Japanese princess to wed commoner.',
+      'Australian walks 100km after outback crash.',
+      'Man charged over missing wedding girl.',
+      'Los Angeles battles huge wildfires.',
+    ];
     switch (curPath) {
       case '/result':
         return (
-          <div className="overall-wrap">
+          <div>
+            <Divider type="vertical">Default Size</Divider>
+            <div width="30%" align="center">
+              <List
+                header={<div>Header</div>}
+                footer={<div>Footer</div>}
+                bordered
+                dataSource={dataList}
+                renderItem={item => <List.Item>{item}</List.Item>}
+              />
+            </div>
+            <Divider type="vertical">Small Size</Divider>
+            <div width="30%" align="center">
+              <List
+                size="small"
+                header={<div>Header</div>}
+                footer={<div>Footer</div>}
+                bordered
+                dataSource={dataList}
+                renderItem={item => <List.Item>{item}</List.Item>}
+              />
+            </div>
+            <Divider type="vertical">Large Size</Divider>
+            <div width="30%" align="center">
+              <List
+                size="large"
+                header={<div>Header</div>}
+                footer={<div>Footer</div>}
+                bordered
+                dataSource={dataList}
+                renderItem={item => <List.Item>{item}</List.Item>}
+              />
+            </div>
+          </div>
+        /* <div className="overall-wrap">
             <div className="mts-overall-container">
               <GlobalMultiFilter
                 initialKeyword={keyword}
@@ -240,7 +213,7 @@ class Overall extends Component {
                 onPageSizeChange={this.handlePageSizeChange}
               />
             </div>
-          </div>
+          </div> */
         );
       case '':
         return (
@@ -253,13 +226,13 @@ class Overall extends Component {
               <div className="title">全网搜索 <SearchOutlined /></div>
               <Input
                 className="search-entry-input"
-                onChange={e => this.setState({keyword: e.target.value})}
+                onChange={e => this.setState({ keyword: e.target.value })}
                 value={keyword}
                 size="large"
-                onSearch={this.handleSearch}
+                onSearch={this.handleSearchWithObject}
               />
               <div className="btn-group">
-                <Button type="primary" onClick={this.handleSearch}>全库搜素</Button>
+                <Button type="primary" onClick={this.handleSearchWithObject}>全库搜素</Button>
                 <Button type="primary" onClick={this.handleBaiduSearch}>百度搜素</Button>
                 <Button type="primary" onClick={this.handle360Search}>360搜素</Button>
               </div>

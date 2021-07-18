@@ -22,7 +22,6 @@ const getHotArticle = async (pageSize, pageId) => {
       publishedDay: moment(item.publishedDay).add(8, 'hours').format(DATE_FORMAT),
     })) : [],
   };
-  console.log(result);
   return result;
 };
 

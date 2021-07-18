@@ -29,9 +29,6 @@ class GlobalMultiFilter extends React.Component {
     switch (type) {
       case 'submit':
         console.log(data);
-        if (!data.keyWord) {
-          data.keyWord = this.props.initialKeyword;
-        }
         if (this.props.onSearch) {
           this.props.onSearch(data);
         }
@@ -63,7 +60,7 @@ class GlobalMultiFilter extends React.Component {
               <Button
                 className="submit-btn"
                 type="primary"
-                style={{ width: '90%'}}
+                style={{ width: '90%' }}
                 htmlType="submit"
               >
                 搜索
@@ -82,11 +79,11 @@ class GlobalMultiFilter extends React.Component {
             {(fields, { add, remove }, { errors }) => (
               <>
                 <Form.Item
-                  style={{ width: '15%', float: 'left', textAlign: 'center'}}
+                  style={{ width: '15%', float: 'left', textAlign: 'center' }}
                 >
                   <Button
                     type="primary"
-                    style={{ width: '90%'}}
+                    style={{ width: '90%' }}
                     onClick={() => add()}
                   >
                     添加关键词
@@ -98,7 +95,7 @@ class GlobalMultiFilter extends React.Component {
                   <Form.Item
                     required={false}
                     key={field.key}
-                    style={{ width: '100%'}}
+                    style={{ width: '100%' }}
                   >
                     <Form.Item
                       {...field}
