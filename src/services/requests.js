@@ -1,4 +1,6 @@
 import getSensitiveWord from './request/data/getSensitiveWord';
+import getOverallDatOnNetwork from './request/data/getOverallDataOnNetwork';
+import getOverallDataBing from './request/data/getOverallDataBing';
 
 const domain1 = 'http://192.168.0.19:8082';
 const domain2 = 'http://localhost:3000/api';
@@ -59,6 +61,10 @@ const requests = {
   getWeiboByid: { url: `${curDomain}/data/getWeiboByid`, method: 'GET' },
   getWeiboListByid: { url: `${curDomain}/data/getWeiboListByid`, method: 'GET' },
   searchBriefWeiboUser: { url: `${curDomain}/data/searchBriefWeiboUser`, method: 'GET' },
+  getOverallDatOnNetwork: { url: `${curDomain}/data/getOverallDatOnNetwork`, method: 'GET' },
+  getOverallDataBing: { url: `${curDomain}/data/getOverallDataBing`, method: 'GET' },
+  getOverallData360: { url: `${curDomain}/data/getOverallData360`, method: 'GET' },
+  getOverallDataBaidu: { url: `${curDomain}/data/getOverallDataBaidu`, method: 'GET' },
 };
 
 export default requests;

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Lodash from 'lodash';
 import moment from 'moment';
-import { Form, Input, Layout, Button, Divider, List } from 'antd';
-import { SearchOutlined, LeftOutlined } from '@ant-design/icons';
+import { Form, Input, Layout, Button, Divider, List, Row, Col, Radio, Table } from 'antd';
+import { SearchOutlined, LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import MultiFilter from '../common/MultiFilter/MultiFilter';
@@ -10,6 +10,10 @@ import GlobalMultiFilter from '../common/GlobalMultiFilter/GlobalMultiFilter';
 import DataList from '../common/DataList/DataList';
 import getOverallData from '../../services/request/data/getOverallData';
 import getOverallDataWithObject from '../../services/request/data/getOverallDataWithObject';
+import getOverallDatOnNetwork from '../../services/request/data/getOverallDataOnNetwork';
+import getOverallData360 from '../../services/request/data/getOverallData360';
+import getOverallDataBing from '../../services/request/data/getOverallDataBing';
+import getOverallDataBaidu from '../../services/request/data/getOverallDataBaidu';
 import getContentTag from '../../services/request/data/getContentTag';
 import getContentEmotion from '../../services/request/data/getContentEmotion';
 import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
@@ -26,6 +30,9 @@ class Overall extends Component {
     super();
     this.state = {
       pageId: 0,
+      pageIdBaidu: 0,
+      pageId360: 0,
+      pageIdBing: 0,
       pageSize: PAGE_SIZE,
       keyword: '',
       source: null,
@@ -36,10 +43,51 @@ class Overall extends Component {
       timeOrder: 0,
       data: {},
       loading: false,
-      src: undefined,
+      loadingBaidu: false,
+      loading360: false,
+      loadingBing: false,
       keywords: [],
+      radiovalue: 1,
+      dataOfBaidu: [],
+      dataOf360: [],
+      dataOfBing: [],
     };
+    this.columnsBaidu = [
+      {
+        title: '百度搜索',
+        dataIndex: 'title',
+        key: 'title',
+        render: this.renderTitle,
+      },
+    ];
+    this.columns360 = [
+      {
+        title: '360搜索',
+        dataIndex: 'title',
+        key: 'title',
+        render: this.renderTitle,
+      },
+    ];
+    this.columnsBing = [
+      {
+        title: '必应搜索',
+        dataIndex: 'title',
+        key: 'title',
+        render: this.renderTitle,
+      },
+    ];
   }
+
+  renderTitle = (text, record) => {
+    const { title, url } = record;
+    return (
+      <a
+        href={url}
+      >
+        {title}
+      </a>
+    );
+  };
 
   getCriteria = () => {
     const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, keywords } = this.state;
@@ -122,23 +170,74 @@ class Overall extends Component {
     });
   };
 
-  handleBaiduSearch = () => {
-    const { keyword } = this.state;
+  onRadioChange= e => {
+    this.setState({ radiovalue: e.target.value });
+  };
+
+  handleSearchOnNetwork = async () => {
+    await this.setState({
+      loadingBaidu: true,
+      loading360: true,
+      loadingBing: true,
+    });
+    const { keyword, pageIdBaidu, pageId360, pageIdBing } = this.state;
+    this.props.onOverallPathChange({ path: '/network' });
+    this.recDataBaidu(keyword, pageIdBaidu);
+    this.recData360(keyword, pageId360);
+    this.recDataBing(keyword, pageIdBing);
+  };
+
+  recDataBaidu= async (keyword, pageId) => {
+    const resultBaidu = await getOverallDataBaidu(keyword, pageId);
     this.setState({
-      src: encodeURI(`https://www.baidu.com/s?ie=UTF-8&wd=${keyword}`),
+      loadingBaidu: false,
+      dataOfBaidu: resultBaidu,
     });
   };
 
-  closeIframe = () => {
+  recData360= async (keyword, pageId) => {
+    const result360 = await getOverallData360(keyword, pageId);
     this.setState({
-      src: undefined,
+      loading360: false,
+      dataOf360: result360,
     });
   };
 
-  handle360Search = () => {
-    const { keyword } = this.state;
+  recDataBing= async (keyword, pageId) => {
+    const resultBing = await getOverallDataBing(keyword, pageId);
     this.setState({
-      src: encodeURI(`https://www.so.com/s?ie=utf-8&fr=none&src=home_suggst_revise&nlpv=base_bt65&q=${keyword}&eci=`),
+      loadingBing: false,
+      dataOfBing: resultBing,
+    });
+  };
+
+  handleSearch = async () => {
+    const { radiovalue } = this.state;
+    if (radiovalue === 1) {
+      await this.handleSearchWithObject();
+    } else {
+      await this.handleSearchOnNetwork();
+    }
+  };
+
+  handleBaiduPageChange = (pagination) => {
+    this.setState({ pageIdBaidu: pagination.current - 1 }, () => {
+      const { keyword, pageIdBaidu } = this.state;
+      this.recDataBaidu(keyword, pageIdBaidu);
+    });
+  };
+
+  handle360PageChange = (pagination) => {
+    this.setState({ pageId360: pagination.current - 1 }, () => {
+      const { keyword, pageId360 } = this.state;
+      this.recData360(keyword, pageId360);
+    });
+  };
+
+  handleBingPageChange = (pagination) => {
+    this.setState({ pageIdBing: pagination.current - 1 }, () => {
+      const { keyword, pageIdBing } = this.state;
+      this.recDataBing(keyword, pageIdBing);
     });
   };
 
@@ -147,7 +246,7 @@ class Overall extends Component {
     const criteria = this.getCriteria();
     const curPath = this.props.overallPath;
     const current = Lodash.pick(this.state, params);
-    const { pageSize, keyword, loading } = this.state;
+    const { pageSize, keyword, loading, radiovalue, loadingBaidu, loading360, loadingBing, dataOfBaidu, dataOf360, dataOfBing } = this.state;
     const data = this.state.data[criteria]?.data || [];
     const dataSize = this.state.data[criteria]?.dataSize || 0;
     const { src } = this.state;
@@ -159,43 +258,103 @@ class Overall extends Component {
       'Los Angeles battles huge wildfires.',
     ];
     switch (curPath) {
-      case '/result':
+      case '/network':
         return (
           <div>
-            <Divider type="vertical">Default Size</Divider>
-            <div width="30%" align="center">
-              <List
-                header={<div>Header</div>}
-                footer={<div>Footer</div>}
-                bordered
-                dataSource={dataList}
-                renderItem={item => <List.Item>{item}</List.Item>}
-              />
-            </div>
-            <Divider type="vertical">Small Size</Divider>
-            <div width="30%" align="center">
-              <List
-                size="small"
-                header={<div>Header</div>}
-                footer={<div>Footer</div>}
-                bordered
-                dataSource={dataList}
-                renderItem={item => <List.Item>{item}</List.Item>}
-              />
-            </div>
-            <Divider type="vertical">Large Size</Divider>
-            <div width="30%" align="center">
-              <List
-                size="large"
-                header={<div>Header</div>}
-                footer={<div>Footer</div>}
-                bordered
-                dataSource={dataList}
-                renderItem={item => <List.Item>{item}</List.Item>}
-              />
-            </div>
+            <Row gutter={16}>
+              <Col className="gutter-row" span={8}>
+                <Table
+                  rowKey={(record) => record.title}
+                  columns={this.columnsBaidu}
+                  dataSource={dataOfBaidu}
+                  pagination={{
+                    position: ['none', 'bottomRight'],
+                    total: 100,
+                  }}
+                  loading={loadingBaidu}
+                  onChange={this.handleBaiduPageChange}
+                  style={{ fontSize: '16px' }}
+                />
+                {/* <List
+                  header={<div>百度搜索</div>}
+                  bordered
+                  dataSource={dataOfBaidu}
+                  loading={loadingBaidu}
+                  renderItem={item => (
+                    <List.Item>
+                      <a
+                        href={item.url}
+                      >
+                        {item.title}
+                      </a>
+                    </List.Item>
+                  )}
+                /> */}
+              </Col>
+              <Col className="gutter-row" span={8}>
+                <Table
+                  rowKey={(record) => record.title}
+                  columns={this.columns360}
+                  dataSource={dataOf360}
+                  pagination={{
+                    position: ['none', 'bottomRight'],
+                    total: 100,
+                  }}
+                  loading={loading360}
+                  onChange={this.handle360PageChange}
+                  style={{ fontSize: '16px' }}
+                />
+                {/* <List
+                  header={<div>360搜索</div>}
+                  bordered
+                  dataSource={dataOf360}
+                  loading={loading360}
+                  renderItem={item => (
+                    <List.Item>
+                      <a
+                        href={item.url}
+                      >
+                        {item.title}
+                      </a>
+                    </List.Item>
+                  )}
+                /> */}
+              </Col>
+              <Col className="gutter-row" span={8}>
+                <Table
+                  rowKey={(record) => record.title}
+                  columns={this.columnsBing}
+                  dataSource={dataOfBing}
+                  pagination={{
+                    position: ['none', 'bottomRight'],
+                    total: 100,
+                  }}
+                  loading={loadingBing}
+                  onChange={this.handleBingPageChange}
+                  style={{ fontSize: '16px' }}
+                />
+                {/* <List
+                  header={<div>必应搜索</div>}
+                  bordered
+                  dataSource={dataOfBing}
+                  loading={loadingBing}
+                  renderItem={item => (
+                    <List.Item>
+                      <a
+                        href={item.url}
+                      >
+                        {item.title}
+                      </a>
+                    </List.Item>
+                  )}
+                /> */}
+              </Col>
+            </Row>
           </div>
-        /* <div className="overall-wrap">
+        );
+      case '/result':
+        return (
+          <div className="overall-wrap">
             <div className="mts-overall-container">
               <GlobalMultiFilter
                 initialKeyword={keyword}
@@ -213,7 +372,7 @@ class Overall extends Component {
                 onPageSizeChange={this.handlePageSizeChange}
               />
             </div>
-          </div> */
+          </div>
         );
       case '':
         return (
@@ -224,26 +383,18 @@ class Overall extends Component {
           >
             <div className="search-entry-wrap">
               <div className="title">全网搜索 <SearchOutlined /></div>
-              <Input
+              <Radio.Group onChange={this.onRadioChange} value={radiovalue}>
+                <Radio value={1}>库内搜索</Radio>
+                <Radio value={2}>网络搜索</Radio>
+              </Radio.Group>
+              <Input.Search
                 className="search-entry-input"
                 onChange={e => this.setState({ keyword: e.target.value })}
                 value={keyword}
                 size="large"
-                onSearch={this.handleSearchWithObject}
+                onSearch={this.handleSearch}
               />
-              <div className="btn-group">
-                <Button type="primary" onClick={this.handleSearchWithObject}>全库搜素</Button>
-                <Button type="primary" onClick={this.handleBaiduSearch}>百度搜素</Button>
-                <Button type="primary" onClick={this.handle360Search}>360搜素</Button>
-              </div>
             </div>
-            {src && (
-            <div className="iframe-wrap">
-              <button className="close-btn" onClick={this.closeIframe}>x</button>
-              {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
-              <iframe className="iframe-content" src={src} />
-            </div>
-            )}
           </AutofitWrap>
         );
     }
