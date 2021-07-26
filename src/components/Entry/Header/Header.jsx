@@ -2,13 +2,13 @@ import React from 'react';
 import { Menu, Dropdown } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import { LogoutOutlined, RadarChartOutlined } from '@ant-design/icons';
 import getRoutes from '../getRoutes';
 import './Header.scss';
 import { connect } from 'react-redux';
 import logout from '../../../services/request/auth/logout';
 import login from '../../../services/request/auth/login';
-import { actions } from "../../../redux/actions";
-import { LogoutOutlined, RadarChartOutlined } from "@ant-design/icons";
+import { actions } from '../../../redux/actions';
 
 const history = createBrowserHistory();
 
@@ -44,7 +44,7 @@ class Header extends React.Component {
   };
 
   handleClick = (e) => {
-    if (e.key === 'search') this.props.onOverallPathChange({ path: ''});
+    if (e.key === 'search') this.props.onOverallPathChange({ path: '' });
     this.setState({ current: e.key });
   };
 
@@ -56,7 +56,7 @@ class Header extends React.Component {
     if (!routeLinks.includes(text)) text = 'home';
     this.setState({ current: text });
     history.listen((event) => {
-      const test = event.pathname;
+      const test = event.location.pathname;
       console.log(test);
       const current = test.substring(test.lastIndexOf('/') + 1, test.length);
       this.setState({ current });

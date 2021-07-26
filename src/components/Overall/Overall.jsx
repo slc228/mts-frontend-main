@@ -39,6 +39,7 @@ class Overall extends Component {
       startPublishedDay: null,
       endPublishedDay: null,
       sensi: null,
+      emotion: null,
       dateRange: null,
       timeOrder: 0,
       data: {},
@@ -78,11 +79,15 @@ class Overall extends Component {
     ];
   }
 
+  handleOpen = (text) => {
+    window.open(text);
+  };
+
   renderTitle = (text, record) => {
     const { title, url } = record;
     return (
       <a
-        href={url}
+        onClick={e => this.handleOpen(url)}
       >
         {title}
       </a>
@@ -90,8 +95,8 @@ class Overall extends Component {
   };
 
   getCriteria = () => {
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, keywords } = this.state;
-    const criteria = { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, keywords };
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, keywords } = this.state;
+    const criteria = { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, keywords };
     return JSON.stringify(criteria);
   };
 
@@ -152,10 +157,11 @@ class Overall extends Component {
 
   handleSearchWithObject = async () => {
     await this.setState({ loading: true });
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, data, keywords } = this.state;
-    const params = [keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, keywords];
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, data, keywords } = this.state;
+    const params = [keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, keywords];
     this.props.onOverallPathChange({ path: '/result' });
     const result = await getOverallDataWithObject(...params);
+    console.log(result);
     const newData = { ...data };
     newData[this.getCriteria()] = result;
     this.setState({
@@ -221,34 +227,35 @@ class Overall extends Component {
   };
 
   handleBaiduPageChange = (pagination) => {
-    this.setState({ pageIdBaidu: pagination.current - 1 }, () => {
+    this.setState({ pageIdBaidu: pagination.current - 1, loadingBaidu: true }, () => {
       const { keyword, pageIdBaidu } = this.state;
       this.recDataBaidu(keyword, pageIdBaidu);
     });
   };
 
   handle360PageChange = (pagination) => {
-    this.setState({ pageId360: pagination.current - 1 }, () => {
+    this.setState({ pageId360: pagination.current - 1, loading360: true }, () => {
       const { keyword, pageId360 } = this.state;
       this.recData360(keyword, pageId360);
     });
   };
 
   handleBingPageChange = (pagination) => {
-    this.setState({ pageIdBing: pagination.current - 1 }, () => {
+    this.setState({ pageIdBing: pagination.current - 1, loadingBing: true }, () => {
       const { keyword, pageIdBing } = this.state;
       this.recDataBing(keyword, pageIdBing);
     });
   };
 
   render() {
-    const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
+    const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay', 'emotion'];
     const criteria = this.getCriteria();
     const curPath = this.props.overallPath;
     const current = Lodash.pick(this.state, params);
-    const { pageSize, keyword, loading, radiovalue, loadingBaidu, loading360, loadingBing, dataOfBaidu, dataOf360, dataOfBing } = this.state;
+    const { pageSize, keyword, loading, radiovalue, loadingBaidu, loading360, loadingBing, dataOfBaidu, dataOf360 } = this.state;
     const data = this.state.data[criteria]?.data || [];
     const dataSize = this.state.data[criteria]?.dataSize || 0;
+    const dataOfBing = this.state.dataOfBing ? this.state.dataOfBing : [];
     const { src } = this.state;
     const dataList = [
       'Racing car sprays burning fuel into crowd.',
@@ -275,21 +282,6 @@ class Overall extends Component {
                   onChange={this.handleBaiduPageChange}
                   style={{ fontSize: '16px' }}
                 />
-                {/* <List
-                  header={<div>百度搜索</div>}
-                  bordered
-                  dataSource={dataOfBaidu}
-                  loading={loadingBaidu}
-                  renderItem={item => (
-                    <List.Item>
-                      <a
-                        href={item.url}
-                      >
-                        {item.title}
-                      </a>
-                    </List.Item>
-                  )}
-                /> */}
               </Col>
               <Col className="gutter-row" span={8}>
                 <Table
@@ -304,21 +296,6 @@ class Overall extends Component {
                   onChange={this.handle360PageChange}
                   style={{ fontSize: '16px' }}
                 />
-                {/* <List
-                  header={<div>360搜索</div>}
-                  bordered
-                  dataSource={dataOf360}
-                  loading={loading360}
-                  renderItem={item => (
-                    <List.Item>
-                      <a
-                        href={item.url}
-                      >
-                        {item.title}
-                      </a>
-                    </List.Item>
-                  )}
-                /> */}
               </Col>
               <Col className="gutter-row" span={8}>
                 <Table
@@ -333,21 +310,6 @@ class Overall extends Component {
                   onChange={this.handleBingPageChange}
                   style={{ fontSize: '16px' }}
                 />
-                {/* <List
-                  header={<div>必应搜索</div>}
-                  bordered
-                  dataSource={dataOfBing}
-                  loading={loadingBing}
-                  renderItem={item => (
-                    <List.Item>
-                      <a
-                        href={item.url}
-                      >
-                        {item.title}
-                      </a>
-                    </List.Item>
-                  )}
-                /> */}
               </Col>
             </Row>
           </div>

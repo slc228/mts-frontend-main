@@ -27,6 +27,7 @@ class Specific extends React.Component {
       startPublishedDay: '',
       endPublishedDay: '',
       sensi: null,
+      emotion: null,
       dateRange: null,
       loading: false,
       timeOrder: 0,
@@ -55,8 +56,8 @@ class Specific extends React.Component {
   handleSearch = async () => {
     await this.setState({ loading: true });
     const fid = this.props.curProgramme?.fid;
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, data } = this.state;
-    const params = [fid, keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId];
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, data } = this.state;
+    const params = [fid, keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId];
     const result = await getProgrammeData(...params);
     const newData = { ...data };
     newData[this.getCriteria()] = result;
@@ -85,7 +86,7 @@ class Specific extends React.Component {
     const newState = {};
     newState[name] = value;
     this.setState(newState);
-    const current = '2020-07-18 12:00:00';
+    const current = moment();
     if (name === 'dateRange') {
       switch (value) {
         case 0:
@@ -128,7 +129,7 @@ class Specific extends React.Component {
   };
 
   render() {
-    const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
+    const params = ['sensi', 'emotion', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
     const current = Lodash.pick(this.state, params);
     const criteria = this.getCriteria();
     const { curProgramme } = this.props;

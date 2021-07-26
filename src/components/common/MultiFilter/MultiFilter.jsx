@@ -35,10 +35,10 @@ class MultiFilter extends React.Component {
           defaultValue={initialKeyword}
         />
         <Form
-          labelCol={{ span: 3 }}
+          labelCol={{ span: 5 }}
           wrapperCol={{ span: 999 }}
         >
-          <div className="criteria" style={{ width: '50%'}}>
+          <div className="criteria">
             <span className="criteria-attr">{criteria[0].label}: </span>
             <Radio.Group
               className="mts-multi-filter-radios"
@@ -55,13 +55,14 @@ class MultiFilter extends React.Component {
               ))}
             </Radio.Group>
             {criteria[0].name === 'dateRange' && current[criteria[0].name] === -1 && (
-              <DatePicker.RangePicker
-                className="mts-multi-filter-date-picker"
-                onChange={this.handleDateChange}
-              />
+            <DatePicker.RangePicker
+              className="mts-multi-filter-date-picker"
+              onChange={this.handleDateChange}
+            />
             )}
           </div>
-          <div className="criteria" style={{ width: '50%'}}>
+          <Divider className="divider" />
+          <div className="criteria">
             <span className="criteria-attr">{criteria[1].label}: </span>
             <Radio.Group
               className="mts-multi-filter-radios"
@@ -78,10 +79,10 @@ class MultiFilter extends React.Component {
               ))}
             </Radio.Group>
             {criteria[1].name === 'dateRange' && current[criteria[1].name] === -1 && (
-              <DatePicker.RangePicker
-                className="mts-multi-filter-date-picker"
-                onChange={this.handleDateChange}
-              />
+            <DatePicker.RangePicker
+              className="mts-multi-filter-date-picker"
+              onChange={this.handleDateChange}
+            />
             )}
           </div>
           <Divider className="divider" />
@@ -102,10 +103,10 @@ class MultiFilter extends React.Component {
               ))}
             </Radio.Group>
             {criteria[2].name === 'dateRange' && current[criteria[2].name] === -1 && (
-              <DatePicker.RangePicker
-                className="mts-multi-filter-date-picker"
-                onChange={this.handleDateChange}
-              />
+            <DatePicker.RangePicker
+              className="mts-multi-filter-date-picker"
+              onChange={this.handleDateChange}
+            />
             )}
           </div>
           <Divider className="divider" />
@@ -126,10 +127,34 @@ class MultiFilter extends React.Component {
               ))}
             </Radio.Group>
             {criteria[3].name === 'dateRange' && current[criteria[3].name] === -1 && (
-              <DatePicker.RangePicker
-                className="mts-multi-filter-date-picker"
-                onChange={this.handleDateChange}
-              />
+            <DatePicker.RangePicker
+              className="mts-multi-filter-date-picker"
+              onChange={this.handleDateChange}
+            />
+            )}
+          </div>
+          <Divider className="divider" />
+          <div className="criteria">
+            <span className="criteria-attr">{criteria[4].label}: </span>
+            <Radio.Group
+              className="mts-multi-filter-radios"
+              value={current[criteria[4].name]}
+              onChange={(event) => this.handleSelect(event, criteria[4].name)}
+            >
+              {criteria[4].options.map((option) => (
+                <Radio
+                  value={option.value}
+                  key={option.value}
+                >
+                  {option.label}
+                </Radio>
+              ))}
+            </Radio.Group>
+            {criteria[4].name === 'dateRange' && current[criteria[4].name] === -1 && (
+            <DatePicker.RangePicker
+              className="mts-multi-filter-date-picker"
+              onChange={this.handleDateChange}
+            />
             )}
           </div>
           <Divider className="divider" />

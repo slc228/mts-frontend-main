@@ -1,21 +1,39 @@
 const criteria = [
   {
+    name: 'timeOrder',
+    label: '时间排序',
+    defaultValue: 0,
+    options: [
+      { label: '时间逆序', value: 0 },
+      { label: '时间顺序', value: 1 },
+    ],
+  },
+  {
     name: 'sensi',
     label: '敏感度',
     defaultValue: null,
     options: [
       { label: '不限', value: null },
-      { label: '敏感', value: '1' },
-      { label: '非敏感', value: '0' },
+      { label: '正常信息', value: '1' },
+      { label: '政治敏感', value: '2' },
+      { label: '广告营销', value: '3' },
+      { label: '不实信息', value: '4' },
+      { label: '人身攻击', value: '5' },
+      { label: '低俗信息', value: '6' },
     ],
   },
   {
-    name: 'timeOrder',
-    label: '时间排序',
-    defaultValue: 0,
+    name: 'emotion',
+    label: '情感',
+    defaultValue: null,
     options: [
-      { label: '时间顺序', value: 0 },
-      { label: '时间逆序', value: 1 },
+      { label: '不限', value: null },
+      { label: '中立', value: '1' },
+      { label: '愤怒', value: '2' },
+      { label: '恐惧', value: '3' },
+      { label: '惊讶', value: '4' },
+      { label: '悲伤', value: '5' },
+      { label: '积极', value: '6' },
     ],
   },
   {

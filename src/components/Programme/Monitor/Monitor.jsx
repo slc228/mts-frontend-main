@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Input, Card, Modal, Table, Button, List, Avatar, Divider, Space, Collapse, Carousel, Badge, Image } from 'antd';
-import { LoadingOutlined, MessageOutlined, ManOutlined, WomanOutlined, SendOutlined, LikeOutlined } from '@ant-design/icons';
+import { LoadingOutlined, MessageOutlined, ManOutlined, WomanOutlined, SendOutlined, LikeOutlined, CloseSquareFilled, PlusCircleFilled, UserOutlined } from '@ant-design/icons';
 import { color } from 'echarts';
 import moment from 'moment';
 import AutofitWrap from '../../common/AutofitWrap/AutofitWrap';
@@ -11,12 +11,12 @@ import addWeiboUser from '../../../services/request/data/addWeiboUser';
 import getFangAnMonitor from '../../../services/request/data/getFangAnMonitor';
 import getWeiboListByid from '../../../services/request/data/getWeiboListByid';
 import searchBriefWeiboUser from '../../../services/request/data/searchBriefWeiboUser';
+import deleteWeiboUser from '../../../services/request/data/deleteWeiboUser';
 
 class Monitor extends React.Component {
   constructor() {
     super();
     this.state = {
-      selectedRowKeys: [],
       WeiboUserForSearch: '',
       SearchedWeiboUser: {},
       loading: false,
@@ -30,13 +30,20 @@ class Monitor extends React.Component {
         dataIndex: 'uri',
         key: 'uri',
         render: this.renderId,
-        width: 100,
+        width: 200,
       },
       {
         title: '微博昵称',
         dataIndex: 'nickname',
         key: 'nickname',
         render: this.renderNickname,
+        width: 200,
+      },
+      {
+        title: '操作',
+        dataIndex: 'add',
+        key: 'add',
+        render: this.renderAddButton,
         width: 100,
       },
     ];
@@ -45,6 +52,16 @@ class Monitor extends React.Component {
   renderId = (text) => <span style={{ color: 'blue' }}>{text}</span>;
 
   renderNickname = (text) => <span style={{ color: 'blue' }}>{text}</span>;
+
+  renderAddButton = (text, record) => (
+    <Button
+      type="primary"
+      icon={<PlusCircleFilled />}
+      onClick={() => this.handleAddWeiboUser(record.uri, record.nickname)}
+    >
+      添加该用户
+    </Button>
+  );
 
   componentDidMount() {
     this.props.onMonitorPathChange({ path: '' });
@@ -106,32 +123,27 @@ class Monitor extends React.Component {
     });
   };
 
-  handleSampleSubmit= async (e) => {
-    const { selectedRowKeys } = this.state;
+  handleAddWeiboUser= async (uri, nickname) => {
     const { fid } = this.props.curProgramme;
-    let print1 = '';
-    let print2 = '';
-    // eslint-disable-next-line no-plusplus
-    for (let j = 0; j < selectedRowKeys.length; j++) {
-      // eslint-disable-next-line no-await-in-loop
-      const ret = await addWeiboUser(fid, selectedRowKeys[j].uri, selectedRowKeys[j].nickname);
-      if (ret.addWeiboUser !== 1) {
-        print1 = `${print1}id: ${selectedRowKeys[j].uri}昵称: ${selectedRowKeys[j].nickname} \n `;
-      } else {
-        print2 = `${print2}id: ${selectedRowKeys[j].uri}昵称: ${selectedRowKeys[j].nickname} \n `;
-      }
+    /* const ret = await addWeiboUser(fid, uri, nickname);
+    if (ret.addWeiboUser !== 1) {
+      alert('添加失败');
+    } else {
+      alert('添加成功');
+    } */
+    addWeiboUser(fid, uri, nickname);
+    alert('添加成功');
+    await this.handleSearch();
+  };
+
+  handleDeleteWeiboUser= async (uri, nickname) => {
+    const { fid } = this.props.curProgramme;
+    const ret = await deleteWeiboUser(fid, uri, nickname);
+    if (ret.deleteWeiboUser === 1) {
+      alert('删除成功');
+    } else {
+      alert('删除失败');
     }
-    let print = '';
-    if (print1 !== '') {
-      print = `${print1}添加失败 \n `;
-    }
-    if (print2 !== '') {
-      print = `${print + print2}添加成功 \n `;
-    }
-    alert(print);
-    this.setState({
-      sampleVisible: false,
-    });
   };
 
   onSelectChange = selectedRowKeys => {
@@ -144,10 +156,6 @@ class Monitor extends React.Component {
     const WeiboList = this.state.WeiboList || [];
     const curPath = this.props.monitorPath;
     const { fid } = this.props.curProgramme;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
 
     // eslint-disable-next-line default-case
     switch (curPath) {
@@ -245,11 +253,10 @@ class Monitor extends React.Component {
                 title="添加监测用户"
                 visible={sampleVisible}
                 width={720}
-                onOk={this.handleSampleSubmit}
+                footer={null}
                 onCancel={this.handleSampleCancel}
               >
                 <Table
-                  rowSelection={rowSelection}
                   pagination={{
                     pageSize: 5,
                   }}
@@ -272,23 +279,43 @@ class Monitor extends React.Component {
                   pageSize: 5,
                 }}
                 dataSource={FangAnMonitor}
-                renderItem={item => (
+                renderItem={item => (!item.userid ? (
+                  <List.Item>
+                    <List.Item.Meta
+                      avatar={(
+                        <Avatar icon={<UserOutlined />} />
+                        )}
+                      title={(
+                        <a>数据正在爬取中,请稍候!</a>
+                        )}
+                    />
+                  </List.Item>
+                ) : (
                   <List.Item
                     key={item.title}
+                    extra={(
+                      <Button
+                        type="primary"
+                        icon={<CloseSquareFilled />}
+                        onClick={() => this.handleDeleteWeiboUser(item.userid, item.nickname)}
+                      >
+                        删除该用户
+                      </Button>
+                          )}
                   >
                     <List.Item.Meta
                       avatar={(
                         <Badge dot={item.isnew === 1}>
                           <Avatar src={item.user_avatar} />
                         </Badge>
-                      )}
+                            )}
                       title={(
                         <div onClick={e => this.handleOpen(item.userid, item)}>
                           <a>{item.nickname}</a>
                           <Divider type="vertical" />
                           {item.gender === '男' ? <ManOutlined style={{ color: '#1890FF' }} /> : <WomanOutlined style={{ color: '#FFB6C1' }} />}
                         </div>
-                      )}
+                            )}
                       description={(
                         <div style={{ color: 'black' }}>
                           <Space size="small" direction="vertical">
@@ -305,10 +332,11 @@ class Monitor extends React.Component {
                             </div>
                           </Space>
                         </div>
-                      )}
+                            )}
                     />
                     {item.content}
                   </List.Item>
+                )
                 )}
               />
             </div>

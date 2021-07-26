@@ -4,18 +4,17 @@ import requests from '../../requests';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-const getOverallDataWithObject = async (keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, keywords) => {
+const getOverallDataWithObject = async (keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, keywords) => {
   const params = {
     keyword,
     timeOrder,
     pageSize,
     fromType: source,
-    cflag: sensi,
+    sensitiveType: sensi,
+    emotion,
     page: pageId,
     keywords: keywords ? JSON.stringify(keywords) : '[]',
   };
-  console.log(keyword);
-  console.log(keywords);
   const url = encodeURI(`${requests.getOverallDataWithObject.url}?${qs.stringify(params)}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
   const response = await fetch(url, { method: requests.getOverallDataWithObject.method });
   const rawResult = response.status === 200 ? await response.json() : {};

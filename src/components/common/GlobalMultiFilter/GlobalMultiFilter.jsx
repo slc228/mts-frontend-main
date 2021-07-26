@@ -28,7 +28,6 @@ class GlobalMultiFilter extends React.Component {
     // eslint-disable-next-line default-case
     switch (type) {
       case 'submit':
-        console.log(data);
         if (this.props.onSearch) {
           this.props.onSearch(data);
         }
@@ -126,10 +125,10 @@ class GlobalMultiFilter extends React.Component {
 
         </Form>
         <Form
-          labelCol={{ span: 3 }}
+          labelCol={{ span: 5 }}
           wrapperCol={{ span: 999 }}
         >
-          <div className="criteria" style={{ width: '50%' }}>
+          <div className="criteria">
             <span className="criteria-attr">{criteria[0].label}: </span>
             <Radio.Group
               className="mts-multi-filter-radios"
@@ -152,7 +151,8 @@ class GlobalMultiFilter extends React.Component {
               />
             )}
           </div>
-          <div className="criteria" style={{ width: '50%' }}>
+          <Divider className="divider" />
+          <div className="criteria">
             <span className="criteria-attr">{criteria[1].label}: </span>
             <Radio.Group
               className="mts-multi-filter-radios"
@@ -221,6 +221,30 @@ class GlobalMultiFilter extends React.Component {
                 className="mts-multi-filter-date-picker"
                 onChange={this.handleDateChange}
               />
+            )}
+          </div>
+          <Divider className="divider" />
+          <div className="criteria">
+            <span className="criteria-attr">{criteria[4].label}: </span>
+            <Radio.Group
+              className="mts-multi-filter-radios"
+              value={current[criteria[4].name]}
+              onChange={(event) => this.handleSelect(event, criteria[4].name)}
+            >
+              {criteria[4].options.map((option) => (
+                <Radio
+                  value={option.value}
+                  key={option.value}
+                >
+                  {option.label}
+                </Radio>
+              ))}
+            </Radio.Group>
+            {criteria[4].name === 'dateRange' && current[criteria[4].name] === -1 && (
+            <DatePicker.RangePicker
+              className="mts-multi-filter-date-picker"
+              onChange={this.handleDateChange}
+            />
             )}
           </div>
           <Divider className="divider" />
