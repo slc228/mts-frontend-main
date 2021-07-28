@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Input, Card, Modal, Table, Button, List, Avatar, Divider, Space, Collapse, Carousel, Badge, Image } from 'antd';
-import { LoadingOutlined, MessageOutlined, ManOutlined, WomanOutlined, SendOutlined, LikeOutlined, CloseSquareFilled, PlusCircleFilled, UserOutlined } from '@ant-design/icons';
+import { Input, Card, Modal, Table, Button, List, Avatar, Divider, Space, Collapse, Carousel, Badge, Image, PageHeader } from 'antd';
+import { LoadingOutlined, MessageOutlined, ManOutlined, WomanOutlined, SendOutlined, LikeOutlined, CloseSquareFilled, PlusCircleFilled, UserOutlined, RollbackOutlined } from '@ant-design/icons';
 import { color } from 'echarts';
 import moment from 'moment';
 import AutofitWrap from '../../common/AutofitWrap/AutofitWrap';
@@ -150,6 +150,11 @@ class Monitor extends React.Component {
     this.setState({ selectedRowKeys });
   };
 
+  handleRoolback = (e) => {
+    this.props.onMonitorPathChange({ path: '' });
+    this.handleGetFangAnMonitor();
+  };
+
   render() {
     const { username, loading, sampleVisible, SearchedWeiboUser, selectedRowKeys, WeiboUserForSearch } = this.state;
     const FangAnMonitor = this.state.FangAnMonitor || [];
@@ -165,6 +170,16 @@ class Monitor extends React.Component {
             <List
               itemLayout="vertical"
               size="large"
+              header={(
+                <Button
+                  type="text"
+                  size="large"
+                  icon={<RollbackOutlined />}
+                  onClick={this.handleRoolback}
+                >
+                  返回上一级
+                </Button>
+              )}
               pagination={{
                 onChange: page => {
                   console.log(page);
