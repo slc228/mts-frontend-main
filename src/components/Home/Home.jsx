@@ -2,16 +2,16 @@ import React from 'react';
 import '../../utils/tagCanvas';
 import './Home.scss';
 import { Carousel, Card, Table } from 'antd';
+import moment from 'moment';
+import { LoadingOutlined } from '@ant-design/icons';
+import Lodash from 'lodash';
 import requests from '../../services/requests';
 import constant from '../../config/constant';
 import DataContent from '../common/DataContent/DataContent';
 import getOverallData from '../../services/request/data/getOverallData';
-import moment from "moment";
-import AutofitWrap from "../common/AutofitWrap/AutofitWrap";
-import Loading from "../common/Loading/Loading";
-import { LoadingOutlined } from "@ant-design/icons";
-import Lodash from "lodash";
-import criteria from "../common/MultiFilter/criteria";
+import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
+import Loading from '../common/Loading/Loading';
+import criteria from '../common/MultiFilter/criteria';
 
 const contentStyle = {
   height: '160px',
@@ -51,7 +51,7 @@ class Home extends React.Component {
   };
 
   getSensitiveInfo = async () => {
-    this.setState({ sensitiveLoading: true })
+    this.setState({ sensitiveLoading: true });
     const PAGE_SIZE = 10;
     const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     const params = [
@@ -72,7 +72,7 @@ class Home extends React.Component {
   };
 
   getLatestInfo = async () => {
-    this.setState({ latestLoading: true })
+    this.setState({ latestLoading: true });
     const PAGE_SIZE = 10;
     const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     const params = [
@@ -177,8 +177,7 @@ class Home extends React.Component {
                 </span>
               </div>
             )) :
-            <Loading />
-          }
+            <Loading />}
         </Card>
         <Card
           title="最新舆情"
@@ -208,12 +207,11 @@ class Home extends React.Component {
                   [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
                 </span>
                 <span className="content2">
-                  {item.content.replace(/\\n/g, '')}
+                  {item.content ? item.content.replace(/\\n/g, '') : null}
                 </span>
               </div>
             )) :
-            <Loading />
-          }
+            <Loading />}
         </Card>
         <DataContent
           record={curRecord}

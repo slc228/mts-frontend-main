@@ -120,6 +120,7 @@ class DataList extends React.Component {
 
   renderSensitiveType = (text) => {
     if (text === '正常信息 ') return text;
+    if (text === '政治敏感 ') return <span style={{ color: 'red' }}>敏感</span>;
     if (text) return <span style={{ color: 'red' }}>{text}</span>;
     return <LoadingOutlined />;
   };
@@ -127,7 +128,9 @@ class DataList extends React.Component {
   renderTitle = (text, record) => {
     const { content, source } = record;
     let renderTxt = '';
-    renderTxt = `${content.slice(0, 100)}`;
+    if (content) {
+      renderTxt = `${content.slice(0, 100)}`;
+    }
     return (
       <div
         onClick={() => this.handleTitleClicked(record)}

@@ -15,7 +15,7 @@ const criteria = [
     options: [
       { label: '不限', value: null },
       { label: '正常信息', value: '1' },
-      { label: '政治敏感', value: '2' },
+      { label: '敏感', value: '2' },
       { label: '广告营销', value: '3' },
       { label: '不实信息', value: '4' },
       { label: '人身攻击', value: '5' },
