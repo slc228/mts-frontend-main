@@ -124,18 +124,19 @@ class Overall extends Component {
       switch (value) {
         case 0:
           this.handleDateChange([
-            moment(current),
             moment(current).startOf('day'),
+            moment(current),
           ]);
           break;
         case -1:
+
         case null:
           this.handleDateChange();
           break;
         default:
           this.handleDateChange([
-            moment(current),
             moment(current).subtract(value, 'days'),
+            moment(current),
           ]);
           break;
       }
@@ -195,6 +196,7 @@ class Overall extends Component {
 
   recDataBaidu= async (keyword, pageId) => {
     const resultBaidu = await getOverallDataBaidu(keyword, pageId);
+    console.log(resultBaidu);
     this.setState({
       loadingBaidu: false,
       dataOfBaidu: resultBaidu,
@@ -203,6 +205,7 @@ class Overall extends Component {
 
   recData360= async (keyword, pageId) => {
     const result360 = await getOverallData360(keyword, pageId);
+    console.log(result360);
     this.setState({
       loading360: false,
       dataOf360: result360,
@@ -210,7 +213,9 @@ class Overall extends Component {
   };
 
   recDataBing= async (keyword, pageId) => {
-    const resultBing = await getOverallDataBing(keyword, pageId);
+    let resultBing = await getOverallDataBing(keyword, pageId);
+    console.log(resultBing);
+    resultBing = resultBing || {};
     this.setState({
       loadingBing: false,
       dataOfBing: resultBing,

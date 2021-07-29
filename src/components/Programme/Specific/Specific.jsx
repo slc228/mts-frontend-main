@@ -91,8 +91,8 @@ class Specific extends React.Component {
       switch (value) {
         case 0:
           this.handleDateChange([
-            moment(current),
             moment(current).startOf('day'),
+            moment(current),
           ]);
           break;
         case -1:
@@ -101,8 +101,8 @@ class Specific extends React.Component {
           break;
         default:
           this.handleDateChange([
-            moment(current),
             moment(current).subtract(value, 'days'),
+            moment(current),
           ]);
           break;
       }

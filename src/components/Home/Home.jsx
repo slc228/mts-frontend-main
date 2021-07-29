@@ -170,7 +170,7 @@ class Home extends React.Component {
               >
                 <span className="subtitle2">{item.title}</span>
                 <span className="addr2">
-                  [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
+                  [{this.renderSource(item.source)} {moment(item.publishedDay).subtract(8, 'hours').month() + 1}/{moment(item.publishedDay).subtract(8, 'hours').date()}]
                 </span>
                 <span className="content2">
                   {item.content.replace(/\\n/g, '')}
@@ -204,7 +204,7 @@ class Home extends React.Component {
               >
                 <span className="subtitle2">{item.title}</span>
                 <span className="addr2">
-                  [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
+                  [{this.renderSource(item.source)} {moment(item.publishedDay).subtract(8, 'hours').month() + 1}/{moment(item.publishedDay).subtract(8, 'hours').date()}]
                 </span>
                 <span className="content2">
                   {item.content ? item.content.replace(/\\n/g, '') : null}

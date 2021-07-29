@@ -5,13 +5,13 @@ import Specific from '../Specific/Specific';
 import Origin from '../Origin/Origin';
 import Config from '../Config/Config';
 import View from '../View/View';
-import HotArticle from "../HotArticle/HotArticle";
-import Monitor from "../Monitor/Monitor";
+import HotArticle from '../HotArticle/HotArticle';
+import Monitor from '../Monitor/Monitor';
 import { actions } from '../../../redux/actions';
-import './Content.scss'
-import AutofitWrap from "../../common/AutofitWrap/AutofitWrap";
-import Alert from "../Alert/Alert";
-import Trace from "../Trace/Trace";
+import './Content.scss';
+import AutofitWrap from '../../common/AutofitWrap/AutofitWrap';
+import Alert from '../Alert/Alert';
+import Trace from '../Trace/Trace';
 
 class Content extends React.Component {
   handleTabPageSelect = (e) => {
@@ -33,7 +33,6 @@ class Content extends React.Component {
         >
           <Menu.Item key="info">信息列表</Menu.Item>
           <Menu.Item key="alert">研判预警</Menu.Item>
-          <Menu.Item key="trace">用户跟踪</Menu.Item>
           <Menu.Item key="config">方案配置</Menu.Item>
           <Menu.Item key="origin">定向监测</Menu.Item>
           <Menu.Item key="view">事件分析</Menu.Item>
@@ -44,7 +43,6 @@ class Content extends React.Component {
           {curPageTag === 'view' && curProgramme && <View />}
           {curPageTag === 'config' && curProgramme && <Config />}
           {curPageTag === 'alert' && curProgramme && <Alert />}
-          {curPageTag === 'trace' && curProgramme && <Trace />}
           {curPageTag === 'origin' && curProgramme && <Origin />}
           {curPageTag === 'monitor' && curProgramme && <Monitor />}
         </Layout.Content>

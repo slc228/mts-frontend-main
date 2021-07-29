@@ -18,13 +18,15 @@ class GlobalMultiFilter extends React.Component {
   };
 
   handleDateChange = (moments) => {
-    console.log(moments);
     if (this.props.onDateChange) {
       this.props.onDateChange(moments);
     }
   };
 
   handleSubmitKeyword = (type, data) => {
+    if (!data.keyWord) {
+      data.keyWord = this.props.initialKeyword;
+    }
     // eslint-disable-next-line default-case
     switch (type) {
       case 'submit':
