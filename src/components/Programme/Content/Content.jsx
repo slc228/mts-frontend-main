@@ -12,6 +12,7 @@ import './Content.scss';
 import AutofitWrap from '../../common/AutofitWrap/AutofitWrap';
 import Alert from '../Alert/Alert';
 import Trace from '../Trace/Trace';
+import Briefing from '../Briefing/Briefing';
 
 class Content extends React.Component {
   handleTabPageSelect = (e) => {
@@ -37,6 +38,7 @@ class Content extends React.Component {
           <Menu.Item key="origin">定向监测</Menu.Item>
           <Menu.Item key="view">事件分析</Menu.Item>
           <Menu.Item key="monitor">定向用户监测</Menu.Item>
+          <Menu.Item key="briefing">简报制作</Menu.Item>
         </Menu>
         <Layout.Content className="site-layout-background">
           {curPageTag === 'info' && curProgramme && <Specific />}
@@ -45,6 +47,7 @@ class Content extends React.Component {
           {curPageTag === 'alert' && curProgramme && <Alert />}
           {curPageTag === 'origin' && curProgramme && <Origin />}
           {curPageTag === 'monitor' && curProgramme && <Monitor />}
+          {curPageTag === 'briefing' && curProgramme && <Briefing />}
         </Layout.Content>
       </Layout.Content>
     );

@@ -60,6 +60,7 @@ class DataList extends React.Component {
         dataIndex: 'sensitiveType',
         key: 'sensitiveType',
         render: this.renderSensitiveType,
+        align: 'center',
         width: 100,
       },
       {
