@@ -14,6 +14,8 @@ import Alert from '../Alert/Alert';
 import Trace from '../Trace/Trace';
 import Briefing from '../Briefing/Briefing';
 
+const { SubMenu } = Menu;
+
 class Content extends React.Component {
   handleTabPageSelect = (e) => {
     this.props.onPageTagChange({
@@ -38,7 +40,10 @@ class Content extends React.Component {
           <Menu.Item key="origin">定向监测</Menu.Item>
           <Menu.Item key="view">事件分析</Menu.Item>
           <Menu.Item key="monitor">定向用户监测</Menu.Item>
-          <Menu.Item key="briefing">简报制作</Menu.Item>
+          <SubMenu key="submenu" title="简报制作">
+            <Menu.Item key="briefing">简报模板制作</Menu.Item>
+            <Menu.Item key="monitor">定向用户监测</Menu.Item>
+          </SubMenu>
         </Menu>
         <Layout.Content className="site-layout-background">
           {curPageTag === 'info' && curProgramme && <Specific />}

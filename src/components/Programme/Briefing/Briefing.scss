@@ -74,18 +74,82 @@
     border: red;
   }
 
-  .add-dimension{
+  .briefing-dimension-title {
+    width: 100%;
+
+    .briefing-dimension-title-name {
+      height: 30px;
+      width: 50%;
+      float: left;
+
+      .title-name-span {
+        font-size: 20px;
+        border-bottom: 3px solid #1890ff;
+      }
+    }
+
+    .briefing-dimension-title-icon {
+      height: 30px;
+      width: 50%;
+      float: right;
+      text-align: right;
+      font-size: 20px;
+      color: #1890ff;
+    }
+  }
+
+  .add-dimension {
     text-align: center;
     padding: 50px;
     border: 1px dashed #1890ff;
-    .add-dimension-span1{
+
+    .add-dimension-span1 {
       font-size: 20px;
       display: block;
     }
-    .add-dimension-span2{
+
+    .add-dimension-span2 {
       font-size: 10px;
       display: block;
     }
   }
 
+  .handle-button{
+    text-align: center;
+    margin-top: 20px;
+  }
+}
+
+.enter-background {
+  width: 96%;
+  background: white;
+  padding: 10px;
+  margin: 20px auto;
+  .add-template {
+    width: 21%;
+    float: left;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 30px;
+    text-align: center;
+    background-color: #f0f5ff;
+
+    .add-template-in{
+      margin: 10px;
+      padding-top: 120px;
+      padding-bottom: 120px;
+      border: 2px dashed #8cc8ff;
+      .add-template-icon{
+        font-size: 30px;
+        color: #40a9ff;
+      }
+      .add-template-span {
+        font-size: 15px;
+        color: #40a9ff;
+        display: block;
+      }
+    }
+
+
+  }
 }

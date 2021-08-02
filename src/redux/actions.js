@@ -6,6 +6,7 @@ export const actionTypes = {
   ON_PROGRAMMES_CHANGE: Symbol('on_programmes_change'),
   ON_PAGETAG_CHANGE: Symbol('on_pagetag_change'),
   ON_MONITOR_PATH_CHANGE: Symbol('on_monitor_path_change'),
+  ON_BRIEFING_PATH_CHANGE: Symbol('on_briefing_path_change'),
 };
 
 export const actions = {
@@ -16,4 +17,5 @@ export const actions = {
   onProgrammesChange: (data) => ({ type: actionTypes.ON_PROGRAMMES_CHANGE, data }),
   onPageTagChange: (data) => ({ type: actionTypes.ON_PAGETAG_CHANGE, data }),
   onMonitorPathChange: (data) => ({ type: actionTypes.ON_MONITOR_PATH_CHANGE, data }),
+  onBriefingPathChange: (data) => ({ type: actionTypes.ON_BRIEFING_PATH_CHANGE, data }),
 };
