@@ -66,6 +66,9 @@ const requests = {
   getOverallData360: { url: `${curDomain}/data/getOverallData360`, method: 'GET' },
   getOverallDataBaidu: { url: `${curDomain}/data/getOverallDataBaidu`, method: 'GET' },
   deleteWeiboUser: { url: `${curDomain}/data/deleteWeiboUser`, method: 'GET' },
+  getBriefingTemplate: { url: `${curDomain}/data/getBriefingTemplate`, method: 'GET' },
+  saveBriefingTemplate: { url: `${curDomain}/data/saveBriefingTemplate`, method: 'GET' },
+  deleteBriefingTemplate: { url: `${curDomain}/data/deleteBriefingTemplate`, method: 'GET' },
 };
 
 export default requests;

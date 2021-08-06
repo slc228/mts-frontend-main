@@ -138,6 +138,7 @@
       margin: 10px;
       padding-top: 120px;
       padding-bottom: 120px;
+      height: 300px;
       border: 2px dashed #8cc8ff;
       .add-template-icon{
         font-size: 30px;
@@ -149,7 +150,28 @@
         display: block;
       }
     }
+  }
+  .added-template {
+    width: 21%;
+    float: left;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 30px;
+    text-align: center;
+    background-color: #f0f5ff;
 
-
+    .added-template-in{
+      margin: 10px;
+      height: 300px;
+      padding-top: 100px;
+      background-color: white;
+      border: 3px solid #8cc8ff;
+      .added-template-span {
+        font-size: 15px;
+        font-weight: bold;
+        color: #40a9ff;
+        display: block;
+      }
+    }
   }
 }

@@ -1,11 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Input, Divider, Layout, List, Button, Space } from 'antd';
+import { Input, Divider, Layout, List, Button, Space, Image } from 'antd';
 import { StarOutlined, CaretUpFilled, CaretDownFilled, DeleteFilled, PlusCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import dimension from './dimension';
 import { actions } from '../../../redux/actions';
 import './Briefing.scss';
+import saveBriefingTemplate from '../../../services/request/data/saveBriefingTemplate';
+import deleteBriefingTemplate from '../../../services/request/data/deleteBriefingTemplate';
+import getBriefingTemplate from '../../../services/request/data/getBriefingTemplate';
+import getFangAnMonitor from '../../../services/request/data/getFangAnMonitor';
 
 const DATE_FORMAT2 = 'YYYY-MM-DD HH:mm';
 const { Sider } = Layout;
@@ -14,17 +18,22 @@ class Briefing extends React.Component {
   constructor() {
     super();
     this.state = {
+      templateList: [],
       title: '行业版',
       numOfVersion: '第（）期',
       institution: '网络舆情中心',
       time: moment().format(DATE_FORMAT2),
-      nowKey: '',
+      nowId: 0,
+      nowKey: 0,
       keyList: [],
+      hid: false,
+      divHiddenList: dimension.map((item) => ({ hid: item.divHidden })),
     };
   }
 
   componentDidMount() {
-    this.props.onBriefingPathChange({ path: '/result' });
+    this.props.onBriefingPathChange({ path: '' });
+    this.handleGetTemplate();
   }
 
   handleTitleChange=(e) => {
@@ -51,9 +60,24 @@ class Briefing extends React.Component {
     });
   };
 
-  handleDragStart = e => {
+  handleDragStart = (e) => {
     this.setState({
       nowKey: e.target.id,
+    });
+    const { divHiddenList } = this.state;
+    divHiddenList.splice(e.target.id - 1, 1, { hid: false });
+    setTimeout(() => {
+      this.setState({
+        divHiddenList,
+      });
+    }, 0);
+  };
+
+  handleDragEnd= (e) => {
+    const { divHiddenList, nowKey } = this.state;
+    divHiddenList.splice(nowKey - 1, 1, { hid: true });
+    this.setState({
+      divHiddenList,
     });
   };
 
@@ -63,12 +87,14 @@ class Briefing extends React.Component {
 
     handleDrop = e => {
       const { keyList, nowKey } = this.state;
+      console.log(nowKey);
       if (keyList.indexOf(nowKey) !== -1) {
         keyList.splice(keyList.indexOf(nowKey), 1);
         keyList.push(nowKey);
       } else {
         keyList.push(nowKey);
       }
+      console.log(keyList);
       this.setState({
         keyList,
       });
@@ -110,7 +136,32 @@ class Briefing extends React.Component {
       console.log(keyList);
     };
 
+    handleOpenTemplate=(item) => {
+      console.log(item.keylist);
+      const keyList = item.keylist.length === 0 ? [] : item.keylist.split(',');
+      console.log(keyList);
+      this.setState({
+        title: item.title,
+        numOfVersion: item.version,
+        institution: item.institution,
+        time: moment(item.time).format(DATE_FORMAT2),
+        nowId: item.id,
+        nowKey: '',
+        keyList,
+      });
+      this.props.onBriefingPathChange({ path: '/result' });
+    };
+
     handleAddNewTemplate = e => {
+      this.setState({
+        title: '行业版',
+        numOfVersion: '第（）期',
+        institution: '网络舆情中心',
+        time: moment().format(DATE_FORMAT2),
+        nowId: 0,
+        nowKey: '',
+        keyList: [],
+      });
       this.props.onBriefingPathChange({ path: '/result' });
     };
 
@@ -118,10 +169,38 @@ class Briefing extends React.Component {
       this.props.onBriefingPathChange({ path: '' });
     };
 
+  handleGetTemplate = async () => {
+    const { fid } = this.props.curProgramme;
+    const result = await getBriefingTemplate(fid);
+    console.log(result);
+    this.setState({
+      templateList: result,
+    });
+  };
+
+    handleSaveTemplate=async e => {
+      const { fid } = this.props.curProgramme;
+      const { nowId, title, numOfVersion, institution, time, keyList } = this.state;
+      const params = [nowId, fid, title, numOfVersion, institution, time, keyList];
+      console.log(params);
+      const result = await saveBriefingTemplate(...params);
+      console.log(result);
+      await this.handleGetTemplate();
+      this.props.onBriefingPathChange({ path: '' });
+    };
+
+    handleDeleteTemplate=async e => {
+      const { nowId } = this.state;
+      const result = await deleteBriefingTemplate(nowId);
+      await this.handleGetTemplate();
+      this.props.onBriefingPathChange({ path: '' });
+    };
+
     render() {
       const { fid } = this.props.curProgramme;
-      const { title, numOfVersion, institution, time, keyList, nowTag } = this.state;
+      const { title, numOfVersion, institution, time, keyList, nowTag, templateList, hid, divHiddenList } = this.state;
       const curPath = this.props.briefingPath;
+      console.log(keyList);
 
       switch (curPath) {
         case '':
@@ -131,6 +210,17 @@ class Briefing extends React.Component {
                 <div>
                   <span>自定义模板库</span>
                 </div>
+                {templateList.length === 0 ? null : (templateList.map((item) => (
+                  <div className="added-template" onClick={() => this.handleOpenTemplate(item)}>
+                    <div className="added-template-in">
+                      <span className="added-template-span">{item.title}</span>
+                      <span className="added-template-span">{item.institution}</span>
+                      <span className="added-template-span">{item.version}</span>
+                      <span className="added-template-span">{moment(item.time).format(DATE_FORMAT2)}</span>
+                    </div>
+                  </div>
+                ))
+                )}
                 <div className="add-template" onClick={this.handleAddNewTemplate}>
                   <div className="add-template-in">
                     <PlusCircleOutlined className="add-template-icon" />
@@ -150,9 +240,10 @@ class Briefing extends React.Component {
                   dataSource={dimension}
                   renderItem={item => (
                     <List.Item>
-                      <div className="list-items" id={item.id} draggable="true" onDragStart={this.handleDragStart}>
+                      <div className="list-items" id={item.id} draggable="true" onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd}>
                         <item.icon />
                         {`  ${item.name}`}
+                        <Image src={item.src} hidden={divHiddenList[item.id - 1].hid} />
                       </div>
                     </List.Item>
                   )}
@@ -164,32 +255,35 @@ class Briefing extends React.Component {
                     <Input className="title-input" value={title} bordered={false} onChange={this.handleTitleChange} />
                   </div>
                   <div className="subtitle-div">
-                    <Input className="subtitle-input" defaultValue="第（）期" value={numOfVersion} bordered={false} onClick={this.handleNumOfVersionChange} />
+                    <Input className="subtitle-input" defaultValue="第（）期" value={numOfVersion} bordered={false} onChange={this.handleNumOfVersionChange} />
                   </div>
                   <div className="tinytitle-div">
-                    <Input className="institution" defaultValue="网络舆情中心" value={institution} bordered={false} onClick={this.handleInstitutionChange} />
-                    <Input className="time" defaultValue={moment().format(DATE_FORMAT2)} value={time} bordered={false} onClick={this.handleTimeChange} />
+                    <Input className="institution" defaultValue="网络舆情中心" value={institution} bordered={false} onChange={this.handleInstitutionChange} />
+                    <Input className="time" defaultValue={moment().format(DATE_FORMAT2)} value={time} bordered={false} onChange={this.handleTimeChange} />
                   </div>
                 </div>
                 <Divider className="briefing-divider"><StarOutlined /></Divider>
                 <div className="briefing-dimension">
-                  {keyList.map((key) => (
-                    <div className="briefing-dimension-title">
-                      <div className="briefing-dimension-title-name">
-                        <span className="title-name-span">
-                          {dimension[key - 1].name}
-                        </span>
-                      </div>
-                      <div className="briefing-dimension-title-icon">
-                        <CaretUpFilled onClick={() => this.handleDimensionUp(key)} />
-                        <Divider type="vertical" />
-                        <CaretDownFilled onClick={() => this.handleDimensionDown(key)} />
-                        <Divider type="vertical" />
-                        <DeleteFilled onClick={() => this.handleDimensionDel(key)} />
+                  {keyList.length === 0 ? null : (keyList.map((key) => (
+                    <div>
+                      <div className="briefing-dimension-title">
+                        <div className="briefing-dimension-title-name">
+                          <span className="title-name-span">
+                            {dimension[key - 1].name}
+                          </span>
+                        </div>
+                        <div className="briefing-dimension-title-icon">
+                          <CaretUpFilled onClick={() => this.handleDimensionUp(key)} />
+                          <Divider type="vertical" />
+                          <CaretDownFilled onClick={() => this.handleDimensionDown(key)} />
+                          <Divider type="vertical" />
+                          <DeleteFilled onClick={() => this.handleDimensionDel(key)} />
+                        </div>
                       </div>
                       <Divider />
+                      <div style={{ textAlign: 'center', marginTop: '5px', marginBottom: '10px' }}><Image width={800} height={300} src={dimension[key - 1].src} /></div>
                     </div>
-                  ))}
+                  )))}
                 </div>
                 <div className="add-dimension" onDragOver={this.handleDragOver} onDrop={this.handleDrop}>
                   <span className="add-dimension-span1">添加维度</span>
@@ -197,8 +291,8 @@ class Briefing extends React.Component {
                 </div>
                 <div className="handle-button">
                   <Space size="large">
-                    <Button type="primary">保存</Button>
-                    <Button type="primary" danger>删除</Button>
+                    <Button type="primary" onClick={this.handleSaveTemplate}>保存</Button>
+                    <Button type="primary" danger onClick={this.handleDeleteTemplate}>删除</Button>
                     <Button type="default" onClick={this.handleReturn}>返回</Button>
                   </Space>
                 </div>
