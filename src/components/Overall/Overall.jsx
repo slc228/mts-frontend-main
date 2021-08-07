@@ -21,6 +21,7 @@ import './Overall.scss';
 
 import { actions } from '../../redux/actions';
 import getSensitiveType from '../../services/request/data/getSensitiveType';
+import GlobalDataList from '../common/GlobalDataList/GlobalDataList';
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -330,7 +331,7 @@ class Overall extends Component {
                 onSearch={this.handleKeywordChange}
                 onDateChange={this.handleDateChange}
               />
-              <DataList
+              <GlobalDataList
                 data={data}
                 dataSize={dataSize}
                 pageSize={pageSize}

@@ -28,12 +28,6 @@ class DataList extends React.Component {
         key: 'title',
         render: this.renderTitle,
       },
-      /* {
-        title: '站点',
-        dataIndex: 'addr',
-        key: 'addr',
-        width: 100,
-      }, */
       {
         title: '站点',
         dataIndex: 'fromType',
@@ -48,13 +42,6 @@ class DataList extends React.Component {
         render: this.renderMoment,
         width: 100,
       },
-      /* {
-        title: '敏感度',
-        dataIndex: 'sensi',
-        key: 'sensi',
-        render: this.renderSensi,
-        width: 100,
-      }, */
       {
         title: '敏感类型',
         dataIndex: 'sensitiveType',
