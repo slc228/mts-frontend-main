@@ -1,12 +1,15 @@
 import React from 'react';
-import { Button, Table, Modal } from 'antd';
-import { HeartOutlined, TagsOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Button, Table, Modal, Tooltip, Divider } from 'antd';
+import { HeartOutlined, TagsOutlined, LoadingOutlined, PlusCircleFilled, DeleteFilled } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import Lodash from 'lodash';
 import criteria from '../MultiFilter/criteria';
 import './DataList.scss';
 import moment from 'moment';
 import DataContent from '../DataContent/DataContent';
+import modeifyMaterial from '../../../services/request/data/modeifyMaterial';
+import getMaterial from '../../../services/request/data/getMaterial';
+import getProgrammeOrigins from '../../../services/request/programme/getProgrammeOrigins';
 
 class DataList extends React.Component {
   constructor() {
@@ -15,15 +18,17 @@ class DataList extends React.Component {
       curRecord: undefined,
       visible: false,
     };
-    this.rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(selectedRowKeys, selectedRows);
-      },
-      getCheckboxProps: (record) => ({}),
-    };
     this.columnsRender = [
       {
-        title: '内容',
+        title: () => (
+          <div>
+            内容
+            <Divider type="vertical" />
+            <Tooltip placement="topLeft" title="添加或修改选择项到素材" arrowPointAtCenter>
+              <PlusCircleFilled onClick={this.props.onModeifyMaterial} />
+            </Tooltip>
+          </div>
+        ),
         dataIndex: 'title',
         key: 'title',
         render: this.renderTitle,
@@ -74,14 +79,6 @@ class DataList extends React.Component {
         width: 100,
       },
     ];
-  }
-
-  // eslint-disable-next-line react/no-deprecated
-  componentWillMount() {
-    const { disableTag, disableSource, disableEmotion } = this.props;
-    if (disableTag) this.columnsRender = this.columnsRender.filter(item => item.key !== 'tag');
-    if (disableEmotion) this.columnsRender = this.columnsRender.filter(item => item.key !== 'emotion');
-    if (disableSource) this.columnsRender = this.columnsRender.filter(item => item.key !== 'source');
   }
 
   renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'));
@@ -146,18 +143,6 @@ class DataList extends React.Component {
     </a>
   );
 
-  renderFooter = () => (
-    <div className="mts-data-list-footer">
-      <span>批量操作：</span>
-      <div className="mts-data-list-icon-button">
-        <Button primary="true" icon={<TagsOutlined />} onClick={(e) => this.handleMaterial(e)} />
-      </div>
-      <div className="mts-data-list-icon-button">
-        <Button primary="true" icon={<HeartOutlined />} onClick={(e) => this.handleCollect(e)} />
-      </div>
-    </div>
-  );
-
   handlePageTurned = (pagination) => {
     if (this.props.onPageChange) {
       this.props.onPageChange(pagination.current - 1);
@@ -178,12 +163,18 @@ class DataList extends React.Component {
   render() {
     const data = this.props.data || [];
     const { visible, curRecord } = this.state;
-    const { dataSize, pageSize, loading } = this.props;
+    const { dataSize, pageSize, loading, selectedRowKeys } = this.props;
+
     return (
       <div className="mts-data-list">
         <div id="table">
           <Table
             rowKey={(record) => record.id}
+            rowSelection={{
+              selectedRowKeys,
+              preserveSelectedRowKeys: true,
+              onChange: this.props.onSelectChange,
+            }}
             columns={this.columnsRender}
             dataSource={data}
             pagination={{

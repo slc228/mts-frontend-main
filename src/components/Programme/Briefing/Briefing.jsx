@@ -217,7 +217,6 @@ class Briefing extends React.Component {
           <Layout>
             <div className="enter-background">
               <div>
-                <Button onClick={this.turnToSpecific}>555</Button>
                 <span>自定义模板库</span>
               </div>
               {templateList.length === 0 ? null : (templateList.map((item) => (

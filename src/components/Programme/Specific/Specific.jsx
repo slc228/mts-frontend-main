@@ -12,6 +12,8 @@ import { actions } from '../../../redux/actions';
 import getContentTag from '../../../services/request/data/getContentTag';
 import getOverallData from '../../../services/request/data/getOverallData';
 import getSensitiveType from '../../../services/request/data/getSensitiveType';
+import modeifyMaterial from '../../../services/request/data/modeifyMaterial';
+import getMaterial from '../../../services/request/data/getMaterial';
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -32,6 +34,7 @@ class Specific extends React.Component {
       loading: false,
       timeOrder: 0,
       data: {},
+      selectedRowKeys: [],
     };
   }
 
@@ -44,12 +47,21 @@ class Specific extends React.Component {
 
   componentDidMount() {
     this.handleSearch();
+    this.getBriefingMaterial();
   }
+
+  getBriefingMaterial = async () => {
+    const fid = this.props.curProgramme?.fid;
+    const data = await getMaterial(fid);
+    const ids = data.ids.length === 0 ? [] : data.ids.split(',');
+    this.setState({ selectedRowKeys: ids });
+  };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const criteria = this.getCriteria();
     if (!this.state.data[criteria] && !this.state.loading) {
       this.handleSearch();
+      this.getBriefingMaterial();
     }
   }
 
@@ -128,12 +140,29 @@ class Specific extends React.Component {
     });
   };
 
+  handleRowSelectChange = (selectedRowKeys) => {
+    this.setState({
+      selectedRowKeys,
+    });
+  };
+
+  handleModeifyMaterial=async () => {
+    const { selectedRowKeys } = this.state;
+    const fid = this.props.curProgramme?.fid;
+    const ret = await modeifyMaterial(fid, selectedRowKeys);
+    if (ret === 1) {
+      alert('修改成功！');
+    } else {
+      alert('修改失败！');
+    }
+  };
+
   render() {
     const params = ['sensi', 'emotion', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
     const current = Lodash.pick(this.state, params);
     const criteria = this.getCriteria();
     const { curProgramme } = this.props;
-    const { pageSize, loading } = this.state;
+    const { pageSize, loading, selectedRowKeys } = this.state;
     const data = this.state.data[criteria]?.data || [];
     const dataSize = this.state.data[criteria]?.dataSize || 0;
 
@@ -150,7 +179,10 @@ class Specific extends React.Component {
           dataSize={dataSize}
           pageSize={pageSize}
           loading={loading}
+          selectedRowKeys={selectedRowKeys}
           fid={this.props.curProgramme?.fid}
+          onModeifyMaterial={this.handleModeifyMaterial}
+          onSelectChange={this.handleRowSelectChange}
           onPageChange={this.handlePageChange}
           onPageSizeChange={this.handlePageSizeChange}
         />

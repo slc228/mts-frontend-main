@@ -1,6 +1,7 @@
 import getSensitiveWord from './request/data/getSensitiveWord';
 import getOverallDatOnNetwork from './request/data/getOverallDataOnNetwork';
 import getOverallDataBing from './request/data/getOverallDataBing';
+import modeifyMaterial from './request/data/modeifyMaterial';
 
 const domain1 = 'http://192.168.0.19:8082';
 const domain2 = 'http://localhost:3000/api';
@@ -69,6 +70,10 @@ const requests = {
   getBriefingTemplate: { url: `${curDomain}/data/getBriefingTemplate`, method: 'GET' },
   saveBriefingTemplate: { url: `${curDomain}/data/saveBriefingTemplate`, method: 'GET' },
   deleteBriefingTemplate: { url: `${curDomain}/data/deleteBriefingTemplate`, method: 'GET' },
+
+  getMaterial: { url: `${curDomain}/data/getMaterial`, method: 'GET' },
+  getMaterialDetail: { url: `${curDomain}/data/getMaterialDetail`, method: 'GET' },
+  modeifyMaterial: { url: `${curDomain}/data/modeifyMaterial`, method: 'POST' },
 };
 
 export default requests;
