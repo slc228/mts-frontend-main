@@ -1,23 +1,22 @@
 import qs from 'qs';
 import requests from '../../requests';
 
-const modeifyMaterial = async (fid, materiallib, ids) => {
+const deleteMaterialIDs = async (fid, materiallib, ids) => {
   const params = {
     fid,
     materiallib,
     ids: ids.toString(),
   };
-  console.log(ids.toString());
-  const url = encodeURI(`${requests.modeifyMaterial.url}`);
+  const url = encodeURI(`${requests.deleteMaterialIDs.url}`);
   const response = await fetch(url, {
-    method: requests.modeifyMaterial.method,
+    method: requests.deleteMaterialIDs.method,
     body: JSON.stringify(params),
     headers: {
       'Content-Type': 'application/json',
     },
   });
   const rawResult = response.status === 200 ? await response.json() : {};
-  return rawResult.modeifyMaterial;
+  return rawResult;
 };
 
-export default modeifyMaterial;
+export default deleteMaterialIDs;

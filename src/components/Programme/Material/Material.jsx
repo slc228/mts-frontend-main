@@ -1,35 +1,49 @@
 import React from 'react';
-import { Button, Table, Modal, Divider, Tooltip } from 'antd';
-import { HeartOutlined, TagsOutlined, LoadingOutlined, DeleteFilled, PlusCircleFilled } from '@ant-design/icons';
+import { Button, Table, Modal, Divider, Tooltip, Layout, Affix, List, Image, Input, Space, Menu } from 'antd';
+import {
+  HeartOutlined,
+  TagsOutlined,
+  LoadingOutlined,
+  DeleteFilled,
+  PlusCircleFilled,
+  StarOutlined, CaretUpFilled, CaretDownFilled, EditOutlined, PlusSquareOutlined, SettingFilled, CheckOutlined,
+} from '@ant-design/icons';
 import { connect } from 'react-redux';
 import Lodash from 'lodash';
 import moment from 'moment';
 import criteria from './criteria';
 import DataContent from '../../common/DataContent/DataContent';
-import getMaterialDetail from '../../../services/request/data/getMaterialDetail';
 import { actions } from '../../../redux/actions';
+import getMaterial from '../../../services/request/data/getMaterial';
+import modeifyMaterial from '../../../services/request/data/modeifyMaterial';
+import getMaterialDetail from '../../../services/request/data/getMaterialDetail';
+import deleteMaterial from '../../../services/request/data/deleteMaterial';
+import renameMaterial from '../../../services/request/data/renameMaterial';
+import deleteMaterialIDs from '../../../services/request/data/deleteMaterialIDs';
+import addNewMaterialLib from '../../../services/request/data/addNewMaterialLib';
+
+const { Sider } = Layout;
+const { Search } = Input;
 
 class Material extends React.Component {
   constructor() {
     super();
     this.state = {
+      materiallibs: [],
+      materiallibsLoading: true,
+      curmateriallib: undefined,
       data: [],
       dataSize: 0,
       loading: true,
       curRecord: undefined,
       visible: false,
+      selectedRowKeys: [],
+      addNewMaterialLibVisible: false,
+      modeifyMaterialLibVisible: false,
     };
     this.columnsRender = [
       {
-        title: () => (
-          <div>
-            内容
-            <Divider type="vertical" />
-            <Tooltip placement="topLeft" title="跳转到舆情列表进行添加" arrowPointAtCenter>
-              <PlusCircleFilled onClick={this.turnToSpecific} />
-            </Tooltip>
-          </div>
-        ),
+        title: '内容',
         dataIndex: 'title',
         key: 'title',
         render: this.renderTitle,
@@ -79,11 +93,6 @@ class Material extends React.Component {
         render: this.renderAddr,
         width: 100,
       },
-      {
-        dataIndex: 'delete',
-        key: 'delete',
-        render: this.renderDelete,
-      },
     ];
   }
 
@@ -93,18 +102,38 @@ class Material extends React.Component {
     });
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    await this.getMateriallibs();
     this.getBriefingMaterialDetail();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    this.getBriefingMaterialDetail();
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    const { curProgramme } = this.props;
+    if (!prevProps.curProgramme || !curProgramme) return;
+    if (prevProps.curProgramme.fid !== curProgramme.fid || prevProps.curProgramme.name !== curProgramme.name) {
+      await this.getMateriallibs();
+      this.getBriefingMaterialDetail();
+    }
   }
+
+  getMateriallibs= async () => {
+    const { fid } = this.props.curProgramme;
+    const ret = await getMaterial(fid);
+    console.log(ret);
+    this.setState({
+      materiallibs: ret,
+      materiallibsLoading: false,
+      curmateriallib: ret.length === 0 ? undefined : ret[0].materiallib });
+  };
 
   getBriefingMaterialDetail = async () => {
+    await this.setState({ loading: true });
     const { fid } = this.props.curProgramme;
-    const data = await getMaterialDetail(fid);
-    this.setState({ data: data.dataContent, loading: false, dataSize: data.hitNumber });
+    const { curmateriallib } = this.state;
+    console.log(curmateriallib);
+    const data = await getMaterialDetail(fid, curmateriallib);
+    console.log(data);
+    this.setState({ data: data.dataContent, loading: false, dataSize: data.hitNumber, selectedRowKeys: [] });
   };
 
     renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'));
@@ -164,10 +193,6 @@ class Material extends React.Component {
       </a>
     );
 
-  renderDelete=(text, record) => (
-    <DeleteFilled onClick={() => this.handleDeletemateria(record.id)} />
-  );
-
     handleTitleClicked = (record) => {
       this.setState({
         visible: true,
@@ -179,38 +204,182 @@ class Material extends React.Component {
       this.setState({ visible: false });
     };
 
-    handleDeletemateria=(id) => {
-      console.log(id);
-      const { fid } = this.props.curProgramme;
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+  };
+
+  handleInputNewMateriallibName= () => {
+    this.setState({ addNewMaterialLibVisible: true });
+  };
+
+  handlemodeifyMaterialLibVisible= async (material) => {
+    this.setState({ modeifyMaterialLibVisible: true, curmateriallib: material });
+  };
+
+  handleAddMateriallibModalCancel = () => {
+    this.setState({ addNewMaterialLibVisible: false });
+  };
+
+  handleModeifyMateriallibModalCancel = () => {
+    this.setState({ modeifyMaterialLibVisible: false });
+  };
+
+  handleAddNewMateriallib=async (value) => {
+    const { fid } = this.props.curProgramme;
+    const ret = await addNewMaterialLib(fid, value);
+    if (ret.addNewMaterialLib === 1) {
+      alert('添加成功！');
+    } else {
+      alert('添加失败！');
+    }
+    this.setState({ addNewMaterialLibVisible: false });
+    await this.getMateriallibs();
+    await this.setState({ curmateriallib: value });
+    await this.getBriefingMaterialDetail();
+  };
+
+  handleRenameMateriallib=async (value) => {
+    const { fid } = this.props.curProgramme;
+    const { curmateriallib } = this.state;
+    const ret = await renameMaterial(fid, curmateriallib, value);
+    if (ret.renameMaterial === 1) {
+      alert('修改名称成功！');
+    } else {
+      alert('修改名称失败！');
+    }
+    this.setState({ modeifyMaterialLibVisible: false });
+    await this.getMateriallibs();
+    await this.setState({ curmateriallib: value });
+    await this.getBriefingMaterialDetail();
+  };
+
+  handleDeleteMateriallib=async () => {
+    const { fid } = this.props.curProgramme;
+    const { curmateriallib } = this.state;
+    const ret = await deleteMaterial(fid, curmateriallib);
+    if (ret.deleteMaterial === 1) {
+      alert('删除成功！');
+    } else {
+      alert('删除失败！');
+    }
+    this.setState({ modeifyMaterialLibVisible: false });
+    await this.getMateriallibs();
+    await this.getBriefingMaterialDetail();
+  };
+
+  handleDeleteMateriallibIds=async () => {
+    const { fid } = this.props.curProgramme;
+    const { curmateriallib, selectedRowKeys } = this.state;
+    const ret = await deleteMaterialIDs(fid, curmateriallib, selectedRowKeys);
+    console.log(ret);
+    if (ret.deleteMaterialIDs === 1) {
+      alert('删除成功！');
+    } else {
+      alert('删除失败！');
+    }
+    await this.getMateriallibs();
+    await this.setState({ curmateriallib });
+    await this.getBriefingMaterialDetail();
+  };
+
+  handleMaterialLibSelect=async (e) => {
+    await this.setState({ curmateriallib: e.key });
+    await this.getBriefingMaterialDetail();
+  };
+
+  render() {
+    const { visible, curRecord, dataSize, loading, data, selectedRowKeys, materiallibs, materiallibsLoading, addNewMaterialLibVisible, modeifyMaterialLibVisible, curmateriallib } = this.state;
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
     };
+    console.log(data);
 
-    render() {
-      const { visible, curRecord, dataSize, loading, data } = this.state;
+    return (
+      <Layout className="briefing-layout">
+        <Sider className="briefing-layout-slider" theme="light">
+          <Affix>
+            <Button block icon={<PlusSquareOutlined />} type="primary" onClick={this.handleInputNewMateriallibName}>添加新素材库</Button>
+            <Menu
+              mode="inline"
+              onClick={this.handleMaterialLibSelect}
+              selectedKeys={[curmateriallib?.toString()]}
+              style={{ height: '100%', borderRight: 0 }}
+            >
+              {
+                  materiallibs.length === 0 ? null : (materiallibs.map((item) => (
+                    <Menu.Item key={item.materiallib}>
+                      {`${item.materiallib} (${item.num})`}
+                      <SettingFilled onClick={() => this.handlemodeifyMaterialLibVisible(item.materiallib)} style={{ float: 'right', paddingTop: '13px' }} />
+                    </Menu.Item>
+                  )))
+              }
+            </Menu>
+          </Affix>
+        </Sider>
+        <Modal
+          visible={addNewMaterialLibVisible}
+          onCancel={this.handleAddMateriallibModalCancel}
+          closable={false}
+          title="请输入素材库名称"
+          footer={null}
+        >
+          <Search placeholder="输入名称后点击按钮完成添加" enterButton={<CheckOutlined />} onSearch={this.handleAddNewMateriallib} />
+        </Modal>
+        <Modal
+          visible={modeifyMaterialLibVisible}
+          onCancel={this.handleModeifyMateriallibModalCancel}
+          closable={false}
+          title="请对素材库进行操作"
+          footer={null}
+        >
+          <Search placeholder="输入名称后点击按钮完成修改" enterButton={<CheckOutlined />} onSearch={this.handleRenameMateriallib} style={{ width: '80%' }} />
+          <Button danger type="primary" style={{ width: '15%', float: 'right' }} onClick={this.handleDeleteMateriallib}>删除</Button>
+        </Modal>
+        <div className="briefing-real">
+          <div className="mts-data-list">
+            <div id="table">
+              <Table
+                title={() => (
+                  <div>
+                    <div style={{ float: 'left', width: '15%', fontSize: '17px', textAlign: 'center', color: '#1890ff' }}>
+                      {'添加舆情素材 '}
+                      <Tooltip placement="topLeft" title="跳转到舆情列表进行添加" arrowPointAtCenter>
+                        <PlusCircleFilled onClick={this.turnToSpecific} style={{ fontSize: '15px' }} />
+                      </Tooltip>
+                    </div>
+                    <div style={{ float: 'left', width: '15%', fontSize: '17px', textAlign: 'center', color: 'red' }}>
+                      {'批量删除 '}
+                      <Tooltip placement="topLeft" title="批量删除选中的素材" arrowPointAtCenter>
+                        <DeleteFilled onClick={this.handleDeleteMateriallibIds} style={{ fontSize: '15px' }} />
+                      </Tooltip>
+                    </div>
+                  </div>
 
-      return (
-        <div className="mts-data-list">
-          <div id="table">
-            <Table
-              rowKey={(record) => record.id}
-              columns={this.columnsRender}
-              dataSource={data}
-              pagination={{
-                position: ['none', 'bottomRight'],
-                total: dataSize,
-              }}
-              loading={loading}
-              style={{ fontSize: '16px' }}
-            />
-            <DataContent
-              record={curRecord}
-              visible={visible}
-              fid={this.props.curProgramme.fid}
-              handleModalCancel={this.handleModalCancel}
-            />
+                )}
+                rowKey={(record) => record.id}
+                columns={this.columnsRender}
+                rowSelection={rowSelection}
+                dataSource={data}
+                pagination={{
+                  position: ['none', 'bottomRight'],
+                  total: dataSize,
+                }}
+                loading={loading}
+                style={{ fontSize: '16px' }}
+              />
+              <DataContent
+                record={curRecord}
+                visible={visible}
+                fid={this.props.curProgramme.fid}
+                handleModalCancel={this.handleModalCancel}
+              />
+            </div>
           </div>
         </div>
-      );
-    }
+      </Layout>
+    );
+  }
 }
 
 const mapStateToProps = (state) => ({

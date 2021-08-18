@@ -35,6 +35,7 @@ class Specific extends React.Component {
       timeOrder: 0,
       data: {},
       selectedRowKeys: [],
+      materiallibs: [],
     };
   }
 
@@ -45,23 +46,25 @@ class Specific extends React.Component {
     return JSON.stringify(criteria);
   };
 
+  getMateriallibs= async () => {
+    const { fid } = this.props.curProgramme;
+    const ret = await getMaterial(fid);
+    console.log(ret);
+    this.setState({
+      materiallibs: ret,
+    });
+  };
+
   componentDidMount() {
     this.handleSearch();
-    this.getBriefingMaterial();
+    this.getMateriallibs();
   }
-
-  getBriefingMaterial = async () => {
-    const fid = this.props.curProgramme?.fid;
-    const data = await getMaterial(fid);
-    const ids = data.ids.length === 0 ? [] : data.ids.split(',');
-    this.setState({ selectedRowKeys: ids });
-  };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const criteria = this.getCriteria();
     if (!this.state.data[criteria] && !this.state.loading) {
       this.handleSearch();
-      this.getBriefingMaterial();
+      this.getMateriallibs();
     }
   }
 
@@ -146,15 +149,23 @@ class Specific extends React.Component {
     });
   };
 
-  handleModeifyMaterial=async () => {
+  handleModeifyMaterial=async (materiallib) => {
     const { selectedRowKeys } = this.state;
+    if (selectedRowKeys.length === 0) {
+      alert('请先选择数据！');
+      return;
+    }
     const fid = this.props.curProgramme?.fid;
-    const ret = await modeifyMaterial(fid, selectedRowKeys);
+    const ret = await modeifyMaterial(fid, materiallib, selectedRowKeys);
     if (ret === 1) {
       alert('修改成功！');
     } else {
       alert('修改失败！');
     }
+    await this.getMateriallibs();
+    this.setState({
+      selectedRowKeys: [],
+    });
   };
 
   render() {
@@ -162,7 +173,7 @@ class Specific extends React.Component {
     const current = Lodash.pick(this.state, params);
     const criteria = this.getCriteria();
     const { curProgramme } = this.props;
-    const { pageSize, loading, selectedRowKeys } = this.state;
+    const { pageSize, loading, selectedRowKeys, materiallibs } = this.state;
     const data = this.state.data[criteria]?.data || [];
     const dataSize = this.state.data[criteria]?.dataSize || 0;
 
@@ -180,6 +191,7 @@ class Specific extends React.Component {
           pageSize={pageSize}
           loading={loading}
           selectedRowKeys={selectedRowKeys}
+          materiallibs={materiallibs}
           fid={this.props.curProgramme?.fid}
           onModeifyMaterial={this.handleModeifyMaterial}
           onSelectChange={this.handleRowSelectChange}

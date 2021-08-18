@@ -1,6 +1,13 @@
 import React from 'react';
-import { Button, Table, Modal, Tooltip, Divider } from 'antd';
-import { HeartOutlined, TagsOutlined, LoadingOutlined, PlusCircleFilled, DeleteFilled } from '@ant-design/icons';
+import { Button, Table, Modal, Tooltip, Divider, Menu } from 'antd';
+import {
+  HeartOutlined,
+  TagsOutlined,
+  LoadingOutlined,
+  PlusCircleFilled,
+  DeleteFilled,
+  SettingFilled,
+} from '@ant-design/icons';
 import { connect } from 'react-redux';
 import Lodash from 'lodash';
 import criteria from '../MultiFilter/criteria';
@@ -24,8 +31,21 @@ class DataList extends React.Component {
           <div>
             内容
             <Divider type="vertical" />
-            <Tooltip placement="topLeft" title="添加或修改选择项到素材" arrowPointAtCenter>
-              <PlusCircleFilled onClick={this.props.onModeifyMaterial} />
+            <Tooltip
+              placement="topLeft"
+              title={() => (
+                <div>
+                  <div>选择素材库进行添加</div>
+                  {this.props.materiallibs.length === 0 ? null : (this.props.materiallibs.map((item) => (
+                    <div style={{ marginBottom: '2px' }}>
+                      <Button type="primary" block onClick={() => this.props.onModeifyMaterial(item.materiallib)}>{`${item.materiallib} (${item.num})`}</Button>
+                    </div>
+                  )))}
+                </div>
+              )}
+              arrowPointAtCenter
+            >
+              <PlusCircleFilled />
             </Tooltip>
           </div>
         ),

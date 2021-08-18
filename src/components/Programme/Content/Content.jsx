@@ -14,6 +14,7 @@ import Alert from '../Alert/Alert';
 import Trace from '../Trace/Trace';
 import Briefing from '../Briefing/Briefing';
 import Material from '../Material/Material';
+import BriefingGeneration from '../BriefingGeneration/BriefingGeneration';
 
 const { SubMenu } = Menu;
 
@@ -42,6 +43,7 @@ class Content extends React.Component {
           <Menu.Item key="view">事件分析</Menu.Item>
           <Menu.Item key="monitor">定向用户监测</Menu.Item>
           <SubMenu key="submenu" title="简报制作">
+            <Menu.Item key="briefingen">简报制作流程</Menu.Item>
             <Menu.Item key="briefing">简报模板制作</Menu.Item>
             <Menu.Item key="material">简报素材管理</Menu.Item>
           </SubMenu>
@@ -55,6 +57,7 @@ class Content extends React.Component {
           {curPageTag === 'monitor' && curProgramme && <Monitor />}
           {curPageTag === 'briefing' && curProgramme && <Briefing />}
           {curPageTag === 'material' && curProgramme && <Material />}
+          {curPageTag === 'briefingen' && curProgramme && <BriefingGeneration />}
         </Layout.Content>
       </Layout.Content>
     );

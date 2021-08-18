@@ -2,6 +2,7 @@ import getSensitiveWord from './request/data/getSensitiveWord';
 import getOverallDatOnNetwork from './request/data/getOverallDataOnNetwork';
 import getOverallDataBing from './request/data/getOverallDataBing';
 import modeifyMaterial from './request/data/modeifyMaterial';
+import addNewMaterialLib from './request/data/addNewMaterialLib';
 
 const domain1 = 'http://192.168.0.19:8082';
 const domain2 = 'http://localhost:3000/api';
@@ -73,7 +74,11 @@ const requests = {
 
   getMaterial: { url: `${curDomain}/data/getMaterial`, method: 'GET' },
   getMaterialDetail: { url: `${curDomain}/data/getMaterialDetail`, method: 'GET' },
+  addNewMaterialLib: { url: `${curDomain}/data/addNewMaterialLib`, method: 'GET' },
   modeifyMaterial: { url: `${curDomain}/data/modeifyMaterial`, method: 'POST' },
+  renameMaterial: { url: `${curDomain}/data/renameMaterial`, method: 'GET' },
+  deleteMaterial: { url: `${curDomain}/data/deleteMaterial`, method: 'GET' },
+  deleteMaterialIDs: { url: `${curDomain}/data/deleteMaterialIDs`, method: 'POST' },
 };
 
 export default requests;
