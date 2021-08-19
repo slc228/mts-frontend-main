@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Input, Divider, Layout, List, Button, Space, Image, Affix, Steps, message, Radio, Table, Tooltip } from 'antd';
+import { Input, Divider, Layout, List, Button, Space, Image, Affix, Steps, message, Radio, Table, Tooltip, Form, Select, Badge, Result } from 'antd';
 import {
   StarOutlined,
   CaretUpFilled,
   CaretDownFilled,
   DeleteFilled,
   PlusCircleOutlined,
-  PlusCircleFilled, LoadingOutlined,
+  PlusCircleFilled, LoadingOutlined, FileWordFilled, FileExcelFilled, FilePdfFilled,
 } from '@ant-design/icons';
 import moment from 'moment';
 import Lodash from 'lodash';
@@ -17,9 +17,13 @@ import getMaterialDetail from '../../../services/request/data/getMaterialDetail'
 import DataContent from '../../common/DataContent/DataContent';
 import deleteMaterialIDs from '../../../services/request/data/deleteMaterialIDs';
 import criteria from '../Material/criteria';
+import getBriefingTemplate from '../../../services/request/data/getBriefingTemplate';
+import './BriefingGeneration.scss';
+import dimension from '../Briefing/dimension';
 
 const DATE_FORMAT2 = 'YYYY-MM-DD HH:mm';
 const { Step } = Steps;
+const { Option } = Select;
 
 const steps = [
   {
@@ -36,6 +40,23 @@ const steps = [
   },
 ];
 
+const briefingmake = [
+  {
+    briefingName: '选择来源添加素材',
+    briefingTime: '1',
+    operation: '1',
+  },
+];
+
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
+
 class BriefingGeneration extends React.Component {
   constructor() {
     super();
@@ -49,7 +70,33 @@ class BriefingGeneration extends React.Component {
       selectedRowKeys: [],
       visible: false,
       curRecord: undefined,
+      templateList: [],
+      title: undefined,
+      header: undefined,
     };
+    this.briefingColumns = [
+      {
+        title: '简报名称',
+        dataIndex: 'briefingName',
+        key: 'briefingName',
+        render: this.renderBriefingName,
+        align: 'center',
+      },
+      {
+        title: '生成时间',
+        dataIndex: 'briefingTime',
+        key: 'briefingTime',
+        render: this.renderBriefingTime,
+        align: 'center',
+      },
+      {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation',
+        render: this.renderOperation,
+        align: 'center',
+      },
+    ];
     this.columnsRender = [
       {
         title: '内容',
@@ -104,6 +151,19 @@ class BriefingGeneration extends React.Component {
       },
     ];
   }
+
+  renderBriefingName=(text) => (text);
+
+  renderBriefingTime=(text) => (text);
+
+  renderOperation=(text, record) => (
+    <div>
+      <Button icon={<FileWordFilled />} type="primary" />
+      <Button icon={<FilePdfFilled />} type="primary" />
+      <Button icon={<FileExcelFilled />} type="primary" />
+      <Button icon={<DeleteFilled />} type="primary" danger />
+    </div>
+  );
 
   renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'));
 
@@ -192,6 +252,14 @@ class BriefingGeneration extends React.Component {
     this.setState({ data: data.dataContent, loading: false, dataSize: data.hitNumber });
   };
 
+  handleGetTemplate = async () => {
+    const { fid } = this.props.curProgramme;
+    const result = await getBriefingTemplate(fid);
+    this.setState({
+      templateList: result,
+    });
+  };
+
   componentDidMount() {
     this.getMateriallibs();
   }
@@ -222,6 +290,9 @@ class BriefingGeneration extends React.Component {
     if (current === 0) {
       this.getBriefingMaterialDetail();
     }
+    if (current === 1) {
+      this.handleGetTemplate();
+    }
   };
 
   prev = (current) => {
@@ -248,16 +319,46 @@ class BriefingGeneration extends React.Component {
     this.setState({ selectedRowKeys });
   };
 
+  handleTemplateChange=(value) => {
+    const { templateList } = this.state;
+    let header = '';
+    templateList.forEach((item) => {
+      if (item.title === value) {
+        header = item.institution;
+      }
+    });
+    this.setState({
+      title: value,
+      header,
+    });
+  };
+
+  handleBriefingTitleChange=(e) => {
+    this.setState({
+      title: e.target.value,
+    });
+  };
+
+  handleBriefingHeaderChange=(e) => {
+    this.setState({
+      header: e.target.value,
+    });
+  };
+
   render() {
     const { fid } = this.props.curProgramme;
-    const { current, materiallibs, curmateriallib, loading, data, dataSize, selectedRowKeys, visible, curRecord } = this.state;
+    const { current, materiallibs, curmateriallib, loading, data, dataSize, selectedRowKeys, visible, curRecord, templateList, title, header } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
+    console.log(templateList);
 
     return (
       <Layout>
+        {/* <div className="enter-background">
+          <Table columns={this.briefingColumns} dataSource={briefingmake} />
+        </div> */}
         <div className="enter-background">
           <Steps current={current}>
             {steps.map(item => (
@@ -266,21 +367,23 @@ class BriefingGeneration extends React.Component {
           </Steps>
           <div className="steps-content">
             {current === 0 && (
-            <div>
+            <div style={{ marginTop: '20px' }}>
               {
                 materiallibs.length === 0 ?
                   (
                     <div>
-                      <div>暂时没有素材库，请点击按钮跳转添加素材库</div>
-                      <Button onClick={this.turnToMaterial}>跳转</Button>
+                      <div style={{ marginBottom: '20px', fontSize: '20px' }}>
+                        暂时没有素材库，请点击按钮跳转添加素材库
+                        <Button style={{ marginLeft: '5%' }} onClick={this.turnToMaterial}>跳转</Button>
+                      </div>
                     </div>
                   ) : (
                     <div>
-                      <div>选择一个素材库作为素材数据来源</div>
-                      <Radio.Group onChange={this.onRadioChange} value={curmateriallib}>
+                      <div style={{ marginBottom: '20px', fontSize: '20px' }}>选择一个素材库作为素材数据来源</div>
+                      <Radio.Group onChange={this.onRadioChange} value={curmateriallib} style={{ marginLeft: '40%', marginBottom: '20px' }}>
                         <Space direction="vertical">
                           {materiallibs.map((item) => (
-                            <Radio value={item.materiallib}>{`${item.materiallib} (${item.num})`}</Radio>
+                            <Radio style={{ fontSize: '18px' }} value={item.materiallib}>{`${item.materiallib} (${item.num})`}</Radio>
                           ))}
                         </Space>
                       </Radio.Group>
@@ -329,11 +432,93 @@ class BriefingGeneration extends React.Component {
             </div>
             )}
             {current === 2 && (
-            <div>
-              <div style={{ backgroundColor: 'orange' }}>生成简报</div>
-              <div style={{ backgroundColor: 'blue', width: '50%', float: 'left' }}><Button>hhh</Button></div>
-              <div style={{ backgroundColor: 'red', width: '50%', float: 'left' }}><Button>hhh</Button></div>
+            <div style={{ marginTop: '20px' }}>
+              <div style={{ width: '40%', float: 'left', minHeight: '45vh' }}>
+                <Form {...layout} name="control-hooks" style={{ width: '80%', marginTop: '13vh' }}>
+                  <Form.Item
+                    name="template"
+                    label="选择模板"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Select
+                      placeholder="请选择一个简报模板"
+                      allowClear
+                      onChange={this.handleTemplateChange}
+                    >
+                      {templateList.length === 0 ? null : (templateList.map((item) => (
+                        <Option value={item.title}>{item.title}</Option>
+                      ))
+                      )}
+                    </Select>
+                  </Form.Item>
+                  <Form.Item
+                    name="title"
+                    label="简报标题"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Input placeholder="请输入简报标题" value={title} onChange={this.handleBriefingTitleChange} />
+                  </Form.Item>
+                  <Form.Item
+                    name="header"
+                    label="简报标头"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Input placeholder="请输入简报标头" value={header} onChange={this.handleBriefingHeaderChange} />
+                  </Form.Item>
+                </Form>
+              </div>
+              <Badge.Ribbon text="预览效果" color="red">
+                <div className="briefingGen-real">
+                  <div className="briefingGen-title">
+                    <div className="title-div">
+                      <Input className="title-input" value={title} bordered={false} />
+                    </div>
+                    <div className="subtitle-div">
+                      <Input className="subtitle-input" defaultValue="第（）期" bordered={false} />
+                    </div>
+                    <div className="tinytitle-div">
+                      <Input className="institution" value={header} bordered={false} />
+                      <Input className="time" defaultValue={moment().format(DATE_FORMAT2)} bordered={false} />
+                    </div>
+                  </div>
+                  <Divider className="briefing-divider" style={{ color: 'red', border: 'red' }}><StarOutlined /></Divider>
+                  <div className="briefing-dimension">
+                    <div>
+                      <div className="briefing-dimension-title">
+                        <div className="briefing-dimension-title-name">
+                          <span className="title-name-span">
+                            简报概述
+                          </span>
+                        </div>
+                      </div>
+                      <Divider />
+                      <div className="briefing-dimension-content">
+                        <Input.TextArea rows={4} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Badge.Ribbon>
             </div>
+            )}
+            {current === 3 && (
+            <Result
+              status="success"
+              title="简报制作完成"
+              subTitle="点击完成按钮查看简报文件制作进度"
+            />
             )}
           </div>
           <div className="steps-action">
