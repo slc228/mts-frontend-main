@@ -20,6 +20,7 @@ import criteria from '../Material/criteria';
 import getBriefingTemplate from '../../../services/request/data/getBriefingTemplate';
 import './BriefingGeneration.scss';
 import dimension from '../Briefing/dimension';
+import generateFile from '../../../services/request/data/generateFile';
 
 const DATE_FORMAT2 = 'YYYY-MM-DD HH:mm';
 const { Step } = Steps;
@@ -71,6 +72,7 @@ class BriefingGeneration extends React.Component {
       visible: false,
       curRecord: undefined,
       templateList: [],
+      templateId: undefined,
       title: undefined,
       header: undefined,
     };
@@ -283,6 +285,7 @@ class BriefingGeneration extends React.Component {
       alert('删除失败！');
     }
     await this.getBriefingMaterialDetail();
+    this.setState({ selectedRowKeys: [] });
   };
 
   next = (current) => {
@@ -297,6 +300,14 @@ class BriefingGeneration extends React.Component {
 
   prev = (current) => {
     this.setState({ current: current - 1 });
+  };
+
+  handleGenerateFile=async () => {
+    const { fid } = this.props.curProgramme;
+    const { selectedRowKeys, templateId, title, header } = this.state;
+    console.log(fid);
+    const ret = await generateFile(fid, templateId, title, header, selectedRowKeys);
+    console.log(ret);
   };
 
   onRadioChange=(e) => {
@@ -322,14 +333,17 @@ class BriefingGeneration extends React.Component {
   handleTemplateChange=(value) => {
     const { templateList } = this.state;
     let header = '';
+    let templateId = 0;
     templateList.forEach((item) => {
       if (item.title === value) {
         header = item.institution;
+        templateId = item.id;
       }
     });
     this.setState({
       title: value,
       header,
+      templateId,
     });
   };
 
@@ -528,7 +542,7 @@ class BriefingGeneration extends React.Component {
             </Button>
             )}
             {current === steps.length - 1 && (
-            <Button type="primary" onClick={() => message.success('Processing complete!')}>
+            <Button type="primary" onClick={() => this.handleGenerateFile()}>
               完成
             </Button>
             )}

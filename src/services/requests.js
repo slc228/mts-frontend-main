@@ -79,6 +79,8 @@ const requests = {
   renameMaterial: { url: `${curDomain}/data/renameMaterial`, method: 'GET' },
   deleteMaterial: { url: `${curDomain}/data/deleteMaterial`, method: 'GET' },
   deleteMaterialIDs: { url: `${curDomain}/data/deleteMaterialIDs`, method: 'POST' },
+
+  generateFile: { url: `${curDomain}/data/generateFile`, method: 'POST' },
 };
 
 export default requests;
