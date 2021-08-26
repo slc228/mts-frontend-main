@@ -1,13 +1,14 @@
 import qs from 'qs';
 import requests from '../../requests';
 
-const generateFile = async (fid, templateId, title, institution, yuQingIds) => {
+const generateFile = async (fid, templateId, title, institution, yuQingIds, echartsData) => {
   const params = {
     fid,
     templateId,
     title,
     institution,
     yuQingIds: yuQingIds.toString(),
+    echartsData: JSON.stringify(echartsData),
   };
   const url = encodeURI(`${requests.generateFile.url}`);
   const response = await fetch(url, {

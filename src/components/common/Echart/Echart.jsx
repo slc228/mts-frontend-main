@@ -11,10 +11,10 @@ import chinaMap from './getRules/chinaMap';
 import './Echart.scss';
 import defaultTree from './getRules/defaultTree';
 import circleTree from './getRules/circleTree';
-import connGraph from "./getRules/connGraph";
-import Loading from "../Loading/Loading";
-import stackLine from "./getRules/stackLine";
-import basicLine from "./getRules/basicLine";
+import connGraph from './getRules/connGraph';
+import Loading from '../Loading/Loading';
+import stackLine from './getRules/stackLine';
+import basicLine from './getRules/basicLine';
 
 class Echart extends React.Component {
   constructor() {
@@ -60,18 +60,19 @@ class Echart extends React.Component {
         id={`echart-${guid}`}
       >
         {
-          data ?
+          data ? (
             <ReactEcharts
               style={{
                 width: '100%',
-                height: '100%'
+                height: '100%',
               }}
               option={option}
               theme="light"
               onEvents={{
-                click: this.handleClick
+                click: this.handleClick,
               }}
-            /> :
+            />
+          ) :
             <Loading title={title} />
         }
       </div>

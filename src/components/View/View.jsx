@@ -6,7 +6,7 @@ import getAmountTrend from '../../services/request/data/getAmountTrend';
 import getSensiLayout from '../../services/request/data/getSensiLayout';
 import getSourceLayout from '../../services/request/data/getSourceLayout';
 import getRegionLayout from '../../services/request/data/getRegionLayout';
-import AutofitWrap from "../common/AutofitWrap/AutofitWrap";
+import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -45,7 +45,7 @@ class View extends React.Component {
     const { startPublishedDay, endPublishedDay } = this.state;
     const regionLayout = await getRegionLayout(keyword, startPublishedDay, endPublishedDay);
 
-    this.setState({ regionLayout })
+    this.setState({ regionLayout });
   };
 
   getSourceLayout = async () => {

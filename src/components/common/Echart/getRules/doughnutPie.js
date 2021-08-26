@@ -14,6 +14,7 @@ const doughnutPie = (data, title, size) => ({
     },
   },
   series: [{
+    animation: false,
     type: 'pie',
     radius: ['40%', '50%'],
     avoidLabelOverlap: false,

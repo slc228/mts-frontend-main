@@ -1,4 +1,5 @@
 import React from 'react';
+import * as echarts from 'echarts';
 import { connect } from 'react-redux';
 import { Input, Divider, Layout, List, Button, Space, Image, Affix, Steps, message, Radio, Table, Tooltip, Form, Select, Badge, Result } from 'antd';
 import {
@@ -21,6 +22,8 @@ import getBriefingTemplate from '../../../services/request/data/getBriefingTempl
 import './BriefingGeneration.scss';
 import dimension from '../Briefing/dimension';
 import generateFile from '../../../services/request/data/generateFile';
+import genEchartSensiLayoutImage from './genEchartSensiLayoutImage';
+import genEchartRegionLayoutImage from './genEchartRegionLayoutImage';
 
 const DATE_FORMAT2 = 'YYYY-MM-DD HH:mm';
 const { Step } = Steps;
@@ -75,6 +78,7 @@ class BriefingGeneration extends React.Component {
       templateId: undefined,
       title: undefined,
       header: undefined,
+      echartsData: [],
     };
     this.briefingColumns = [
       {
@@ -160,10 +164,10 @@ class BriefingGeneration extends React.Component {
 
   renderOperation=(text, record) => (
     <div>
-      <Button icon={<FileWordFilled />} type="primary" />
-      <Button icon={<FilePdfFilled />} type="primary" />
-      <Button icon={<FileExcelFilled />} type="primary" />
-      <Button icon={<DeleteFilled />} type="primary" danger />
+      <Button style={{ margin: '5px' }} icon={<FileWordFilled />} type="primary" />
+      <Button style={{ margin: '5px' }} icon={<FilePdfFilled />} type="primary" />
+      <Button style={{ margin: '5px' }} icon={<FileExcelFilled />} type="primary" />
+      <Button style={{ margin: '5px' }} icon={<DeleteFilled />} type="primary" danger />
     </div>
   );
 
@@ -239,7 +243,6 @@ class BriefingGeneration extends React.Component {
     this.setState({ current: 0 });
     const { fid } = this.props.curProgramme;
     const ret = await getMaterial(fid);
-    console.log(ret);
     this.setState({
       materiallibs: ret,
       curmateriallib: ret.length === 0 ? undefined : ret[0].materiallib,
@@ -263,7 +266,7 @@ class BriefingGeneration extends React.Component {
   };
 
   componentDidMount() {
-    this.getMateriallibs();
+    this.props.onBriefingGenPathChange({ path: '' });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -304,10 +307,42 @@ class BriefingGeneration extends React.Component {
 
   handleGenerateFile=async () => {
     const { fid } = this.props.curProgramme;
-    const { selectedRowKeys, templateId, title, header } = this.state;
-    console.log(fid);
-    const ret = await generateFile(fid, templateId, title, header, selectedRowKeys);
-    console.log(ret);
+    const { selectedRowKeys, templateId, title, header, templateList } = this.state;
+    let keyList;
+    templateList.forEach((item) => {
+      if (item.id === templateId) {
+        keyList = item.keylist.length === 0 ? [] : item.keylist.split(',');
+      }
+    });
+    this.handleGenEchartImage(keyList);
+    // const ret = await generateFile(fid, templateId, title, header, selectedRowKeys);
+    this.props.onBriefingGenPathChange({ path: '' });
+  };
+
+  handleGenEchartImage=async (keyList) => {
+    const { fid } = this.props.curProgramme;
+    for (const item of keyList) {
+      if (dimension[item - 1].type === 'image') {
+        let ret;
+        if (dimension[item - 1].name === '敏感度分布') {
+          ret = await genEchartSensiLayoutImage(fid);
+          console.log(ret);
+        }
+        if (dimension[item - 1].name === '地域分布') {
+          ret = await genEchartRegionLayoutImage(fid);
+        }
+        const { echartsData } = this.state;
+        echartsData.push(ret);
+        this.setState({
+          echartsData,
+        });
+      }
+    }
+    const { selectedRowKeys, templateId, title, header, echartsData } = this.state;
+    const ret = await generateFile(fid, templateId, title, header, selectedRowKeys, echartsData);
+    this.setState({
+      echartsData: [],
+    });
   };
 
   onRadioChange=(e) => {
@@ -359,215 +394,274 @@ class BriefingGeneration extends React.Component {
     });
   };
 
+  handleAddNewBriefingFile=() => {
+    this.props.onBriefingGenPathChange({ path: 'result' });
+    this.setState({
+      current: 0,
+      materiallibs: [],
+      curmateriallib: undefined,
+      loading: true,
+      data: [],
+      dataSize: 0,
+      selectedRowKeys: [],
+      visible: false,
+      curRecord: undefined,
+      templateList: [],
+      templateId: undefined,
+      title: undefined,
+      header: undefined,
+    });
+    this.getMateriallibs();
+  };
+
+  handleGenEchartsBase64=(e) => {
+    console.log('here');
+    console.log(e.getDataURL());
+  };
+
   render() {
     const { fid } = this.props.curProgramme;
-    const { current, materiallibs, curmateriallib, loading, data, dataSize, selectedRowKeys, visible, curRecord, templateList, title, header } = this.state;
+    const { current, materiallibs, curmateriallib, loading, data, dataSize, selectedRowKeys, visible, curRecord, templateList, title, header, echartsTitle, echartsType, echartsData } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-    console.log(templateList);
+    const curPath = this.props.briefingGenPath;
 
-    return (
-      <Layout>
-        {/* <div className="enter-background">
-          <Table columns={this.briefingColumns} dataSource={briefingmake} />
-        </div> */}
-        <div className="enter-background">
-          <Steps current={current}>
-            {steps.map(item => (
-              <Step key={item.title} title={item.title} />
-            ))}
-          </Steps>
-          <div className="steps-content">
-            {current === 0 && (
-            <div style={{ marginTop: '20px' }}>
-              {
-                materiallibs.length === 0 ?
-                  (
-                    <div>
-                      <div style={{ marginBottom: '20px', fontSize: '20px' }}>
-                        暂时没有素材库，请点击按钮跳转添加素材库
-                        <Button style={{ marginLeft: '5%' }} onClick={this.turnToMaterial}>跳转</Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <div style={{ marginBottom: '20px', fontSize: '20px' }}>选择一个素材库作为素材数据来源</div>
-                      <Radio.Group onChange={this.onRadioChange} value={curmateriallib} style={{ marginLeft: '40%', marginBottom: '20px' }}>
-                        <Space direction="vertical">
-                          {materiallibs.map((item) => (
-                            <Radio style={{ fontSize: '18px' }} value={item.materiallib}>{`${item.materiallib} (${item.num})`}</Radio>
-                          ))}
-                        </Space>
-                      </Radio.Group>
-                    </div>
-                  )
-              }
+    switch (curPath) {
+      case '':
+        return (
+          <Layout>
+            <div className="enter-background">
+              <Button style={{ marginBottom: '10px' }} icon={<PlusCircleOutlined />} type="primary" onClick={this.handleAddNewBriefingFile}>新建简报文件</Button>
+              <Table columns={this.briefingColumns} dataSource={briefingmake} />
             </div>
-            )}
-            {current === 1 && (
-            <div id="table">
-              <Table
-                title={() => (
-                  <div>
-                    <div style={{ float: 'left', width: '15%', fontSize: '17px', textAlign: 'center', color: '#1890ff' }}>
-                      {'添加舆情素材 '}
-                      <Tooltip placement="topLeft" title="跳转到舆情列表进行添加" arrowPointAtCenter>
-                        <PlusCircleFilled onClick={this.turnToSpecific} style={{ fontSize: '15px' }} />
-                      </Tooltip>
-                    </div>
-                    <div style={{ float: 'left', width: '15%', fontSize: '17px', textAlign: 'center', color: 'red' }}>
-                      {'批量删除 '}
-                      <Tooltip placement="topLeft" title="批量删除选中的素材" arrowPointAtCenter>
-                        <DeleteFilled onClick={this.handleDeleteMateriallibIds} style={{ fontSize: '15px' }} />
-                      </Tooltip>
-                    </div>
+          </Layout>
+        );
+      case 'result':
+        return (
+          <Layout>
+            <div className="enter-background">
+              <Steps current={current}>
+                {steps.map(item => (
+                  <Step key={item.title} title={item.title} />
+                ))}
+              </Steps>
+              <div className="steps-content">
+                {current === 0 && (
+                  <div style={{ marginTop: '20px' }}>
+                    {
+                          materiallibs.length === 0 ?
+                            (
+                              <div>
+                                <div style={{ marginBottom: '20px', fontSize: '20px' }}>
+                                  暂时没有素材库，请点击按钮跳转添加素材库
+                                  <Button style={{ marginLeft: '5%' }} onClick={this.turnToMaterial}>跳转</Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div>
+                                <div style={{ marginBottom: '20px', fontSize: '20px' }}>选择一个素材库作为素材数据来源</div>
+                                <Radio.Group
+                                  onChange={this.onRadioChange}
+                                  value={curmateriallib}
+                                  style={{ marginLeft: '40%', marginBottom: '20px' }}
+                                >
+                                  <Space direction="vertical">
+                                    {materiallibs.map((item) => (
+                                      <Radio
+                                        style={{ fontSize: '18px' }}
+                                        value={item.materiallib}
+                                      >{`${item.materiallib} (${item.num})`}
+                                      </Radio>
+                                    ))}
+                                  </Space>
+                                </Radio.Group>
+                              </div>
+                            )
+                        }
                   </div>
-
                 )}
-                rowKey={(record) => record.id}
-                columns={this.columnsRender}
-                rowSelection={rowSelection}
-                dataSource={data}
-                pagination={{
-                  position: ['none', 'bottomRight'],
-                  total: dataSize,
-                }}
-                loading={loading}
-                style={{ fontSize: '16px' }}
-              />
-              <DataContent
-                record={curRecord}
-                visible={visible}
-                fid={this.props.curProgramme.fid}
-                handleModalCancel={this.handleModalCancel}
-              />
-            </div>
-            )}
-            {current === 2 && (
-            <div style={{ marginTop: '20px' }}>
-              <div style={{ width: '40%', float: 'left', minHeight: '45vh' }}>
-                <Form {...layout} name="control-hooks" style={{ width: '80%', marginTop: '13vh' }}>
-                  <Form.Item
-                    name="template"
-                    label="选择模板"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                    ]}
-                  >
-                    <Select
-                      placeholder="请选择一个简报模板"
-                      allowClear
-                      onChange={this.handleTemplateChange}
-                    >
-                      {templateList.length === 0 ? null : (templateList.map((item) => (
-                        <Option value={item.title}>{item.title}</Option>
-                      ))
+                {current === 1 && (
+                  <div id="table">
+                    <Table
+                      title={() => (
+                        <div>
+                          <div style={{
+                            float: 'left',
+                            width: '15%',
+                            fontSize: '17px',
+                            textAlign: 'center',
+                            color: '#1890ff',
+                          }}
+                          >
+                            {'添加舆情素材 '}
+                            <Tooltip placement="topLeft" title="跳转到舆情列表进行添加" arrowPointAtCenter>
+                              <PlusCircleFilled onClick={this.turnToSpecific} style={{ fontSize: '15px' }} />
+                            </Tooltip>
+                          </div>
+                          <div style={{
+                            float: 'left',
+                            width: '15%',
+                            fontSize: '17px',
+                            textAlign: 'center',
+                            color: 'red',
+                          }}
+                          >
+                            {'批量删除 '}
+                            <Tooltip placement="topLeft" title="批量删除选中的素材" arrowPointAtCenter>
+                              <DeleteFilled
+                                onClick={this.handleDeleteMateriallibIds}
+                                style={{ fontSize: '15px' }}
+                              />
+                            </Tooltip>
+                          </div>
+                        </div>
+
                       )}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    name="title"
-                    label="简报标题"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                    ]}
-                  >
-                    <Input placeholder="请输入简报标题" value={title} onChange={this.handleBriefingTitleChange} />
-                  </Form.Item>
-                  <Form.Item
-                    name="header"
-                    label="简报标头"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                    ]}
-                  >
-                    <Input placeholder="请输入简报标头" value={header} onChange={this.handleBriefingHeaderChange} />
-                  </Form.Item>
-                </Form>
-              </div>
-              <Badge.Ribbon text="预览效果" color="red">
-                <div className="briefingGen-real">
-                  <div className="briefingGen-title">
-                    <div className="title-div">
-                      <Input className="title-input" value={title} bordered={false} />
-                    </div>
-                    <div className="subtitle-div">
-                      <Input className="subtitle-input" defaultValue="第（）期" bordered={false} />
-                    </div>
-                    <div className="tinytitle-div">
-                      <Input className="institution" value={header} bordered={false} />
-                      <Input className="time" defaultValue={moment().format(DATE_FORMAT2)} bordered={false} />
-                    </div>
+                      rowKey={(record) => record.id}
+                      columns={this.columnsRender}
+                      rowSelection={rowSelection}
+                      dataSource={data}
+                      pagination={{
+                        position: ['none', 'bottomRight'],
+                        total: dataSize,
+                      }}
+                      loading={loading}
+                      style={{ fontSize: '16px' }}
+                    />
+                    <DataContent
+                      record={curRecord}
+                      visible={visible}
+                      fid={this.props.curProgramme.fid}
+                      handleModalCancel={this.handleModalCancel}
+                    />
                   </div>
-                  <Divider className="briefing-divider" style={{ color: 'red', border: 'red' }}><StarOutlined /></Divider>
-                  <div className="briefing-dimension">
-                    <div>
-                      <div className="briefing-dimension-title">
-                        <div className="briefing-dimension-title-name">
-                          <span className="title-name-span">
-                            简报概述
-                          </span>
+                )}
+                {current === 2 && (
+                  <div style={{ marginTop: '20px' }}>
+                    <div style={{ width: '40%', float: 'left', minHeight: '45vh' }}>
+                      <Form {...layout} name="control-hooks" style={{ width: '80%', marginTop: '13vh' }}>
+                        <Form.Item
+                          name="template"
+                          label="选择模板"
+                          rules={[
+                            {
+                              required: true,
+                            },
+                          ]}
+                        >
+                          <Select
+                            placeholder="请选择一个简报模板"
+                            allowClear
+                            onChange={this.handleTemplateChange}
+                          >
+                            {templateList.length === 0 ? null : (templateList.map((item) => (
+                              <Option value={item.title}>{item.title}</Option>
+                            ))
+                            )}
+                          </Select>
+                        </Form.Item>
+                        <Form.Item
+                          name="title"
+                          label="简报标题"
+                          rules={[
+                            {
+                              required: true,
+                            },
+                          ]}
+                        >
+                          <Input placeholder="请输入简报标题" value={title} onChange={this.handleBriefingTitleChange} />
+                        </Form.Item>
+                        <Form.Item
+                          name="header"
+                          label="简报标头"
+                          rules={[
+                            {
+                              required: true,
+                            },
+                          ]}
+                        >
+                          <Input placeholder="请输入简报标头" value={header} onChange={this.handleBriefingHeaderChange} />
+                        </Form.Item>
+                      </Form>
+                    </div>
+                    <Badge.Ribbon text="预览效果" color="red">
+                      <div className="briefingGen-real">
+                        <div className="briefingGen-title">
+                          <div className="title-div">
+                            <Input className="title-input" value={title} bordered={false} />
+                          </div>
+                          <div className="subtitle-div">
+                            <Input className="subtitle-input" defaultValue="第（）期" bordered={false} />
+                          </div>
+                          <div className="tinytitle-div">
+                            <Input className="institution" value={header} bordered={false} />
+                            <Input className="time" defaultValue={moment().format(DATE_FORMAT2)} bordered={false} />
+                          </div>
+                        </div>
+                        <Divider className="briefing-divider" style={{ color: 'red', border: 'red' }}><StarOutlined /></Divider>
+                        <div className="briefing-dimension">
+                          <div>
+                            <div className="briefing-dimension-title">
+                              <div className="briefing-dimension-title-name">
+                                <span className="title-name-span">
+                                  简报概述
+                                </span>
+                              </div>
+                            </div>
+                            <Divider />
+                            <div className="briefing-dimension-content">
+                              <Input.TextArea rows={4} />
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <Divider />
-                      <div className="briefing-dimension-content">
-                        <Input.TextArea rows={4} />
-                      </div>
-                    </div>
+                    </Badge.Ribbon>
                   </div>
-                </div>
-              </Badge.Ribbon>
+                )}
+                {current === 3 && (
+                  <Result
+                    status="success"
+                    title="简报制作完成"
+                    subTitle="点击完成按钮查看简报文件制作进度"
+                  />
+                )}
+              </div>
+              <div className="steps-action">
+                {current < steps.length - 1 && (
+                  <Button type="primary" onClick={() => this.next(current)}>
+                    下一步
+                  </Button>
+                )}
+                {current === steps.length - 1 && (
+                  <Button type="primary" onClick={() => this.handleGenerateFile()}>
+                    完成
+                  </Button>
+                )}
+                {current > 0 && (
+                  <Button style={{ margin: '0 8px' }} onClick={() => this.prev(current)}>
+                    上一步
+                  </Button>
+                )}
+              </div>
             </div>
-            )}
-            {current === 3 && (
-            <Result
-              status="success"
-              title="简报制作完成"
-              subTitle="点击完成按钮查看简报文件制作进度"
-            />
-            )}
-          </div>
-          <div className="steps-action">
-            {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => this.next(current)}>
-              下一步
-            </Button>
-            )}
-            {current === steps.length - 1 && (
-            <Button type="primary" onClick={() => this.handleGenerateFile()}>
-              完成
-            </Button>
-            )}
-            {current > 0 && (
-            <Button style={{ margin: '0 8px' }} onClick={() => this.prev(current)}>
-              上一步
-            </Button>
-            )}
-          </div>
-        </div>
-      </Layout>
-    );
+          </Layout>
+        );
+    }
   }
 }
 
 const mapStateToProps = (state) => ({
   userName: state.userName,
   curProgramme: state.curProgramme,
-  briefingPath: state.briefingPath,
+  briefingGenPath: state.briefingGenPath,
   curPageTag: state.curPageTag,
 });
 const mapDispatchToProps = {
   onPageTagChange: actions.onPageTagChange,
   onProgrammeChange: actions.onProgrammeChange,
-  onBriefingPathChange: actions.onBriefingPathChange,
+  onBriefingGenPathChange: actions.onBriefingGenPathChange,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(BriefingGeneration);

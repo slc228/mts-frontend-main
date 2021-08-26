@@ -81,6 +81,7 @@ const requests = {
   deleteMaterialIDs: { url: `${curDomain}/data/deleteMaterialIDs`, method: 'POST' },
 
   generateFile: { url: `${curDomain}/data/generateFile`, method: 'POST' },
+  receiveImage: { url: `${curDomain}/data/receiveImage`, method: 'POST' },
 };
 
 export default requests;

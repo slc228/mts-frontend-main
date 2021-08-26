@@ -1,5 +1,5 @@
-import requests from "../../requests";
 import qs from 'qs';
+import requests from '../../requests';
 
 const getProgrammeRegionLayout = async (fid, startPublishedDay, endPublishedDay) => {
   const params = {
@@ -7,9 +7,10 @@ const getProgrammeRegionLayout = async (fid, startPublishedDay, endPublishedDay)
     startPublishedDay,
     endPublishedDay,
   };
-  const url = encodeURI(`${requests.getProgrammeRegionLayout.url}?${qs.stringify(params)}`);
+  const url = encodeURI(`${requests.getProgrammeRegionLayout.url}?fid=${fid}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
   const response = await fetch(url, { method: requests.getProgrammeRegionLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
+  console.log(rawResult);
 
   const regionMap = new Map();
   // eslint-disable-next-line no-lone-blocks
@@ -66,6 +67,7 @@ const getProgrammeRegionLayout = async (fid, startPublishedDay, endPublishedDay)
     if (item.value < min) min = item.value;
     if (item.value > max) max = item.value;
   });
+  console.log(regionLayout);
   return {
     regions: regionLayout,
     min,

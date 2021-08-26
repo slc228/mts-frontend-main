@@ -4,6 +4,7 @@ import { handleProgrammeChange, handleProgrammesChange, handlePageTagChange } fr
 import { handleOverallPathChange } from './reducer/overall';
 import { handleMonitorPathChange } from './reducer/monitor';
 import { handleBriefingPathChange } from './reducer/briefingmake';
+import { handleBriefingGenPathChange } from './reducer/briefingGeneration';
 
 const initialState = {
   userName: undefined,
@@ -12,6 +13,7 @@ const initialState = {
   overallPath: '',
   monitorPath: '',
   briefingPath: '',
+  briefingGenPath: '',
   programmes: [],
   curPageTag: 'info',
 };
@@ -40,6 +42,9 @@ export default (prevState = initialState, actions) => {
       break;
     case actionTypes.ON_BRIEFING_PATH_CHANGE:
       newState = handleBriefingPathChange(prevState, data);
+      break;
+    case actionTypes.ON_BRIEFINGGEN_PATH_CHANGE:
+      newState = handleBriefingGenPathChange(prevState, data);
       break;
     default:
       newState = { ...prevState };
