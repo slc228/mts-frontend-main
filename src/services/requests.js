@@ -81,7 +81,9 @@ const requests = {
   deleteMaterialIDs: { url: `${curDomain}/data/deleteMaterialIDs`, method: 'POST' },
 
   generateFile: { url: `${curDomain}/data/generateFile`, method: 'POST' },
-  receiveImage: { url: `${curDomain}/data/receiveImage`, method: 'POST' },
+  getBriefingFiles: { url: `${curDomain}/data/getBriefingFiles`, method: 'GET' },
+  deleteBriefingFiles: { url: `${curDomain}/data/deleteBriefingFiles`, method: 'GET' },
+  downloadBriefingFiles: { url: `${curDomain}/data/downloadBriefingFiles`, method: 'GET' },
 };
 
 export default requests;

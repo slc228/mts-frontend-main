@@ -24,6 +24,7 @@ import dimension from '../Briefing/dimension';
 import generateFile from '../../../services/request/data/generateFile';
 import genEchartSensiLayoutImage from './genEchartSensiLayoutImage';
 import genEchartRegionLayoutImage from './genEchartRegionLayoutImage';
+import getBriefingFiles from '../../../services/request/data/getBriefingFiles';
 
 const DATE_FORMAT2 = 'YYYY-MM-DD HH:mm';
 const { Step } = Steps;
@@ -65,6 +66,7 @@ class BriefingGeneration extends React.Component {
   constructor() {
     super();
     this.state = {
+      briefingfiles: [],
       current: 0,
       materiallibs: [],
       curmateriallib: undefined,
@@ -239,6 +241,14 @@ class BriefingGeneration extends React.Component {
     this.setState({ visible: false });
   };
 
+  getBriefings=async () => {
+    const { fid } = this.props.curProgramme;
+    const ret = await getBriefingFiles(fid);
+    this.setState({
+      briefingfiles: ret,
+    });
+  };
+
   getMateriallibs= async () => {
     this.setState({ current: 0 });
     const { fid } = this.props.curProgramme;
@@ -267,6 +277,7 @@ class BriefingGeneration extends React.Component {
 
   componentDidMount() {
     this.props.onBriefingGenPathChange({ path: '' });
+    this.getBriefings();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -317,6 +328,7 @@ class BriefingGeneration extends React.Component {
     this.handleGenEchartImage(keyList);
     // const ret = await generateFile(fid, templateId, title, header, selectedRowKeys);
     this.props.onBriefingGenPathChange({ path: '' });
+    this.getBriefings();
   };
 
   handleGenEchartImage=async (keyList) => {
@@ -421,7 +433,7 @@ class BriefingGeneration extends React.Component {
 
   render() {
     const { fid } = this.props.curProgramme;
-    const { current, materiallibs, curmateriallib, loading, data, dataSize, selectedRowKeys, visible, curRecord, templateList, title, header, echartsTitle, echartsType, echartsData } = this.state;
+    const { current, materiallibs, curmateriallib, loading, data, dataSize, selectedRowKeys, visible, curRecord, templateList, title, header, briefingfiles } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -434,7 +446,7 @@ class BriefingGeneration extends React.Component {
           <Layout>
             <div className="enter-background">
               <Button style={{ marginBottom: '10px' }} icon={<PlusCircleOutlined />} type="primary" onClick={this.handleAddNewBriefingFile}>新建简报文件</Button>
-              <Table columns={this.briefingColumns} dataSource={briefingmake} />
+              <Table columns={this.briefingColumns} dataSource={briefingfiles} />
             </div>
           </Layout>
         );
