@@ -25,6 +25,8 @@ import generateFile from '../../../services/request/data/generateFile';
 import genEchartSensiLayoutImage from './genEchartSensiLayoutImage';
 import genEchartRegionLayoutImage from './genEchartRegionLayoutImage';
 import getBriefingFiles from '../../../services/request/data/getBriefingFiles';
+import deleteBriefingFiles from '../../../services/request/data/deleteBriefingFiles';
+import downloadBriefingFiles from '../../../services/request/data/downloadBriefingFiles';
 
 const DATE_FORMAT2 = 'YYYY-MM-DD HH:mm';
 const { Step } = Steps;
@@ -166,10 +168,10 @@ class BriefingGeneration extends React.Component {
 
   renderOperation=(text, record) => (
     <div>
-      <Button style={{ margin: '5px' }} icon={<FileWordFilled />} type="primary" />
-      <Button style={{ margin: '5px' }} icon={<FilePdfFilled />} type="primary" />
-      <Button style={{ margin: '5px' }} icon={<FileExcelFilled />} type="primary" />
-      <Button style={{ margin: '5px' }} icon={<DeleteFilled />} type="primary" danger />
+      <Button style={{ margin: '5px' }} icon={<FileWordFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'word')} />
+      <Button style={{ margin: '5px' }} icon={<FilePdfFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'pdf')} />
+      <Button style={{ margin: '5px' }} icon={<FileExcelFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'excel')} />
+      <Button style={{ margin: '5px' }} icon={<DeleteFilled />} type="primary" onClick={() => this.handleDeleteBriefings(record.id)} danger />
     </div>
   );
 
@@ -247,6 +249,20 @@ class BriefingGeneration extends React.Component {
     this.setState({
       briefingfiles: ret,
     });
+  };
+
+  handleDeleteBriefings=async (id) => {
+    const ret = await deleteBriefingFiles(id);
+    if (ret.deleteBriefingFiles === 1) {
+      alert('删除成功！');
+    } else {
+      alert('删除失败！');
+    }
+    this.getBriefings();
+  };
+
+  downloadBriefings=(id, type) => {
+    downloadBriefingFiles(id, type);
   };
 
   getMateriallibs= async () => {
