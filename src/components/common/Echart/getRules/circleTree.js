@@ -13,6 +13,7 @@ const circleTree = (data, title, size) => ({
   },
   series: [
     {
+      animation: false,
       label: {
         'normal': {
           'show': true,

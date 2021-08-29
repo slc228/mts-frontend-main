@@ -10,6 +10,7 @@ const areaLine = (data, title, size) => ({
   },
   yAxis: { type: 'value' },
   series: [{
+    animation: false,
     data: data.yAxis,
     type: 'line',
     areaStyle: {},

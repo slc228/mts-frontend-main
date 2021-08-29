@@ -27,6 +27,7 @@ import genEchartRegionLayoutImage from './genEchartRegionLayoutImage';
 import getBriefingFiles from '../../../services/request/data/getBriefingFiles';
 import deleteBriefingFiles from '../../../services/request/data/deleteBriefingFiles';
 import downloadBriefingFiles from '../../../services/request/data/downloadBriefingFiles';
+import genEchartsImages from './genEchartsImage';
 
 const DATE_FORMAT2 = 'YYYY-MM-DD HH:mm';
 const { Step } = Steps;
@@ -344,33 +345,35 @@ class BriefingGeneration extends React.Component {
     this.handleGenEchartImage(keyList);
     // const ret = await generateFile(fid, templateId, title, header, selectedRowKeys);
     this.props.onBriefingGenPathChange({ path: '' });
-    this.getBriefings();
+    // this.getBriefings();
   };
 
   handleGenEchartImage=async (keyList) => {
-    const { fid } = this.props.curProgramme;
-    for (const item of keyList) {
-      if (dimension[item - 1].type === 'image') {
-        let ret;
-        if (dimension[item - 1].name === '敏感度分布') {
-          ret = await genEchartSensiLayoutImage(fid);
-          console.log(ret);
-        }
-        if (dimension[item - 1].name === '地域分布') {
-          ret = await genEchartRegionLayoutImage(fid);
-        }
-        const { echartsData } = this.state;
-        echartsData.push(ret);
-        this.setState({
-          echartsData,
-        });
-      }
-    }
-    const { selectedRowKeys, templateId, title, header, echartsData } = this.state;
-    const ret = await generateFile(fid, templateId, title, header, selectedRowKeys, echartsData);
-    this.setState({
-      echartsData: [],
-    });
+    const { fid, name } = this.props.curProgramme;
+    const echartsDataRet = await genEchartsImages(fid, name, keyList);
+    // for (const item of keyList) {
+    //   if (dimension[item - 1].type === 'image') {
+    //     let ret;
+    //     if (dimension[item - 1].name === '敏感度分布') {
+    //       ret = await genEchartSensiLayoutImage(fid);
+    //       console.log(ret);
+    //     }
+    //     if (dimension[item - 1].name === '地域分布') {
+    //       ret = await genEchartRegionLayoutImage(fid);
+    //     }
+    //     const { echartsData } = this.state;
+    //     echartsData.push(ret);
+    //     this.setState({
+    //       echartsData,
+    //     });
+    //   }
+    // }
+    const { selectedRowKeys, templateId, title, header } = this.state;
+    const ret = await generateFile(fid, templateId, title, header, selectedRowKeys, echartsDataRet);
+    this.getBriefings();
+    // this.setState({
+    //   echartsData: [],
+    // });
   };
 
   onRadioChange=(e) => {

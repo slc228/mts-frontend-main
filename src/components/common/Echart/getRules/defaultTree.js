@@ -13,6 +13,7 @@ const defaultTree = (data, title, size) => ({
   },
   series: [
     {
+      animation: false,
       type: 'tree',
       data: [data],
       roam: true,

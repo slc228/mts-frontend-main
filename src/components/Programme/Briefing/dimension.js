@@ -1,4 +1,4 @@
-import { StarOutlined, EditOutlined, FacebookOutlined, PieChartOutlined, AreaChartOutlined, GlobalOutlined } from '@ant-design/icons';
+import { StarOutlined, EditOutlined, FacebookOutlined, PieChartOutlined, AreaChartOutlined, GlobalOutlined, CloudOutlined, ShareAltOutlined, DeploymentUnitOutlined } from '@ant-design/icons';
 
 const dimension = [
   {
@@ -27,6 +27,14 @@ const dimension = [
   },
   {
     id: '4',
+    icon: CloudOutlined,
+    name: '关键词云',
+    divHidden: true,
+    type: 'image',
+    src: 'https://i.loli.net/2021/08/06/L1PpDZqxMjTEvRU.png',
+  },
+  {
+    id: '5',
     icon: PieChartOutlined,
     name: '敏感度分布',
     divHidden: true,
@@ -34,7 +42,15 @@ const dimension = [
     src: 'https://i.loli.net/2021/08/06/L1PpDZqxMjTEvRU.png',
   },
   {
-    id: '5',
+    id: '6',
+    icon: PieChartOutlined,
+    name: '来源分布',
+    divHidden: true,
+    type: 'image',
+    src: 'https://i.loli.net/2021/08/06/L1PpDZqxMjTEvRU.png',
+  },
+  {
+    id: '7',
     icon: AreaChartOutlined,
     name: '总量趋势',
     divHidden: true,
@@ -42,7 +58,7 @@ const dimension = [
     src: 'https://i.loli.net/2021/08/06/RPIGhp6tCjBs1br.png',
   },
   {
-    id: '6',
+    id: '8',
     icon: AreaChartOutlined,
     name: '来源趋势',
     divHidden: true,
@@ -50,9 +66,49 @@ const dimension = [
     src: 'https://i.loli.net/2021/08/06/oQ38RNqzKDXb7GU.png',
   },
   {
-    id: '7',
+    id: '9',
     icon: GlobalOutlined,
     name: '地域分布',
+    divHidden: true,
+    type: 'image',
+    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+  },
+  {
+    id: '10',
+    icon: PieChartOutlined,
+    name: '情感分析',
+    divHidden: true,
+    type: 'image',
+    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+  },
+  {
+    id: '11',
+    icon: AreaChartOutlined,
+    name: '情感趋势图',
+    divHidden: true,
+    type: 'image',
+    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+  },
+  {
+    id: '12',
+    icon: ShareAltOutlined,
+    name: '事件溯源',
+    divHidden: true,
+    type: 'image',
+    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+  },
+  {
+    id: '13',
+    icon: ShareAltOutlined,
+    name: '微博溯源树形图',
+    divHidden: true,
+    type: 'image',
+    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+  },
+  {
+    id: '14',
+    icon: DeploymentUnitOutlined,
+    name: '微博溯源扩散图',
     divHidden: true,
     type: 'image',
     src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
