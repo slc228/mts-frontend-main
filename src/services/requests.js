@@ -81,6 +81,8 @@ const requests = {
   deleteMaterialIDs: { url: `${curDomain}/data/deleteMaterialIDs`, method: 'POST' },
 
   generateFile: { url: `${curDomain}/data/generateFile`, method: 'POST' },
+  addNewBriefingFileRecord: { url: `${curDomain}/data/addNewBriefingFileRecord`, method: 'GET' },
+  updateBriefingFileProgess: { url: `${curDomain}/data/updateBriefingFileProgess`, method: 'GET' },
   getBriefingFiles: { url: `${curDomain}/data/getBriefingFiles`, method: 'GET' },
   deleteBriefingFiles: { url: `${curDomain}/data/deleteBriefingFiles`, method: 'GET' },
   downloadBriefingFiles: { url: `${curDomain}/data/downloadBriefingFiles`, method: 'GET' },

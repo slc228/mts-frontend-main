@@ -1,8 +1,10 @@
 import qs from 'qs';
 import requests from '../../requests';
 
-const generateFile = async (fid, templateId, title, institution, yuQingIds, echartsData) => {
+const generateFile = async (fileID, fid, templateId, title, institution, yuQingIds, echartsData) => {
+  console.log(echartsData);
   const params = {
+    fileID,
     fid,
     templateId,
     title,

@@ -1,7 +1,26 @@
 import React from 'react';
 import * as echarts from 'echarts';
 import { connect } from 'react-redux';
-import { Input, Divider, Layout, List, Button, Space, Image, Affix, Steps, message, Radio, Table, Tooltip, Form, Select, Badge, Result } from 'antd';
+import {
+  Input,
+  Divider,
+  Layout,
+  List,
+  Button,
+  Space,
+  Image,
+  Affix,
+  Steps,
+  message,
+  Radio,
+  Table,
+  Tooltip,
+  Form,
+  Select,
+  Badge,
+  Result,
+  Progress,
+} from 'antd';
 import {
   StarOutlined,
   CaretUpFilled,
@@ -28,6 +47,8 @@ import getBriefingFiles from '../../../services/request/data/getBriefingFiles';
 import deleteBriefingFiles from '../../../services/request/data/deleteBriefingFiles';
 import downloadBriefingFiles from '../../../services/request/data/downloadBriefingFiles';
 import genEchartsImages from './genEchartsImage';
+import addNewBriefingFileRecord from '../../../services/request/data/addNewBriefingFileRecord';
+import updateBriefingFileProgess from '../../../services/request/data/updateBriefingFileProgess';
 
 const DATE_FORMAT2 = 'YYYY-MM-DD HH:mm';
 const { Step } = Steps;
@@ -167,14 +188,21 @@ class BriefingGeneration extends React.Component {
 
   renderBriefingTime=(text) => (text);
 
-  renderOperation=(text, record) => (
-    <div>
-      <Button style={{ margin: '5px' }} icon={<FileWordFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'word')} />
-      <Button style={{ margin: '5px' }} icon={<FilePdfFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'pdf')} />
-      <Button style={{ margin: '5px' }} icon={<FileExcelFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'excel')} />
-      <Button style={{ margin: '5px' }} icon={<DeleteFilled />} type="primary" onClick={() => this.handleDeleteBriefings(record.id)} danger />
-    </div>
-  );
+  renderOperation=(text, record) => {
+    if (record.percent) {
+      return (
+        <Progress percent={record.percent} />
+      );
+    }
+    return (
+      <div>
+        <Button style={{ margin: '5px' }} icon={<FileWordFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'word')} />
+        <Button style={{ margin: '5px' }} icon={<FilePdfFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'pdf')} />
+        <Button style={{ margin: '5px' }} icon={<FileExcelFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'excel')} />
+        <Button style={{ margin: '5px' }} icon={<DeleteFilled />} type="primary" onClick={() => this.handleDeleteBriefings(record.id)} danger />
+      </div>
+    );
+  };
 
   renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'));
 
@@ -350,31 +378,41 @@ class BriefingGeneration extends React.Component {
 
   handleGenEchartImage=async (keyList) => {
     const { fid, name } = this.props.curProgramme;
-    const echartsDataRet = await genEchartsImages(fid, name, keyList);
-    // for (const item of keyList) {
-    //   if (dimension[item - 1].type === 'image') {
-    //     let ret;
-    //     if (dimension[item - 1].name === '敏感度分布') {
-    //       ret = await genEchartSensiLayoutImage(fid);
-    //       console.log(ret);
-    //     }
-    //     if (dimension[item - 1].name === '地域分布') {
-    //       ret = await genEchartRegionLayoutImage(fid);
-    //     }
-    //     const { echartsData } = this.state;
-    //     echartsData.push(ret);
-    //     this.setState({
-    //       echartsData,
-    //     });
-    //   }
-    // }
-    const { selectedRowKeys, templateId, title, header } = this.state;
-    const ret = await generateFile(fid, templateId, title, header, selectedRowKeys, echartsDataRet);
+    const { briefingfiles, title } = this.state;
+    const addret = await addNewBriefingFileRecord(fid, title);
     this.getBriefings();
-    // this.setState({
-    //   echartsData: [],
-    // });
+    const fileID = addret.fileId;
+    const echartsDataRet = [];
+    let numOfImageKey = 0;
+    for (const item of keyList) {
+      if (dimension[item - 1].type === 'image') {
+        numOfImageKey += 1;
+      }
+    }
+    const everyKeyPercent = Math.floor(80 / numOfImageKey);
+    for (const item of keyList) {
+      if (dimension[item - 1].type === 'image') {
+        const echartObject = await genEchartsImages(fid, name, item);
+        if (dimension[item - 1].name === '关键词云') {
+          await this.sleep(1200);
+        }
+        console.log(echartObject);
+        echartsDataRet.push(echartObject);
+        const updateRet = await updateBriefingFileProgess(fileID, everyKeyPercent);
+        this.getBriefings();
+      }
+    }
+    const { selectedRowKeys, templateId, header } = this.state;
+    console.log(echartsDataRet);
+    const ret = await generateFile(fileID, fid, templateId, title, header, selectedRowKeys, echartsDataRet);
+    this.getBriefings();
   };
+
+  sleep=(delay) => new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, delay);
+  });
 
   onRadioChange=(e) => {
     this.setState({ curmateriallib: e.target.value });
