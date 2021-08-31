@@ -84,17 +84,34 @@ class Header extends React.Component {
           selectedKeys={[current]}
           mode="horizontal"
           className="mts-header"
+          theme="dark"
         >
           {getRoutes(userType).map((route) => (
-            <Menu.Item key={route.key}>
-              <Link
-                to={route.link}
-                className="link"
-              >
-                {route.label}
-              </Link>
-            </Menu.Item>
+            route.hasOwnProperty('type') ? null : (
+              <Menu.Item key={route.key}>
+                <Link
+                  to={route.link}
+                  className="link"
+                >
+                  {route.label}
+                </Link>
+              </Menu.Item>
+            )
           ))}
+          <Menu.SubMenu key="Admin" title="管理" style={{ fontSize: '16px' }}>
+            {getRoutes(userType).map((route) => (
+              route.hasOwnProperty('type') ? (
+                <Menu.Item key={route.key}>
+                  <Link
+                    to={route.link}
+                    className="link"
+                  >
+                    {route.label}
+                  </Link>
+                </Menu.Item>
+              ) : null
+            ))}
+          </Menu.SubMenu>
         </Menu>
       </div>
     );

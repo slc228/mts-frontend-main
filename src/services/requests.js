@@ -3,6 +3,7 @@ import getOverallDatOnNetwork from './request/data/getOverallDataOnNetwork';
 import getOverallDataBing from './request/data/getOverallDataBing';
 import modeifyMaterial from './request/data/modeifyMaterial';
 import addNewMaterialLib from './request/data/addNewMaterialLib';
+import addSensitiveWordForAll from './request/data/addSensitiveWordForAll';
 
 const domain1 = 'http://192.168.0.19:8082';
 const domain2 = 'http://localhost:3000/api';
@@ -86,6 +87,11 @@ const requests = {
   getBriefingFiles: { url: `${curDomain}/data/getBriefingFiles`, method: 'GET' },
   deleteBriefingFiles: { url: `${curDomain}/data/deleteBriefingFiles`, method: 'GET' },
   downloadBriefingFiles: { url: `${curDomain}/data/downloadBriefingFiles`, method: 'GET' },
+
+  getSensitiveWordTypes: { url: `${curDomain}/data/getSensitiveWordTypes`, method: 'GET' },
+  getSensitiveWords: { url: `${curDomain}/data/getSensitiveWords`, method: 'GET' },
+  deleteSensitiveWords: { url: `${curDomain}/data/deleteSensitiveWords`, method: 'POST' },
+  addSensitiveWordForAll: { url: `${curDomain}/data/addSensitiveWordForAll`, method: 'GET' },
 };
 
 export default requests;
