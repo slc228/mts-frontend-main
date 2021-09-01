@@ -133,7 +133,7 @@ class SensitiveWords extends Component {
                 visible={addNewSwordVisible}
                 onCancel={this.handleAddSwordModalCancel}
                 closable={false}
-                title="请输入敏感词名称"
+                title="请选择添加敏感词"
                 footer={null}
               >
                 <Input.Search placeholder="输入后点击按钮完成添加" enterButton={<CheckOutlined />} onSearch={this.handleAddNewSword} />

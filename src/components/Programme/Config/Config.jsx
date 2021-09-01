@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, Input, Button, Radio, Layout, Switch ,Modal} from 'antd';
-import { QuestionCircleFilled } from '@ant-design/icons';
+import {Form, Input, Button, Radio, Layout, Switch, Modal, Menu, Checkbox} from 'antd';
+import {CheckOutlined, PlusCircleFilled, QuestionCircleFilled} from '@ant-design/icons';
 import './Config.scss';
 import modifyProgramme from "../../../services/request/programme/modifyProgamme";
 import delProgramme from "../../../services/request/programme/delProgramme";
@@ -9,6 +9,8 @@ import { actions } from "../../../redux/actions";
 import getProgrammes from "../../../services/request/programme/getProgrammes";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import sampleKeywordAnalysis from "../../../services/request/programme/sampleKeywordAnalysis";
+import getSensitiveWordTypes from "../../../services/request/data/getSensitiveWordTypes";
+import getSensitiveWords from "../../../services/request/data/getSensitiveWords";
 
 const formItemLayoutWithOutLabel = {
   wrapperCol: {span: 22, offset: 3},
@@ -30,7 +32,97 @@ class Config extends React.Component {
     this.state = {
       sampleVisible: false,
       sampleText: '',
+      swordTypes: [],
+      curSwordType: undefined,
+      swords: [],
+      addNewSwordVisible: false,
+      checkedSwordsList:[],
+      checkedSwords:[],
     }
+  }
+
+  handleGetSwordTypes=async () => {
+    const swordTypes = await getSensitiveWordTypes();
+    this.setState({
+      swordTypes,
+      curSwordType: swordTypes.length === 0 ? undefined : swordTypes[0].type,
+      checkedSwordsList : swordTypes.length > 0 ? swordTypes.map((item) => ({
+        type: item.type,
+        checkedSwords: [],
+      })) : [],
+    });
+  };
+
+  handleGetSwords=async () => {
+    const { curSwordType } = this.state;
+    const swords = await getSensitiveWords(curSwordType);
+    this.setState({
+      swords,
+    });
+  };
+
+  changeSwordsType=async (e) => {
+    await this.setState({
+      curSwordType: e.key,
+    });
+    await this.handleGetSwords();
+    const {checkedSwordsList} = this.state;
+    let checkedSwords;
+    checkedSwordsList.forEach((item) => {
+      if (item.type === e.key) {
+        checkedSwords = item.checkedSwords;
+      }
+    });
+    this.setState({
+      checkedSwords,
+    })
+  };
+
+  handleAddSwordModalCancel=() => {
+    this.setState({
+      addNewSwordVisible: false,
+    });
+  };
+
+  addNewSword=() => {
+    const { swordTypes } = this.state;
+    this.setState({
+      addNewSwordVisible: true,
+      checkedSwordsList : swordTypes.length > 0 ? swordTypes.map((item) => ({
+        type: item.type,
+        checkedSwords: [],
+      })) : [],
+      checkedSwords:[],
+    });
+  };
+
+  handleCheck = (value) => {
+    const {curSwordType, checkedSwordsList} = this.state;
+    checkedSwordsList.forEach((item) => {
+      if (item.type === curSwordType) {
+        item.checkedSwords=value;
+      }
+    });
+    this.setState({
+      checkedSwords: value,
+      checkedSwordsList,
+    });
+  };
+
+  addNewSwordToProgramme=()=>{
+    const { programmes } = this.props;
+    const {checkedSwordsList} = this.state;
+    let str=[];
+    checkedSwordsList.forEach((item) => {
+       str=str.concat(item.checkedSwords);
+    });
+    const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid);
+    const sensitiveWords = curProgramme.sensitiveWord.split(/\s+/);
+    str=str.concat(sensitiveWords);
+    str=Array.from(new Set(str));
+    curProgramme.sensitiveWord=str.toString().replace(/,/g, ' ');
+    this.props.onProgrammeChange({ curProgramme });
+    this.handleAddSwordModalCancel();
   }
 
   handleProgrammeConfig = (type, data) => {
@@ -63,6 +155,7 @@ class Config extends React.Component {
       userName,
       ...rawData,
     };
+    console.log(rawData);
     const result = await modifyProgramme(data);
     if (result.modifyProgramme !== 1) { alert('提交失败！'); }
     else {
@@ -95,9 +188,11 @@ class Config extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // console.log(this.form.input.props.value);
     this.resetProgrammeForm();
+    await this.handleGetSwordTypes();
+    await this.handleGetSwords();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -149,7 +244,7 @@ class Config extends React.Component {
 
   render() {
     const { layout, subLayout } = this;
-    const { sampleVisible, sampleText } = this.state;
+    const { sampleVisible, sampleText, swordTypes, curSwordType, swords, addNewSwordVisible, checkedSwords } = this.state;
     // console.log(this.props.curProgramme);
     return (
       <Layout className="programme-config-wrap">
@@ -280,34 +375,21 @@ class Config extends React.Component {
                 </>
             )}
           </Form.List>
-
-        {/*  <Form.Item
-            label="事件关键词"
-            name="eventKeywords"
+          <Form.Item
+              label="方案敏感词"
           >
-            <Input.TextArea
-              rows={5}
-            />
+            <Button
+                type={'primary'}
+                style={{ width: '20%' }}
+                icon={<PlusOutlined />}
+                onClick={this.addNewSword}
+            >
+              添加方案敏感词
+            </Button>
           </Form.Item>
           <Form.Item
-            name="eventMatch"
-            label="事件关系"
-            rules={[{ required: true, message: '请选择匹配方式' }]}
-          >
-            <Radio.Group>
-              <Radio value="and">或</Radio>
-              <Radio value="or">与</Radio>
-            </Radio.Group>
-          </Form.Item>*/}
-          {/*<Form.Item
-            label="启用预警"
-            name="enableAlert"
-          >
-            <Switch />
-          </Form.Item>*/}
-          <Form.Item
               name="sensitiveWord"
-              label="方案敏感词"
+              {...(formItemLayoutWithOutLabel)}
           >
             <Input.TextArea
                 rows={5}
@@ -350,6 +432,32 @@ class Config extends React.Component {
               value={sampleText}
               onChange={this.handleSampleChange}
           />
+        </Modal>
+        <Modal
+            visible={addNewSwordVisible}
+            onCancel={this.handleAddSwordModalCancel}
+            closable={false}
+            title={
+              <Button
+                  icon={<PlusCircleFilled />}
+                  style={{ fontSize: '15px'}}
+                  type="primary"
+                  onClick={this.addNewSwordToProgramme}
+              >
+                添加新敏感词
+              </Button>
+            }
+            footer={null}
+            width={1200}
+        >
+          <Menu onClick={this.changeSwordsType} mode="horizontal" selectedKeys={[curSwordType]} theme={"light"}>
+            { swordTypes.map((item) => (
+                <Menu.Item key={item.type.toString()}>{item.type}</Menu.Item>
+            ))}
+          </Menu>
+          <div>
+            <Checkbox.Group options={swords} onChange={this.handleCheck} value={checkedSwords} />
+          </div>
         </Modal>
       </Layout>
     )
