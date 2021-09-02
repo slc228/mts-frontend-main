@@ -28,6 +28,7 @@ const horizontalBar = (data, title, size) => ({
     data: data.yAxis,
   },
   series: data.xAxis.map((item) => ({
+    animation: false,
     type: 'bar',
     stack: 'total',
     data: item.value,

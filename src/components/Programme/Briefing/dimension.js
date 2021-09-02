@@ -31,7 +31,7 @@ const dimension = [
     name: '关键词云',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/L1PpDZqxMjTEvRU.png',
+    src: 'https://i.loli.net/2021/09/02/YQ4OJ8mIBwslAgd.png',
   },
   {
     id: '5',
@@ -39,7 +39,7 @@ const dimension = [
     name: '敏感度分布',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/L1PpDZqxMjTEvRU.png',
+    src: 'https://i.loli.net/2021/09/02/4i3qbvolgCWJnMF.png',
   },
   {
     id: '6',
@@ -47,7 +47,7 @@ const dimension = [
     name: '来源分布',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/L1PpDZqxMjTEvRU.png',
+    src: 'https://i.loli.net/2021/09/02/Pbq7JstQdkgCSf6.png',
   },
   {
     id: '7',
@@ -55,7 +55,7 @@ const dimension = [
     name: '总量趋势',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/RPIGhp6tCjBs1br.png',
+    src: 'https://i.loli.net/2021/09/02/ijHnuAFZa4RIohV.png',
   },
   {
     id: '8',
@@ -63,7 +63,7 @@ const dimension = [
     name: '来源趋势',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/oQ38RNqzKDXb7GU.png',
+    src: 'https://i.loli.net/2021/09/02/UyMNzwhlVstPQxr.png',
   },
   {
     id: '9',
@@ -71,7 +71,7 @@ const dimension = [
     name: '地域分布',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+    src: 'https://i.loli.net/2021/09/02/UW1FARkYOEdpVob.png',
   },
   {
     id: '10',
@@ -79,7 +79,7 @@ const dimension = [
     name: '情感分析',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+    src: 'https://i.loli.net/2021/09/02/9p6lZMAsOaLESPB.png',
   },
   {
     id: '11',
@@ -87,7 +87,7 @@ const dimension = [
     name: '情感趋势图',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+    src: 'https://i.loli.net/2021/09/02/iZNu4CWMYvOH6Up.png',
   },
   {
     id: '12',
@@ -103,7 +103,7 @@ const dimension = [
     name: '微博溯源树形图',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+    src: 'https://i.loli.net/2021/09/02/c1hAGWNijotMFED.png',
   },
   {
     id: '14',
@@ -111,7 +111,7 @@ const dimension = [
     name: '微博溯源扩散图',
     divHidden: true,
     type: 'image',
-    src: 'https://i.loli.net/2021/08/06/cODJ8HMgZEiB9sp.png',
+    src: 'https://i.loli.net/2021/09/02/urgUqTSEBNi1s4t.png',
   },
 ];
 

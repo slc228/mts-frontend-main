@@ -16,8 +16,9 @@ const defaultPie = (data, title, size) => ({
     },
   },
   series: [{
+    animation: false,
     color: data[0]?.color ? [
-      'pink', 'red', 'blue', 'yellow', 'green', 'darkgray'
+      'pink', 'red', 'blue', 'yellow', 'green', 'darkgray',
     ] : undefined,
     type: 'pie',
     radius: '50%',

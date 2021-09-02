@@ -129,30 +129,31 @@ const genEchartsImages = async (fid, name, item) => {
     mychart.dispose();
   }
   if (dimension[item - 1].name === '情感分析') {
-    // console.log('情感分析');
-    // const emotionLayout = await getProgrammeSentimentLayout(fid, undefined, undefined);
-    // console.log(emotionLayout);
-    // const div = document.createElement('div');
-    // const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'svg' });
-    // mychart.resize();
-    // const data = defaultPie(emotionLayout, '情感分析', 'big');
-    // mychart.setOption(data, true);
-    // const str = mychart.getDataURL({ backgroundColor: '#fff' });
+    console.log('情感分析');
+    const emotionLayout = await getProgrammeSentimentLayout(fid, undefined, undefined);
+    console.log(emotionLayout);
+    const div = document.createElement('div');
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    mychart.resize();
+    const data = defaultPie(emotionLayout, '情感分析', 'big');
+    mychart.setOption(data, true);
+    const str = mychart.getDataURL({ backgroundColor: '#fff' });
+    console.log(str);
     ret.name = '情感分析';
-    ret.URL = '';
-    // mychart.dispose();
+    ret.URL = str;
+    mychart.dispose();
   }
   if (dimension[item - 1].name === '情感趋势图') {
-    // const emotionTrend = await getProgrammeSentimentTrend(fid, startTime, endTime);
-    // const div = document.createElement('div');
-    // const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
-    // mychart.resize();
-    // const data = horizontalBar(emotionTrend, '情感趋势图', 'big');
-    // mychart.setOption(data, true);
-    // const str = mychart.getDataURL({ backgroundColor: '#fff' });
+    const emotionTrend = await getProgrammeSentimentTrend(fid, startTime, endTime);
+    const div = document.createElement('div');
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    mychart.resize();
+    const data = horizontalBar(emotionTrend, '情感趋势图', 'big');
+    mychart.setOption(data, true);
+    const str = mychart.getDataURL({ backgroundColor: '#fff' });
     ret.name = '情感趋势图';
-    ret.URL = '';
-    // mychart.dispose();
+    ret.URL = str;
+    mychart.dispose();
   }
   if (dimension[item - 1].name === '事件溯源') {
     // const eventTree = await getEventTree(fid, startTime, endTime);
