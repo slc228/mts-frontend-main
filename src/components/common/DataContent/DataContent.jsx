@@ -6,6 +6,7 @@ import Lodash from 'lodash';
 import getSensitiveWord from '../../../services/request/data/getSensitiveWord';
 import getEventKeyWordByFid from '../../../services/request/data/getEventKeyWordByFid';
 import criteria from '../MultiFilter/criteria';
+import getSensitiveWordsByFid from '../../../services/request/data/getSensitiveWordsByFid';
 
 class DataContent extends React.Component {
   constructor() {
@@ -21,7 +22,7 @@ class DataContent extends React.Component {
 
   getSensitiveWordAndEventKeyWord = async () => {
     const { content } = this.props.record || {};
-    const result1 = await getSensitiveWord(content);
+    const result1 = await getSensitiveWordsByFid(this.props.fid);
     const result2 = await getEventKeyWordByFid(this.props.fid);
     let contentSlice = [{
       sensitive: false,

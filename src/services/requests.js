@@ -1,10 +1,3 @@
-import getSensitiveWord from './request/data/getSensitiveWord';
-import getOverallDatOnNetwork from './request/data/getOverallDataOnNetwork';
-import getOverallDataBing from './request/data/getOverallDataBing';
-import modeifyMaterial from './request/data/modeifyMaterial';
-import addNewMaterialLib from './request/data/addNewMaterialLib';
-import addSensitiveWordForAll from './request/data/addSensitiveWordForAll';
-
 const domain1 = 'http://192.168.0.19:8082';
 const domain2 = 'http://localhost:3000/api';
 const domain3 = 'http://localhost:8082';
@@ -92,6 +85,7 @@ const requests = {
   getSensitiveWords: { url: `${curDomain}/data/getSensitiveWords`, method: 'GET' },
   deleteSensitiveWords: { url: `${curDomain}/data/deleteSensitiveWords`, method: 'POST' },
   addSensitiveWordForAll: { url: `${curDomain}/data/addSensitiveWordForAll`, method: 'GET' },
+  getSensitiveWordsByFid: { url: `${curDomain}/data/getSensitiveWordsByFid`, method: 'GET' },
 };
 
 export default requests;
