@@ -21,7 +21,7 @@ const requests = {
   getProgrammes: { url: `${curDomain}/User/findFangAn`, method: 'GET' },
   login: { url: `${curDomain}/User/login`, method: 'POST' },
   logout: { url: `${curDomain}/User/logout`, method: 'POST' },
-  getUsers: { url: `${domain3}/User/allUsers`, method: 'GET' },
+  getUsers: { url: `${curDomain}/User/allUsers`, method: 'GET' },
   getKeywordsCloud: { url: `${curDomain}/data/keywordExtraction`, method: 'GET' },
   getSensitiveWord: { url: `${curDomain}/data/sensitiveWord`, method: 'POST' },
   getContentTag: { url: `${curDomain}/data/textClass2`, method: 'POST' },
@@ -86,6 +86,8 @@ const requests = {
   deleteSensitiveWords: { url: `${curDomain}/data/deleteSensitiveWords`, method: 'POST' },
   addSensitiveWordForAll: { url: `${curDomain}/data/addSensitiveWordForAll`, method: 'GET' },
   getSensitiveWordsByFid: { url: `${curDomain}/data/getSensitiveWordsByFid`, method: 'GET' },
+
+  changeUserJurisdiction: { url: `${curDomain}/User/changeUserJurisdiction`, method: 'GET' },
 };
 
 export default requests;

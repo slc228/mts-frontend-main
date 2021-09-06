@@ -4,8 +4,8 @@ import { FolderOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import OrgList from './OrgList/OrgList';
 import UserList from './UserList/UserList';
 import './Admin.scss';
-import getUsers from "../../services/request/data/getUsers";
-import AutofitWrap from "../common/AutofitWrap/AutofitWrap";
+import getUsers from '../../services/request/data/getUsers';
+import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
 
 const { Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -62,7 +62,7 @@ class Admin extends Component {
             padding={200}
           >
 
-            { curRole === 'user' ? <UserList users={users} /> : null }
+            { curRole === 'user' ? <UserList users={users} onGetUsers={this.getUsers} /> : null }
             { curRole === 'org' ? <OrgList orgs={orgs} /> : null }
           </AutofitWrap>
         </Content>
