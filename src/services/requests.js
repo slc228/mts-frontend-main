@@ -88,6 +88,8 @@ const requests = {
   getSensitiveWordsByFid: { url: `${curDomain}/data/getSensitiveWordsByFid`, method: 'GET' },
 
   changeUserJurisdiction: { url: `${curDomain}/User/changeUserJurisdiction`, method: 'GET' },
+  changeUserEventLimiter: { url: `${curDomain}/User/changeUserEventLimiter`, method: 'GET' },
+  changeUserSensitiveLimiter: { url: `${curDomain}/User/changeUserSensitiveLimiter`, method: 'GET' },
 };
 
 export default requests;

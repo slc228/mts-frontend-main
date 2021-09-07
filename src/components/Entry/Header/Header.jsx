@@ -39,6 +39,9 @@ class Header extends React.Component {
     // }
     localStorage.removeItem('userName');
     localStorage.removeItem('userType');
+    localStorage.removeItem('userJurisdiction');
+    localStorage.removeItem('userEventLimiter');
+    localStorage.removeItem('userSensitiveLimiter');
     this.props.onAuthChange();
     this.props.history.push('/login');
   };
@@ -64,7 +67,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const { userType, userName } = this.props;
+    const { userType, userName, userJurisdiction } = this.props;
     const { current } = this.state;
     return (
       <div className="mts-header-container">
@@ -86,7 +89,7 @@ class Header extends React.Component {
           className="mts-header"
           theme="dark"
         >
-          {getRoutes(userType).map((route) => (
+          {getRoutes(userType, userJurisdiction).map((route) => (
             route.hasOwnProperty('type') ? null : (
               <Menu.Item key={route.key}>
                 <Link
@@ -99,7 +102,7 @@ class Header extends React.Component {
             )
           ))}
           <Menu.SubMenu key="Admin" title="管理" style={{ fontSize: '16px' }}>
-            {getRoutes(userType).map((route) => (
+            {getRoutes(userType, userJurisdiction).map((route) => (
               route.hasOwnProperty('type') ? (
                 <Menu.Item key={route.key}>
                   <Link
@@ -121,6 +124,7 @@ class Header extends React.Component {
 const mapStateToProps = (state) => ({
   userType: state.userType,
   userName: state.userName,
+  userJurisdiction: state.userJurisdiction,
 });
 const mapDispatchToProps = {
   onAuthChange: actions.onAuthChange,

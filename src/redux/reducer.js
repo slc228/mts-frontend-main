@@ -9,6 +9,9 @@ import { handleBriefingGenPathChange } from './reducer/briefingGeneration';
 const initialState = {
   userName: undefined,
   userType: undefined,
+  userJurisdiction: [],
+  userEventLimiter: '',
+  userSensitiveLimiter: '',
   curProgramme: undefined,
   overallPath: '',
   monitorPath: '',

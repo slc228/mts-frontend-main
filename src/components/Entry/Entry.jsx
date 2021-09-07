@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 class Entry extends React.Component {
   render() {
-    const { userType } = this.props;
+    const { userType, userJurisdiction } = this.props;
     return (
       <Layout className="mts-app-wrap">
         <Header />
@@ -18,7 +18,7 @@ class Entry extends React.Component {
           ref={r => this.body = r}
         >
           <Switch>
-            {getRoutes(userType).map((item) => (
+            {getRoutes(userType, userJurisdiction).map((item) => (
               <Route path={item.link} component={item.component} />
             ))}
             <Redirect from="/*" to="/home" />
@@ -32,6 +32,7 @@ class Entry extends React.Component {
 
 const mapStateToProps = (state) => ({
   userType: state.userType,
+  userJurisdiction: state.userJurisdiction,
 });
 const mapDispatchToProps = {};
 
