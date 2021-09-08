@@ -6,6 +6,24 @@ import './Sider.scss';
 import { connect } from 'react-redux';
 import addProgramme from '../../../services/request/programme/addProgramme';
 import { actions } from '../../../redux/actions';
+import Overall from '../../Overall/Overall';
+import HotArticle from '../HotArticle/HotArticle';
+import View from '../../View/View';
+
+const determineAddProgrammeJurisdiction = (userType, jurisdiction) => {
+  if (userType === 'admin') {
+    return true;
+  }
+  if (jurisdiction) {
+    for (const item of jurisdiction) {
+      if (item.type === '添加方案') {
+        return item.tag;
+      }
+    }
+  } else {
+    return true;
+  }
+};
 
 class Sider extends React.Component {
   constructor() {
@@ -91,22 +109,25 @@ class Sider extends React.Component {
   };
 
   render() {
-    const { curProgramme, programmes } = this.props;
+    const { curProgramme, programmes, userType, userJurisdiction } = this.props;
     const { newProgrammeVisible, newProgrammeName } = this.state;
+    const jurisdiction = userJurisdiction && userJurisdiction !== '' ? JSON.parse(userJurisdiction) : [];
     return (
       <Layout.Sider
         className="programme-sider-wrap"
       >
-        <Button
-          block="block"
-          type="primary"
-          className="programme-new-btn"
-          size="large"
-          onClick={() => this.handleProgrammeNew('open')}
-        >
-          <PlusOutlined />
-          添加方案
-        </Button>
+        {determineAddProgrammeJurisdiction(userType, jurisdiction) ? (
+          <Button
+            block="block"
+            type="primary"
+            className="programme-new-btn"
+            size="large"
+            onClick={() => this.handleProgrammeNew('open')}
+          >
+            <PlusOutlined />
+            添加方案
+          </Button>
+        ) : null}
         <Modal
           title="添加方案"
           visible={newProgrammeVisible}
@@ -135,6 +156,8 @@ class Sider extends React.Component {
 
 const mapStateToProps = (state) => ({
   userName: state.userName,
+  userType: state.userType,
+  userJurisdiction: state.userJurisdiction,
   curProgramme: state.curProgramme,
   programmes: state.programmes,
 });

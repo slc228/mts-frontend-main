@@ -24,7 +24,7 @@ class Login extends React.Component {
     else {
       localStorage.setItem('userName', result.username);
       localStorage.setItem('userType', result.role === '0' ? 'admin' : 'default');
-      localStorage.setItem('userJurisdiction', result.jurisdiction);
+      localStorage.setItem('userJurisdiction', result.jurisdiction ? result.jurisdiction : '');
       localStorage.setItem('userEventLimiter', result.eventLimiter ? result.eventLimiter : '');
       localStorage.setItem('userSensitiveLimiter', result.sensitiveLimiter ? result.sensitiveLimiter : '');
       this.props.onAuthChange();

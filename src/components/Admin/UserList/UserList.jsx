@@ -1,7 +1,7 @@
 import React from 'react';
-import { Table, Divider, Image, Button, Layout, Input, Modal, Menu, Checkbox } from 'antd';
+import { Table, Divider, Image, Button, Layout, Input, Modal, Menu, Checkbox, Tooltip } from 'antd';
 import { Switch } from 'antd/es';
-import { CloseOutlined, CheckOutlined, PlusCircleOutlined, PlusCircleFilled } from '@ant-design/icons';
+import { CloseOutlined, CheckOutlined, PlusCircleOutlined, PlusCircleFilled, EditOutlined } from '@ant-design/icons';
 import changeUserState from '../../../services/request/auth/changeUserState';
 import changeUserJurisdiction from '../../../services/request/data/changeUserJurisdiction';
 import Register from '../../Authority/Register/Register';
@@ -18,10 +18,11 @@ class UserList extends React.Component {
       swordTypes: [],
       curSwordType: undefined,
       swords: [],
+      swordsList: [],
       addNewSwordVisible: false,
       checkedSwordsList: [],
       checkedSwords: [],
-      nowRecord: {},
+      nowUser: undefined,
     };
     this.columns = [
       {
@@ -48,32 +49,17 @@ class UserList extends React.Component {
     ];
   }
 
-  handleGetSwordTypes=async () => {
-    const swordTypes = await getSensitiveWordTypes();
-    this.setState({
-      swordTypes,
-      curSwordType: swordTypes.length === 0 ? undefined : swordTypes[0].type,
-      checkedSwordsList: swordTypes.length > 0 ? swordTypes.map((item) => ({
-        type: item.type,
-        checkedSwords: [],
-      })) : [],
-    });
-  };
-
-  handleGetSwords=async () => {
-    const { curSwordType } = this.state;
-    const swords = await getSensitiveWords(curSwordType);
-    this.setState({
-      swords,
-    });
-  };
-
   changeSwordsType=async (e) => {
     await this.setState({
       curSwordType: e.key,
     });
-    await this.handleGetSwords();
-    const { checkedSwordsList } = this.state;
+    const { swordsList, checkedSwordsList } = this.state;
+    let swords;
+    swordsList.forEach((item) => {
+      if (item.type === e.key) {
+        swords = item.swords;
+      }
+    });
     let checkedSwords;
     checkedSwordsList.forEach((item) => {
       if (item.type === e.key) {
@@ -82,19 +68,44 @@ class UserList extends React.Component {
     });
     this.setState({
       checkedSwords,
+      swords,
     });
   };
 
-  addNewSword=(record) => {
-    const { swordTypes } = this.state;
+  addNewSword=async (record) => {
+    const swordTypes = await getSensitiveWordTypes();
+    const swordsList = [];
+    const checkedSwordsList = [];
+    for (const item of swordTypes) {
+      const swords = await getSensitiveWords(item.type);
+      const swordsArray = swords.length > 0 ? swords.map((item1) => item1.value) : [];
+      const sensitiveWords = record.sensitiveLimiter ? record.sensitiveLimiter.split(/\s+/) : [];
+      const newArr = [];
+      for (let i = 0; i < swordsArray.length; i++) {
+        for (let j = 0; j < sensitiveWords.length; j++) {
+          if (sensitiveWords[j] === swordsArray[i]) {
+            newArr.push(sensitiveWords[j]);
+          }
+        }
+      }
+      const swordsListItem = {};
+      swordsListItem.type = item.type;
+      swordsListItem.swords = swords;
+      swordsList.push(swordsListItem);
+      const checkedSwordsListItem = {};
+      checkedSwordsListItem.type = item.type;
+      checkedSwordsListItem.checkedSwords = newArr;
+      checkedSwordsList.push(checkedSwordsListItem);
+    }
     this.setState({
-      nowRecord: record,
+      swordTypes,
+      curSwordType: swordTypes.length === 0 ? undefined : swordTypes[0].type,
+      swordsList,
+      swords: swordsList.length === 0 ? undefined : swordsList[0].swords,
+      checkedSwordsList,
+      checkedSwords: checkedSwordsList.length === 0 ? undefined : checkedSwordsList[0].checkedSwords,
       addNewSwordVisible: true,
-      checkedSwordsList: swordTypes.length > 0 ? swordTypes.map((item) => ({
-        type: item.type,
-        checkedSwords: [],
-      })) : [],
-      checkedSwords: [],
+      nowUser: record.username,
     });
   };
 
@@ -112,16 +123,13 @@ class UserList extends React.Component {
   };
 
   addNewSwordToUser=async () => {
-    const { checkedSwordsList, nowRecord } = this.state;
+    const { checkedSwordsList, nowUser } = this.state;
     let sensitiveLimiterList = [];
     checkedSwordsList.forEach((item) => {
       sensitiveLimiterList = sensitiveLimiterList.concat(item.checkedSwords);
     });
-    const sensitiveWords = nowRecord.sensitiveLimiter ? nowRecord.sensitiveLimiter.split(/\s+/) : [];
-    sensitiveLimiterList = sensitiveLimiterList.concat(sensitiveWords);
-    sensitiveLimiterList = Array.from(new Set(sensitiveLimiterList));
     const sensitiveLimiterStr = sensitiveLimiterList.toString().replace(/,/g, ' ');
-    const ret = await changeUserSensitiveLimiter(nowRecord.username, sensitiveLimiterStr);
+    const ret = await changeUserSensitiveLimiter(nowUser, sensitiveLimiterStr);
     if (ret.changeUserSensitiveLimiter === 1) {
       alert('修改成功');
     } else {
@@ -129,11 +137,6 @@ class UserList extends React.Component {
     }
     await this.handleAddSwordModalCancel();
   };
-
-  async componentDidMount() {
-    await this.handleGetSwordTypes();
-    await this.handleGetSwords();
-  }
 
   handleChange = async (username) => {
     console.log(username);
@@ -233,14 +236,26 @@ class UserList extends React.Component {
                     <div
                       style={{ width: '48%', float: 'left', margin: '10px 1%' }}
                     >
-                      <Input.TextArea rows={4} defaultValue={record.eventLimiter} onChange={(e) => this.handleEventLimiterInputChange(e, record)} />
-                      <Button style={{ marginTop: '10px' }} icon={<PlusCircleOutlined />} type="primary" onClick={() => this.handleChangeUserEventLimiter(record)}>添加搜索限定词</Button>
+                      <Tooltip
+                        title={(
+                          <div style={{ textAlign: 'center' }}>
+                            <p>请直接在文本框进行修改</p>
+                            <p>以空格键隔开词语</p>
+                          </div>
+                      )}
+                        trigger="click"
+                      >
+                        <Input.TextArea rows={4} defaultValue={record.eventLimiter} onChange={(e) => this.handleEventLimiterInputChange(e, record)} />
+                      </Tooltip>
+                      <Button style={{ marginTop: '10px' }} icon={<EditOutlined />} type="primary" onClick={() => this.handleChangeUserEventLimiter(record)}>修改搜索限定词</Button>
                     </div>
                     <div
                       style={{ width: '48%', float: 'left', margin: '10px 1%' }}
                     >
-                      <Input.TextArea rows={4} value={record.sensitiveLimiter} />
-                      <Button style={{ marginTop: '10px' }} icon={<PlusCircleOutlined />} type="primary" onClick={() => this.addNewSword(record)}>添加敏感限定词</Button>
+                      <Tooltip title="请点击按钮进行修改">
+                        <Input.TextArea rows={4} value={record.sensitiveLimiter} />
+                      </Tooltip>
+                      <Button style={{ marginTop: '10px' }} icon={<EditOutlined />} type="primary" onClick={() => this.addNewSword(record)}>修改敏感限定词</Button>
                     </div>
                   </div>
                 );
@@ -269,7 +284,7 @@ class UserList extends React.Component {
                 type="primary"
                 onClick={this.addNewSwordToUser}
               >
-                添加新敏感词
+                确认修改
               </Button>
               )}
             footer={null}

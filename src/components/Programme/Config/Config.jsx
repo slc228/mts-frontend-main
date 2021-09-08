@@ -1,6 +1,6 @@
 import React from 'react';
 import {Form, Input, Button, Radio, Layout, Switch, Modal, Menu, Checkbox} from 'antd';
-import {CheckOutlined, PlusCircleFilled, QuestionCircleFilled} from '@ant-design/icons';
+import {CheckOutlined, PlusCircleFilled, QuestionCircleFilled, EditOutlined} from '@ant-design/icons';
 import './Config.scss';
 import modifyProgramme from "../../../services/request/programme/modifyProgamme";
 import delProgramme from "../../../services/request/programme/delProgramme";
@@ -38,6 +38,7 @@ class Config extends React.Component {
       addNewSwordVisible: false,
       checkedSwordsList:[],
       checkedSwords:[],
+      userCheckedSwords:[],
     }
   }
 
@@ -85,43 +86,69 @@ class Config extends React.Component {
   };
 
   addNewSword=() => {
-    const { swordTypes } = this.state;
-    this.setState({
-      addNewSwordVisible: true,
-      checkedSwordsList : swordTypes.length > 0 ? swordTypes.map((item) => ({
-        type: item.type,
-        checkedSwords: [],
-      })) : [],
-      checkedSwords:[],
-    });
+    const {userType, programmes}=this.props;
+    if (userType==='admin')
+    {
+      const { swordTypes } = this.state;
+      this.setState({
+        addNewSwordVisible: true,
+        checkedSwordsList : swordTypes.length > 0 ? swordTypes.map((item) => ({
+          type: item.type,
+          checkedSwords: [],
+        })) : [],
+        checkedSwords:[],
+      });
+    }else {
+      const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid);
+      const sensitiveWords = curProgramme.sensitiveWord?curProgramme.sensitiveWord.split(/\s+/):[];
+      this.setState({
+        addNewSwordVisible: true,
+        userCheckedSwords:sensitiveWords,
+      });
+    }
   };
 
   handleCheck = (value) => {
     const {curSwordType, checkedSwordsList} = this.state;
-    checkedSwordsList.forEach((item) => {
-      if (item.type === curSwordType) {
-        item.checkedSwords=value;
-      }
-    });
-    this.setState({
-      checkedSwords: value,
-      checkedSwordsList,
-    });
+      checkedSwordsList.forEach((item) => {
+        if (item.type === curSwordType) {
+          item.checkedSwords=value;
+        }
+      });
+      this.setState({
+        checkedSwords: value,
+        checkedSwordsList,
+      });
   };
 
-  addNewSwordToProgramme=()=>{
-    const { programmes } = this.props;
-    const {checkedSwordsList} = this.state;
-    let str=[];
-    checkedSwordsList.forEach((item) => {
-       str=str.concat(item.checkedSwords);
+  handleUserCheck=(value)=>{
+    this.setState({
+      userCheckedSwords: value,
     });
+  }
+
+  addNewSwordToProgramme=()=>{
+    const {programmes} = this.props;
+    const {checkedSwordsList} = this.state;
+      let str = [];
+      checkedSwordsList.forEach((item) => {
+        str = str.concat(item.checkedSwords);
+      });
+      const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid);
+      const sensitiveWords = curProgramme.sensitiveWord.split(/\s+/);
+      str = str.concat(sensitiveWords);
+      str = Array.from(new Set(str));
+      curProgramme.sensitiveWord = str.toString().replace(/,/g, ' ');
+      this.props.onProgrammeChange({curProgramme});
+      this.handleAddSwordModalCancel();
+  }
+
+  addNewSwordToProgrammeForUser=()=>{
+    const {programmes} = this.props;
+    const {userCheckedSwords} = this.state;
     const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid);
-    const sensitiveWords = curProgramme.sensitiveWord.split(/\s+/);
-    str=str.concat(sensitiveWords);
-    str=Array.from(new Set(str));
-    curProgramme.sensitiveWord=str.toString().replace(/,/g, ' ');
-    this.props.onProgrammeChange({ curProgramme });
+    curProgramme.sensitiveWord = userCheckedSwords.toString().replace(/,/g, ' ');
+    this.props.onProgrammeChange({curProgramme});
     this.handleAddSwordModalCancel();
   }
 
@@ -244,7 +271,9 @@ class Config extends React.Component {
 
   render() {
     const { layout, subLayout } = this;
-    const { sampleVisible, sampleText, swordTypes, curSwordType, swords, addNewSwordVisible, checkedSwords } = this.state;
+    const { sampleVisible, sampleText, swordTypes, curSwordType, swords, addNewSwordVisible, checkedSwords, userCheckedSwords } = this.state;
+    const {userType, userSensitiveLimiter}=this.props;
+    const sensitiveWords = userSensitiveLimiter&&userSensitiveLimiter!=='' ? userSensitiveLimiter.split(/\s+/) : [];
     // console.log(this.props.curProgramme);
     return (
       <Layout className="programme-config-wrap">
@@ -433,32 +462,55 @@ class Config extends React.Component {
               onChange={this.handleSampleChange}
           />
         </Modal>
-        <Modal
-            visible={addNewSwordVisible}
-            onCancel={this.handleAddSwordModalCancel}
-            closable={false}
-            title={
-              <Button
-                  icon={<PlusCircleFilled />}
-                  style={{ fontSize: '15px'}}
-                  type="primary"
-                  onClick={this.addNewSwordToProgramme}
-              >
-                添加新敏感词
-              </Button>
-            }
-            footer={null}
-            width={1200}
-        >
-          <Menu onClick={this.changeSwordsType} mode="horizontal" selectedKeys={[curSwordType]} theme={"light"}>
-            { swordTypes.map((item) => (
-                <Menu.Item key={item.type.toString()}>{item.type}</Menu.Item>
-            ))}
-          </Menu>
-          <div>
-            <Checkbox.Group options={swords} onChange={this.handleCheck} value={checkedSwords} />
-          </div>
-        </Modal>
+        {userType==='admin'?
+            <Modal
+                visible={addNewSwordVisible}
+                onCancel={this.handleAddSwordModalCancel}
+                closable={false}
+                title={
+                  <Button
+                      icon={<PlusCircleFilled />}
+                      style={{ fontSize: '15px'}}
+                      type="primary"
+                      onClick={this.addNewSwordToProgramme}
+                  >
+                    添加新敏感词
+                  </Button>
+                }
+                footer={null}
+                width={1200}
+            >
+              <Menu onClick={this.changeSwordsType} mode="horizontal" selectedKeys={[curSwordType]} theme={"light"}>
+                { swordTypes.map((item) => (
+                    <Menu.Item key={item.type.toString()}>{item.type}</Menu.Item>
+                ))}
+              </Menu>
+              <div>
+                <Checkbox.Group options={swords} onChange={this.handleCheck} value={checkedSwords} />
+              </div>
+            </Modal>:
+            <Modal
+                visible={addNewSwordVisible}
+                onCancel={this.handleAddSwordModalCancel}
+                closable={false}
+                title={
+                  <Button
+                      icon={<EditOutlined />}
+                      style={{ fontSize: '15px'}}
+                      type="primary"
+                      onClick={this.addNewSwordToProgrammeForUser}
+                  >
+                    修改敏感词
+                  </Button>
+                }
+                footer={null}
+                width={1200}
+            >
+              <div>
+                <Checkbox.Group options={sensitiveWords} onChange={this.handleUserCheck} value={userCheckedSwords} />
+              </div>
+            </Modal>
+        }
       </Layout>
     )
   }
@@ -467,6 +519,8 @@ class Config extends React.Component {
 
 const mapStateToProps = (state) => ({
   userName: state.userName,
+  userType: state.userType,
+  userSensitiveLimiter: state.userSensitiveLimiter,
   curProgramme: state.curProgramme,
   programmes: state.programmes,
 });
