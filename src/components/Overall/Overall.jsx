@@ -161,6 +161,17 @@ class Overall extends Component {
     await this.setState({ loading: true });
     const { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, data, keywords } = this.state;
     const params = [keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, keywords];
+    if (this.props.userType !== 'admin') {
+      let eventLimiter = this.props.userEventLimiter ? this.props.userEventLimiter.split(/\s+/) : [];
+      eventLimiter = Array.from(new Set(eventLimiter));
+      let arrayInput = keyword ? keyword.split(/\s+/) : [];
+      arrayInput = Array.from(new Set(arrayInput));
+      const subArray = arrayInput.filter((i) => !eventLimiter.includes(i));
+      if (subArray.length > 0) {
+        alert(`${subArray.toString()}  关键词不允许搜索`);
+        return;
+      }
+    }
     this.props.onOverallPathChange({ path: '/result' });
     const result = await getOverallDataWithObject(...params);
     console.log(result);
@@ -327,6 +338,8 @@ class Overall extends Component {
               <GlobalMultiFilter
                 initialKeyword={keyword}
                 current={current}
+                userType={this.props.userType}
+                userEventLimiter={this.props.userEventLimiter}
                 onSelect={this.handleSelect}
                 onSearch={this.handleKeywordChange}
                 onDateChange={this.handleDateChange}
@@ -371,6 +384,8 @@ class Overall extends Component {
 
 const mapStateToProps = (state) => ({
   overallPath: state.overallPath,
+  userType: state.userType,
+  userEventLimiter: state.userEventLimiter,
 });
 const mapDispatchToProps = {
   onOverallPathChange: actions.onOverallPathChange,

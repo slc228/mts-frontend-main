@@ -31,7 +31,25 @@ class GlobalMultiFilter extends React.Component {
     switch (type) {
       case 'submit':
         if (this.props.onSearch) {
-          this.props.onSearch(data);
+          if (this.props.userType === 'admin') {
+            this.props.onSearch(data);
+          } else {
+            let eventLimiter = this.props.userEventLimiter ? this.props.userEventLimiter.split(/\s+/) : [];
+            eventLimiter = Array.from(new Set(eventLimiter));
+            const arrInput = data.Keywords ? data.Keywords : [];
+            arrInput.push(data.keyWord);
+            let arrayInput = [];
+            arrInput.forEach((item) => {
+              arrayInput = arrayInput.concat(item.split(/\s+/));
+            });
+            arrayInput = Array.from(new Set(arrayInput));
+            const subArray = arrayInput.filter((i) => !eventLimiter.includes(i));
+            if (subArray.length > 0) {
+              alert(`${subArray.toString()}  关键词不允许搜索`);
+            } else {
+              this.props.onSearch(data);
+            }
+          }
         }
         break;
       case 'reject':

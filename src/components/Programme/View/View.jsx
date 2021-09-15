@@ -138,14 +138,16 @@ class View extends React.Component {
       this.props.curProgramme.fid,
       '', // keyword
       null, // source
-      '', // startPublishDay
-      '', // endPublishDay
+      this.state.startPublishedDay, // startPublishDay
+      this.state.endPublishedDay, // endPublishDay
       null, // sensitiveFlag
+      null, // emotion
       0, // timeOrder
       PAGE_SIZE, // pageSize
       0, // pageId
     ];
     const result = await getProgrammeData(...params);
+    console.log(result);
     const { fid } = this.props.curProgramme;
     const newData = { ...this.state.data };
     newData[fid] = result.data;
@@ -220,6 +222,7 @@ class View extends React.Component {
     const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
     const sourceLayout = await getProgrammeSourceLayout(fid, startPublishedDay, endPublishedDay);
+    console.log(sourceLayout);
     const criteria = this.getCriteria();
     const newData = { ...this.state.sourceLayout };
     newData[fid] = sourceLayout;

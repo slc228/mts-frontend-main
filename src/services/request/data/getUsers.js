@@ -10,12 +10,7 @@ const getUsers = async () => {
     },
   });
   const rawResult = response.status === 200 ? await response.json() : {};
-  const result = rawResult.map((item) => ({
-    ...item,
-    userName: item.username,
-    userType: item.role === '0' ? 'admin' : 'default',
-  }));
-  return result;
+  return rawResult;
 };
 
 export default getUsers;

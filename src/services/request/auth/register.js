@@ -1,6 +1,6 @@
 import requests from '../../requests';
 
-const register = async (userName, password, email, phone) => {
+const register = async (userName, password, email, phone, role) => {
   const url = encodeURI(`${requests.register.url}`);
   const response = await fetch(url, {
     method: requests.register.method,
@@ -9,6 +9,7 @@ const register = async (userName, password, email, phone) => {
       password,
       email,
       phone,
+      role,
     }),
     headers: {
       'Content-Type': 'application/json',

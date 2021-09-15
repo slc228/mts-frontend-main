@@ -12,7 +12,20 @@ class MultiFilter extends React.Component {
 
   handleSearch = (keyword) => {
     if (this.props.onSearch) {
-      this.props.onSearch(keyword);
+      if (this.props.userType === 'admin') {
+        this.props.onSearch(keyword);
+      } else {
+        let eventLimiter = this.props.userEventLimiter ? this.props.userEventLimiter.split(/\s+/) : [];
+        eventLimiter = Array.from(new Set(eventLimiter));
+        let arrayInput = keyword ? keyword.split(/\s+/) : [];
+        arrayInput = Array.from(new Set(arrayInput));
+        const subArray = arrayInput.filter((i) => !eventLimiter.includes(i));
+        if (subArray.length > 0) {
+          alert(`${subArray.toString()}  关键词不允许搜索`);
+        } else {
+          this.props.onSearch(keyword);
+        }
+      }
     }
   };
 

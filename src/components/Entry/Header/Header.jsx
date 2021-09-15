@@ -52,9 +52,9 @@ class Header extends React.Component {
   };
 
   componentDidMount = () => {
-    const { userType } = this.props;
+    const { userType, userJurisdiction } = this.props;
     const { pathname } = this.props.location;
-    const routeLinks = getRoutes(userType).map((item) => item.link);
+    const routeLinks = getRoutes(userType, userJurisdiction).map((item) => item.link);
     let text = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.length);
     if (!routeLinks.includes(text)) text = 'home';
     this.setState({ current: text });
@@ -101,20 +101,22 @@ class Header extends React.Component {
               </Menu.Item>
             )
           ))}
-          <Menu.SubMenu key="Admin" title="管理" style={{ fontSize: '16px' }}>
-            {getRoutes(userType, userJurisdiction).map((route) => (
-              route.hasOwnProperty('type') ? (
-                <Menu.Item key={route.key}>
-                  <Link
-                    to={route.link}
-                    className="link"
-                  >
-                    {route.label}
-                  </Link>
-                </Menu.Item>
-              ) : null
-            ))}
-          </Menu.SubMenu>
+          {userType === 'systemAdmin' ? (
+            <Menu.SubMenu key="Admin" title="管理" style={{ fontSize: '16px' }}>
+              {getRoutes(userType, userJurisdiction).map((route) => (
+                route.hasOwnProperty('type') ? (
+                  <Menu.Item key={route.key}>
+                    <Link
+                      to={route.link}
+                      className="link"
+                    >
+                      {route.label}
+                    </Link>
+                  </Menu.Item>
+                ) : null
+              ))}
+            </Menu.SubMenu>
+          ) : null}
         </Menu>
       </div>
     );

@@ -10,21 +10,6 @@ import Overall from '../../Overall/Overall';
 import HotArticle from '../HotArticle/HotArticle';
 import View from '../../View/View';
 
-const determineAddProgrammeJurisdiction = (userType, jurisdiction) => {
-  if (userType === 'admin') {
-    return true;
-  }
-  if (jurisdiction) {
-    for (const item of jurisdiction) {
-      if (item.type === '添加方案') {
-        return item.tag;
-      }
-    }
-  } else {
-    return true;
-  }
-};
-
 class Sider extends React.Component {
   constructor() {
     super();
@@ -111,12 +96,12 @@ class Sider extends React.Component {
   render() {
     const { curProgramme, programmes, userType, userJurisdiction } = this.props;
     const { newProgrammeVisible, newProgrammeName } = this.state;
-    const jurisdiction = userJurisdiction && userJurisdiction !== '' ? JSON.parse(userJurisdiction) : [];
+    const jurisdiction = userJurisdiction ? JSON.parse(userJurisdiction) : undefined;
     return (
       <Layout.Sider
         className="programme-sider-wrap"
       >
-        {determineAddProgrammeJurisdiction(userType, jurisdiction) ? (
+        {jurisdiction.schemeConfiguration ? (
           <Button
             block="block"
             type="primary"

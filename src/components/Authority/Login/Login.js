@@ -19,12 +19,12 @@ class Login extends React.Component {
   }
 
   handleSubmit = async (data) => {
-    const result = await login(data.userName, data.password, data.role ? 0 : 1);
+    const result = await login(data.userName, data.password);
     if (result.login !== 1) alert('登录失败');
     else {
       localStorage.setItem('userName', result.username);
-      localStorage.setItem('userType', result.role === '0' ? 'admin' : 'default');
-      localStorage.setItem('userJurisdiction', result.jurisdiction ? result.jurisdiction : '');
+      localStorage.setItem('userType', result.role);
+      localStorage.setItem('userJurisdiction', JSON.stringify(result.userRights));
       localStorage.setItem('userEventLimiter', result.eventLimiter ? result.eventLimiter : '');
       localStorage.setItem('userSensitiveLimiter', result.sensitiveLimiter ? result.sensitiveLimiter : '');
       this.props.onAuthChange();
@@ -62,13 +62,13 @@ class Login extends React.Component {
         >
           <Input.Password maxLength={20} />
         </Form.Item>
-        <Form.Item
-          {...this.tailLayout}
-          valuePropName="checked"
-          name="role"
-        >
-          <Checkbox>以管理员身份登录</Checkbox>
-        </Form.Item>
+        {/* <Form.Item */}
+        {/*  {...this.tailLayout} */}
+        {/*  valuePropName="checked" */}
+        {/*  name="role" */}
+        {/* > */}
+        {/*  <Checkbox>以管理员身份登录</Checkbox> */}
+        {/* </Form.Item> */}
         <Form.Item {...this.tailLayout}>
           <Button
             type="primary"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from '../../../redux/actions';
@@ -19,7 +19,7 @@ class Register extends React.Component {
   }
 
   handleSubmit = async (data) => {
-    const result = await register(data.userName, data.password, data.email, data.phone);
+    const result = await register(data.userName, data.password, data.email, data.phone, data.role);
     if (result.register !== 1) alert('注册失败！');
     else alert('注册成功!');
   };
@@ -76,6 +76,23 @@ class Register extends React.Component {
           rules={[{ required: true, message: '请输入电子邮箱!' }]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item
+          name="role"
+          label="身份"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Select
+            placeholder="选择一个您想要注册的角色"
+            allowClear
+          >
+            <Select.Option value="default">普通用户</Select.Option>
+            <Select.Option value="tourist">访问用户</Select.Option>
+          </Select>
         </Form.Item>
         <Form.Item
           {...this.tailLayout}

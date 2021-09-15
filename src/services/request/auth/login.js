@@ -1,13 +1,12 @@
 import requests from '../../requests';
 
-const login = async (userName, password, role) => {
+const login = async (userName, password) => {
   const url = encodeURI(`${requests.login.url}`);
   const response = await fetch(url, {
     method: requests.login.method,
     body: JSON.stringify({
       username: userName,
       password,
-      role,
     }),
     withCredentials: true,
     headers: {

@@ -27,14 +27,24 @@ class UserList extends React.Component {
     this.columns = [
       {
         title: '用户名',
-        dataIndex: 'userName',
-        key: 'userName',
+        dataIndex: 'username',
+        key: 'username',
       },
       {
         title: '权限',
-        dataIndex: 'userType',
-        key: 'userType',
-        render: (field) => (field === 'admin' ? '管理员' : '普通用户'),
+        dataIndex: 'role',
+        key: 'role',
+        render: (field) => {
+          if (field === 'admin') {
+            return '管理员';
+          }
+          if (field === 'default') {
+            return '普通用户';
+          }
+          if (field === 'tourist') {
+            return '访问者';
+          }
+        },
       },
       {
         title: '电话',
@@ -146,13 +156,8 @@ class UserList extends React.Component {
     } else alert('编辑失败！');
   };
 
-    changeUserJurisdiction=async (checked, record, type, jurisdiction) => {
-      jurisdiction.forEach(item => {
-        if (item.type === type) {
-          item.tag = checked;
-        }
-      });
-      const ret = await changeUserJurisdiction(record.username, JSON.stringify(jurisdiction));
+    changeUserJurisdiction=async (checked, record, type) => {
+      const ret = await changeUserJurisdiction(record.username, type, checked);
     };
 
   handleAddNewUser=() => {
@@ -193,6 +198,7 @@ class UserList extends React.Component {
   render() {
     const { addNewUserVisible, swordTypes, curSwordType, swords, addNewSwordVisible, checkedSwords } = this.state;
     const { users } = this.props;
+    console.log(users);
     return (
       <Layout>
         <div className="enter-background">
@@ -202,30 +208,96 @@ class UserList extends React.Component {
             rowKey={(record) => record.username}
             expandable={{
               expandedRowRender: (record) => {
-                const jurisdiction = JSON.parse(record.jurisdiction);
+                const jurisdiction = record.userRights;
                 return (
                   <div>
                     <div style={{ width: '100%' }}>
-                      {jurisdiction.map(item => (
-                        <div
-                          style={{ width: '20%', float: 'left', textAlign: 'center' }}
-                        >
-                          {item.type}
-                          <Divider type="vertical" />
-                          <Switch
-                            defaultChecked={item.tag}
-                            checkedChildren={<CheckOutlined />}
-                            unCheckedChildren={<CloseOutlined />}
-                            onChange={(checked) => this.changeUserJurisdiction(checked, record, item.type, jurisdiction)}
-                          />
-                        </div>
-                      ))}
+
                       <div
-                        style={{ width: '20%', float: 'left', textAlign: 'center' }}
+                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
+                      >
+                        数据大屏
+                        <Divider type="vertical" />
+                        <Switch
+                          size="small"
+                          defaultChecked={jurisdiction.dataScreen}
+                          checkedChildren={<CheckOutlined />}
+                          unCheckedChildren={<CloseOutlined />}
+                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'dataScreen')}
+                        />
+                      </div>
+                      <div
+                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
+                      >
+                        新建和配置方案
+                        <Divider type="vertical" />
+                        <Switch
+                          size="small"
+                          defaultChecked={jurisdiction.schemeConfiguration}
+                          checkedChildren={<CheckOutlined />}
+                          unCheckedChildren={<CloseOutlined />}
+                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'schemeConfiguration')}
+                        />
+                      </div>
+                      <div
+                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
+                      >
+                        全网搜索
+                        <Divider type="vertical" />
+                        <Switch
+                          size="small"
+                          defaultChecked={jurisdiction.globalSearch}
+                          checkedChildren={<CheckOutlined />}
+                          unCheckedChildren={<CloseOutlined />}
+                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'globalSearch')}
+                        />
+                      </div>
+                      <div
+                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
+                      >
+                        舆情分析
+                        <Divider type="vertical" />
+                        <Switch
+                          size="small"
+                          defaultChecked={jurisdiction.analysis}
+                          checkedChildren={<CheckOutlined />}
+                          unCheckedChildren={<CloseOutlined />}
+                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'analysis')}
+                        />
+                      </div>
+                      <div
+                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
+                      >
+                        舆情预警配置
+                        <Divider type="vertical" />
+                        <Switch
+                          size="small"
+                          defaultChecked={jurisdiction.warning}
+                          checkedChildren={<CheckOutlined />}
+                          unCheckedChildren={<CloseOutlined />}
+                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'warning')}
+                        />
+                      </div>
+                      <div
+                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
+                      >
+                        简报生成与发送
+                        <Divider type="vertical" />
+                        <Switch
+                          size="small"
+                          defaultChecked={jurisdiction.briefing}
+                          checkedChildren={<CheckOutlined />}
+                          unCheckedChildren={<CloseOutlined />}
+                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'briefing')}
+                        />
+                      </div>
+                      <div
+                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
                       >
                         用户权限
                         <Divider type="vertical" />
                         <Switch
+                          size="small"
                           defaultChecked={record.status}
                           checkedChildren={<CheckOutlined />}
                           unCheckedChildren={<CloseOutlined />}

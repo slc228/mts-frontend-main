@@ -26,7 +26,8 @@ class Content extends React.Component {
   };
 
   render() {
-    const { curProgramme, curPageTag } = this.props;
+    const { curProgramme, curPageTag, userJurisdiction } = this.props;
+    const jurisdiction = userJurisdiction ? JSON.parse(userJurisdiction) : undefined;
     return (
       <Layout.Content>
         <Menu
@@ -37,16 +38,18 @@ class Content extends React.Component {
           className="mts-programme-content-menu"
         >
           <Menu.Item key="info">信息列表</Menu.Item>
-          <Menu.Item key="alert">研判预警</Menu.Item>
-          <Menu.Item key="config">方案配置</Menu.Item>
+          {jurisdiction.warning ? <Menu.Item key="alert">研判预警</Menu.Item> : null}
+          {jurisdiction.schemeConfiguration ? <Menu.Item key="config">方案配置</Menu.Item> : null}
           <Menu.Item key="origin">定向监测</Menu.Item>
-          <Menu.Item key="view">事件分析</Menu.Item>
+          {jurisdiction.analysis ? <Menu.Item key="view">事件分析</Menu.Item> : null}
           <Menu.Item key="monitor">定向用户监测</Menu.Item>
-          <SubMenu key="submenu" title="简报制作">
-            <Menu.Item key="briefingen">简报制作流程</Menu.Item>
-            <Menu.Item key="briefing">简报模板制作</Menu.Item>
-            <Menu.Item key="material">简报素材管理</Menu.Item>
-          </SubMenu>
+          {jurisdiction.briefing ? (
+            <SubMenu key="submenu" title="简报制作">
+              <Menu.Item key="briefingen">简报制作流程</Menu.Item>
+              <Menu.Item key="briefing">简报模板制作</Menu.Item>
+              <Menu.Item key="material">简报素材管理</Menu.Item>
+            </SubMenu>
+          ) : null}
         </Menu>
         <Layout.Content className="site-layout-background">
           {curPageTag === 'info' && curProgramme && <Specific />}
@@ -65,6 +68,7 @@ class Content extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  userJurisdiction: state.userJurisdiction,
   curProgramme: state.curProgramme,
   curPageTag: state.curPageTag,
 });

@@ -181,6 +181,8 @@ class Specific extends React.Component {
       <Layout className="programme-specific-wrap">
         <MultiFilter
           current={current}
+          userType={this.props.userType}
+          userEventLimiter={this.props.userEventLimiter}
           onSelect={this.handleSelect}
           onSearch={this.handleKeywordChange}
           onDateChange={this.handleDateChange}
@@ -206,6 +208,8 @@ class Specific extends React.Component {
 const mapStateToProps = (state) => ({
   userName: state.userName,
   curProgramme: state.curProgramme,
+  userType: state.userType,
+  userEventLimiter: state.userEventLimiter,
 });
 const mapDispatchToProps = {
   onProgrammeChange: actions.onProgrammeChange,
