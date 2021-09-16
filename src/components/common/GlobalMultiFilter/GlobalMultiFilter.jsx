@@ -31,7 +31,7 @@ class GlobalMultiFilter extends React.Component {
     switch (type) {
       case 'submit':
         if (this.props.onSearch) {
-          if (this.props.userType === 'admin') {
+          if (this.props.userEventLimiter === '' || !this.props.userEventLimiter) {
             this.props.onSearch(data);
           } else {
             let eventLimiter = this.props.userEventLimiter ? this.props.userEventLimiter.split(/\s+/) : [];

@@ -1,5 +1,5 @@
+import { string } from 'prop-types';
 import requests from '../../requests';
-import {string} from "prop-types";
 
 const modifyProgramme = async (rawData) => {
   console.log(rawData);
@@ -16,6 +16,7 @@ const modifyProgramme = async (rawData) => {
     username: rawData.userName,
     programmeName: rawData.name,
     sensitiveWord: rawData.sensitiveWord,
+    priority: rawData.priority,
   };
   const url = encodeURI(`${requests.modifyProgramme.url}`);
   const response = await fetch(url, {

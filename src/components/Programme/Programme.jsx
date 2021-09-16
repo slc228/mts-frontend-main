@@ -4,7 +4,7 @@ import { Layout, Menu } from 'antd';
 import { connect } from 'react-redux';
 import Sider from './Sider/Sider';
 import Content from './Content/Content';
-import AutofitWrap from "../common/AutofitWrap/AutofitWrap";
+import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
 
 class Programme extends React.Component {
   render() {
@@ -12,8 +12,8 @@ class Programme extends React.Component {
     const { curProgramme } = this.props;
     return (
       <Layout>
-          <Sider />
-          <Content />
+        <Sider />
+        <Content />
       </Layout>
     );
   }

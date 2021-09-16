@@ -95,6 +95,7 @@ class Sider extends React.Component {
 
   render() {
     const { curProgramme, programmes, userType, userJurisdiction } = this.props;
+    console.log(programmes);
     const { newProgrammeVisible, newProgrammeName } = this.state;
     const jurisdiction = userJurisdiction ? JSON.parse(userJurisdiction) : undefined;
     return (

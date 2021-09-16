@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Input, Button, Radio, Layout, Switch, Modal, Menu, Checkbox} from 'antd';
+import {Form, Input, Button, Radio, Layout, Switch, Modal, Menu, Checkbox, Select} from 'antd';
 import {CheckOutlined, PlusCircleFilled, QuestionCircleFilled, EditOutlined} from '@ant-design/icons';
 import './Config.scss';
 import modifyProgramme from "../../../services/request/programme/modifyProgamme";
@@ -216,6 +216,7 @@ class Config extends React.Component {
   }
 
   async componentDidMount() {
+    console.log(this.props.curProgramme);
     // console.log(this.form.input.props.value);
     this.resetProgrammeForm();
     await this.handleGetSwordTypes();
@@ -290,6 +291,25 @@ class Config extends React.Component {
             rules={[{ required: true, message: '请输入方案名称' }]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item
+              name="priority"
+              label="紧急程度"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+          >
+            <Select
+                placeholder="选择一个紧急程度作为方案优先级"
+                allowClear
+            >
+              <Select.Option value={0} >低</Select.Option>
+              <Select.Option value={1}>中</Select.Option>
+              <Select.Option value={2}>高</Select.Option>
+              <Select.Option color={"red"} value={3}>紧急</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item
             name="keywordMatch"

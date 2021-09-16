@@ -8,12 +8,13 @@ const addProgramme = async (rawData) => {
     regionKeyword: '', // rawData.regionKeywords,
     eventKeyword: '', // rawData.eventKeywords,
     roleKeyword: '', // rawData.eventKeywords,
-    sensitiveword: '',
+    sensitiveWord: '',
     roleKeywordMatch: 0, // rawData.roleMatch,
     eventKeywordMatch: 0, // rawData.eventMatch,
     regionKeywordMatch: 0, // rawData.regionMatch,
     username: rawData.userName,
     programmeName: rawData.name,
+    priority: 1,
   };
   const url = encodeURI(`${requests.addProgramme.url}`);
   const response = await fetch(url, {

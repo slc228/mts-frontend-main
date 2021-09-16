@@ -17,6 +17,7 @@ const getProgrammes = async (username) => {
     roleMatch: item.roleKeywordMatch ? 'and' : 'or',
     enableAlert: item.enableAlert,
     sensitiveWord: item.sensitiveWord,
+    priority: item.priority,
     // names: item.names,
   }));
   return result;

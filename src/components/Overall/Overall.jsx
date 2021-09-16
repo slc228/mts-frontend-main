@@ -161,7 +161,7 @@ class Overall extends Component {
     await this.setState({ loading: true });
     const { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, data, keywords } = this.state;
     const params = [keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, keywords];
-    if (this.props.userType !== 'admin') {
+    if (this.props.userEventLimiter !== '' && this.props.userEventLimiter) {
       let eventLimiter = this.props.userEventLimiter ? this.props.userEventLimiter.split(/\s+/) : [];
       eventLimiter = Array.from(new Set(eventLimiter));
       let arrayInput = keyword ? keyword.split(/\s+/) : [];
@@ -174,7 +174,6 @@ class Overall extends Component {
     }
     this.props.onOverallPathChange({ path: '/result' });
     const result = await getOverallDataWithObject(...params);
-    console.log(result);
     const newData = { ...data };
     newData[this.getCriteria()] = result;
     this.setState({

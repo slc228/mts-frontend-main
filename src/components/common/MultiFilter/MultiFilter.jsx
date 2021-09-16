@@ -12,7 +12,7 @@ class MultiFilter extends React.Component {
 
   handleSearch = (keyword) => {
     if (this.props.onSearch) {
-      if (this.props.userType === 'admin') {
+      if (this.props.userEventLimiter === '' || !this.props.userEventLimiter) {
         this.props.onSearch(keyword);
       } else {
         let eventLimiter = this.props.userEventLimiter ? this.props.userEventLimiter.split(/\s+/) : [];
