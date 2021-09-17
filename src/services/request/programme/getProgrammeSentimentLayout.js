@@ -23,10 +23,10 @@ const getProgrammeSentimentLayout = async (fid, startPublishedDay, endPublishedD
   const sentimentLayout = [
     { name: '积极', label: '积极', value: rawResult.happy, color: 'pink' },
     { name: '愤怒', label: '愤怒', value: rawResult.angry, color: 'red' },
-    { name: '悲伤', label: '悲伤', value: rawResult.sad, color: 'blue' },
+    { name: '悲伤', label: '悲伤', value: rawResult.sad, color: 'SteelBlue' },
     { name: '恐惧', label: '恐惧', value: rawResult.fear, color: 'fear' },
     { name: '惊奇', label: '惊奇', value: rawResult.surprise, color: 'yellow' },
-    { name: '中立', label: '中立', value: rawResult.neutral, color: 'darkgray' },
+    { name: '中立', label: '中立', value: rawResult.neutral, color: 'LightSteelBlue' },
   ].filter(item => item.value);
   return sentimentLayout;
 };

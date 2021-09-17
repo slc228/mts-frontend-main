@@ -18,10 +18,10 @@ const getProgrammeSentimentTrend = async (fid, startPublishedDay, endPublishedDa
     'xAxis': [
       { 'name': '积极', 'label': '积极', 'value': rawResult.happyTrend, color: 'pink' },
       { 'name': '愤怒', 'label': '愤怒', 'value': rawResult.angryTrend, color: 'red' },
-      { 'name': '悲伤', 'label': '悲伤', 'value': rawResult.sadTrend, color: 'blue' },
+      { 'name': '悲伤', 'label': '悲伤', 'value': rawResult.sadTrend, color: 'SteelBlue' },
       { 'name': '惊奇', 'label': '惊奇', 'value': rawResult.surpriseTrend, color: 'green' },
       { 'name': '恐惧', 'label': '恐惧', 'value': rawResult.fearTrend, color: 'yellow' },
-      { 'name': '中立', 'label': '中立', 'value': rawResult.neutralTrend, color: 'darkgray' }],
+      { 'name': '中立', 'label': '中立', 'value': rawResult.neutralTrend, color: 'LightSteelBlue' }],
   };
   return emotionTrendLayout;
 };

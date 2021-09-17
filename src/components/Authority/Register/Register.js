@@ -27,6 +27,7 @@ class Register extends React.Component {
   handleReject = () => {};
 
   render() {
+    const { roleList } = this.props;
     return (
       <Form
         className="login-form"
@@ -90,8 +91,7 @@ class Register extends React.Component {
             placeholder="选择一个您想要注册的角色"
             allowClear
           >
-            <Select.Option value="default">普通用户</Select.Option>
-            <Select.Option value="tourist">访问用户</Select.Option>
+            {roleList.map((item) => <Select.Option value={item.value}>{item.name}</Select.Option>)}
           </Select>
         </Form.Item>
         <Form.Item

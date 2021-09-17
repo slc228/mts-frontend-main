@@ -198,7 +198,7 @@ class UserList extends React.Component {
   render() {
     const { addNewUserVisible, swordTypes, curSwordType, swords, addNewSwordVisible, checkedSwords } = this.state;
     const { users } = this.props;
-    console.log(users);
+    const roleList = [{ value: 'default', name: '普通用户' }, { value: 'tourist', name: '访问者' }, { value: 'systemAdmin', name: '系统管理员' }, { value: 'admin', name: '管理员' }];
     return (
       <Layout>
         <div className="enter-background">
@@ -343,7 +343,7 @@ class UserList extends React.Component {
             title="请输入信息添加用户"
             footer={null}
           >
-            <Register />
+            <Register roleList={roleList} />
           </Modal>
           <Modal
             visible={addNewSwordVisible}

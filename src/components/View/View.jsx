@@ -141,7 +141,7 @@ class View extends React.Component {
           </div>
           <div className="sub-item">
             <Echart
-              title="来源分部"
+              title="来源分布"
               type="defaultPie"
               data={sourceLayout}
               size="small"

@@ -162,6 +162,7 @@ class View extends React.Component {
     const { startPublishedDay, endPublishedDay } = this.state;
     const { fid } = this.props.curProgramme;
     const emotionTrend = await getProgrammeSentimentTrend(fid, startPublishedDay, endPublishedDay);
+    console.log(emotionTrend);
     const criteria = this.getCriteria();
     const newData = { ...this.state.emotionTrend };
     newData[criteria] = emotionTrend;
@@ -172,6 +173,7 @@ class View extends React.Component {
     const { startPublishedDay, endPublishedDay } = this.state;
     const { fid } = this.props.curProgramme;
     const emotionLayout = await getProgrammeSentimentLayout(fid, startPublishedDay, endPublishedDay);
+    console.log(emotionLayout);
     const criteria = this.getCriteria();
     const newData = { ...this.state.emotionLayout };
     newData[fid] = emotionLayout;
@@ -222,7 +224,6 @@ class View extends React.Component {
     const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
     const sourceLayout = await getProgrammeSourceLayout(fid, startPublishedDay, endPublishedDay);
-    console.log(sourceLayout);
     const criteria = this.getCriteria();
     const newData = { ...this.state.sourceLayout };
     newData[fid] = sourceLayout;
