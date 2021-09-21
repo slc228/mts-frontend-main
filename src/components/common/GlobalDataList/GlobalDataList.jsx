@@ -101,15 +101,10 @@ class GlobalDataList extends React.Component {
       return <LoadingOutlined />;
     };
 
-    renderSensi = (text) => {
-      if (text === '1') return <span style={{ color: 'red' }}>敏感</span>;
-      return <span>非敏感</span>;
-    };
-
     renderSensitiveType = (text) => {
       if (text === '正常信息 ') return text;
-      if (text === '政治敏感 ') return <span style={{ color: 'red' }}>敏感</span>;
-      if (text) return <span style={{ color: 'red' }}>{text}</span>;
+      if (text === '政治敏感 ') return <span className="redSpan">敏感</span>;
+      if (text) return <span className="redSpan">{text}</span>;
       return <LoadingOutlined />;
     };
 
@@ -127,7 +122,7 @@ class GlobalDataList extends React.Component {
           <a>
             {text}
           </a>
-          <div style={{ color: 'gray' }}>{renderTxt}</div>
+          <div className="graySpan">{renderTxt}</div>
         </div>
 
       );
@@ -193,7 +188,6 @@ class GlobalDataList extends React.Component {
               }}
               onChange={this.handlePageTurned}
               loading={loading}
-              style={{ fontSize: '16px' }}
             />
             <DataContent
               record={curRecord}

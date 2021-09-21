@@ -41,8 +41,6 @@ import getBriefingTemplate from '../../../services/request/data/getBriefingTempl
 import './BriefingGeneration.scss';
 import dimension from '../Briefing/dimension';
 import generateFile from '../../../services/request/data/generateFile';
-import genEchartSensiLayoutImage from './genEchartSensiLayoutImage';
-import genEchartRegionLayoutImage from './genEchartRegionLayoutImage';
 import getBriefingFiles from '../../../services/request/data/getBriefingFiles';
 import deleteBriefingFiles from '../../../services/request/data/deleteBriefingFiles';
 import downloadBriefingFiles from '../../../services/request/data/downloadBriefingFiles';
@@ -196,10 +194,10 @@ class BriefingGeneration extends React.Component {
     }
     return (
       <div>
-        <Button style={{ margin: '5px' }} icon={<FileWordFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'word')} />
-        <Button style={{ margin: '5px' }} icon={<FilePdfFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'pdf')} />
-        <Button style={{ margin: '5px' }} icon={<FileExcelFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'excel')} />
-        <Button style={{ margin: '5px' }} icon={<DeleteFilled />} type="primary" onClick={() => this.handleDeleteBriefings(record.id)} danger />
+        <Button className="briefing-file-icon" icon={<FileWordFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'word')} />
+        <Button className="briefing-file-icon" icon={<FilePdfFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'pdf')} />
+        <Button className="briefing-file-icon" icon={<FileExcelFilled />} type="primary" onClick={() => this.downloadBriefings(record.id, 'excel')} />
+        <Button className="briefing-file-icon" icon={<DeleteFilled />} type="primary" onClick={() => this.handleDeleteBriefings(record.id)} danger />
       </div>
     );
   };
@@ -223,8 +221,8 @@ class BriefingGeneration extends React.Component {
 
   renderSensitiveType = (text) => {
     if (text === '正常信息 ') return text;
-    if (text === '政治敏感 ') return <span style={{ color: 'red' }}>敏感</span>;
-    if (text) return <span style={{ color: 'red' }}>{text}</span>;
+    if (text === '政治敏感 ') return <span className="redSpan">敏感</span>;
+    if (text) return <span className="redSpan">{text}</span>;
     return <LoadingOutlined />;
   };
 
@@ -242,7 +240,7 @@ class BriefingGeneration extends React.Component {
         <a>
           {text}
         </a>
-        <div style={{ color: 'gray' }}>{renderTxt}</div>
+        <div className="graySpan">{renderTxt}</div>
       </div>
 
     );
@@ -337,7 +335,6 @@ class BriefingGeneration extends React.Component {
     const { fid } = this.props.curProgramme;
     const { curmateriallib, selectedRowKeys } = this.state;
     const ret = await deleteMaterialIDs(fid, curmateriallib, selectedRowKeys);
-    console.log(ret);
     if (ret.deleteMaterialIDs === 1) {
       alert('删除成功！');
     } else {
@@ -396,14 +393,12 @@ class BriefingGeneration extends React.Component {
         if (dimension[item - 1].name === '关键词云') {
           await this.sleep(1200);
         }
-        console.log(echartObject);
         echartsDataRet.push(echartObject);
         const updateRet = await updateBriefingFileProgess(fileID, everyKeyPercent);
         this.getBriefings();
       }
     }
     const { selectedRowKeys, templateId, header } = this.state;
-    console.log(echartsDataRet);
     const ret = await generateFile(fileID, fid, templateId, title, header, selectedRowKeys, echartsDataRet);
     this.getBriefings();
   };
@@ -483,11 +478,6 @@ class BriefingGeneration extends React.Component {
     this.getMateriallibs();
   };
 
-  handleGenEchartsBase64=(e) => {
-    console.log('here');
-    console.log(e.getDataURL());
-  };
-
   render() {
     const { fid } = this.props.curProgramme;
     const { current, materiallibs, curmateriallib, loading, data, dataSize, selectedRowKeys, visible, curRecord, templateList, title, header, briefingfiles } = this.state;
@@ -502,7 +492,7 @@ class BriefingGeneration extends React.Component {
         return (
           <Layout>
             <div className="enter-background">
-              <Button style={{ marginBottom: '10px' }} icon={<PlusCircleOutlined />} type="primary" onClick={this.handleAddNewBriefingFile}>新建简报文件</Button>
+              <Button className="briefing-add-button" icon={<PlusCircleOutlined />} type="primary" onClick={this.handleAddNewBriefingFile}>新建简报文件</Button>
               <Table columns={this.briefingColumns} dataSource={briefingfiles} />
             </div>
           </Layout>
@@ -518,28 +508,28 @@ class BriefingGeneration extends React.Component {
               </Steps>
               <div className="steps-content">
                 {current === 0 && (
-                  <div style={{ marginTop: '20px' }}>
+                  <div className="briefing-materiallibs-content">
                     {
                           materiallibs.length === 0 ?
                             (
                               <div>
-                                <div style={{ marginBottom: '20px', fontSize: '20px' }}>
+                                <div className="briefing-materiallib-content">
                                   暂时没有素材库，请点击按钮跳转添加素材库
                                   <Button style={{ marginLeft: '5%' }} onClick={this.turnToMaterial}>跳转</Button>
                                 </div>
                               </div>
                             ) : (
                               <div>
-                                <div style={{ marginBottom: '20px', fontSize: '20px' }}>选择一个素材库作为素材数据来源</div>
+                                <div className="briefing-materiallib-content">选择一个素材库作为素材数据来源</div>
                                 <Radio.Group
                                   onChange={this.onRadioChange}
                                   value={curmateriallib}
-                                  style={{ marginLeft: '40%', marginBottom: '20px' }}
+                                  className="briefing-materiallib-radioGroup"
                                 >
                                   <Space direction="vertical">
                                     {materiallibs.map((item) => (
                                       <Radio
-                                        style={{ fontSize: '18px' }}
+                                        className="briefing-materiallib-radio"
                                         value={item.materiallib}
                                       >{`${item.materiallib} (${item.num})`}
                                       </Radio>
@@ -556,33 +546,16 @@ class BriefingGeneration extends React.Component {
                     <Table
                       title={() => (
                         <div>
-                          <div style={{
-                            float: 'left',
-                            width: '15%',
-                            fontSize: '17px',
-                            textAlign: 'center',
-                            color: '#1890ff',
-                          }}
-                          >
+                          <div className="add-briefing-material-button">
                             {'添加舆情素材 '}
                             <Tooltip placement="topLeft" title="跳转到舆情列表进行添加" arrowPointAtCenter>
-                              <PlusCircleFilled onClick={this.turnToSpecific} style={{ fontSize: '15px' }} />
+                              <PlusCircleFilled onClick={this.turnToSpecific} className="add-button-icon" />
                             </Tooltip>
                           </div>
-                          <div style={{
-                            float: 'left',
-                            width: '15%',
-                            fontSize: '17px',
-                            textAlign: 'center',
-                            color: 'red',
-                          }}
-                          >
+                          <div className="delete-briefing-material-button">
                             {'批量删除 '}
                             <Tooltip placement="topLeft" title="批量删除选中的素材" arrowPointAtCenter>
-                              <DeleteFilled
-                                onClick={this.handleDeleteMateriallibIds}
-                                style={{ fontSize: '15px' }}
-                              />
+                              <DeleteFilled onClick={this.handleDeleteMateriallibIds} className="delete-button-icon" />
                             </Tooltip>
                           </div>
                         </div>
@@ -597,7 +570,6 @@ class BriefingGeneration extends React.Component {
                         total: dataSize,
                       }}
                       loading={loading}
-                      style={{ fontSize: '16px' }}
                     />
                     <DataContent
                       record={curRecord}
@@ -608,9 +580,9 @@ class BriefingGeneration extends React.Component {
                   </div>
                 )}
                 {current === 2 && (
-                  <div style={{ marginTop: '20px' }}>
-                    <div style={{ width: '40%', float: 'left', minHeight: '45vh' }}>
-                      <Form {...layout} name="control-hooks" style={{ width: '80%', marginTop: '13vh' }}>
+                  <div className="briefing-template-background">
+                    <div className="briefing-template-form-div">
+                      <Form {...layout} name="control-hooks" className="briefing-template-form">
                         <Form.Item
                           name="template"
                           label="选择模板"

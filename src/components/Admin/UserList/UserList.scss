@@ -1,0 +1,24 @@
+.UserListSwitch{
+  width: 14%;
+  float: left;
+  text-align: center;
+  font-size: 14px;
+}
+.UserListAddUserButton{
+  margin-bottom: 10px;
+}
+.UserListTextArea{
+  width: 48%;
+  float: left;
+  margin: 10px 1%;
+  .UserListTextAreaTooltip
+  {
+    text-align: center;
+  }
+  .UserListTextAreaButton{
+    margin-top: 10px;
+  }
+}
+.UserListAddNewSwordButton{
+  font-size: 15px;
+}

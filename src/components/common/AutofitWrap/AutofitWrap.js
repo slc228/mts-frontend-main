@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Lodash from 'lodash';
 
 class AutofitWrap extends React.Component {
@@ -10,8 +10,6 @@ class AutofitWrap extends React.Component {
   }
 
   handleResize = Lodash.debounce(() => {
-    // console.log('window resize');
-    // console.log(document.body.offsetHeight);
     this.setState({
       height: document.body.offsetHeight - this.props.padding,
     });

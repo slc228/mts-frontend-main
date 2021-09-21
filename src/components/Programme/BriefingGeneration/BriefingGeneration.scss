@@ -83,3 +83,65 @@
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+.briefing-file-icon{
+  margin:5px;
+}
+
+.redSpan{
+  color: red;
+}
+.graySpan{
+  color: gray;
+}
+
+.briefing-add-button{
+  margin-bottom: 10px;
+}
+
+.briefing-materiallibs-content{
+  margin-top: 20px;
+}
+.briefing-materiallib-content{
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+.briefing-materiallib-radioGroup{
+  margin-left: 40%;
+  margin-bottom: 20px;
+}
+.briefing-materiallib-radio{
+  font-size: 18px;
+}
+.add-briefing-material-button{
+  float: left;
+  width: 15%;
+  font-size: 17px;
+  text-align: center;
+  color: #1890ff;
+  .add-button-icon{
+   font-size: 15px;
+  }
+}
+.delete-briefing-material-button{
+  float: left;
+  width: 15%;
+  font-size: 17px;
+  text-align: center;
+  color: red;
+  .delete-button-icon{
+    font-size: 15px;
+  }
+}
+.briefing-template-background{
+  margin-top: 20px;
+}
+.briefing-template-form-div{
+  width: 40%;
+  float: left;
+  min-height: 45vh;
+  .briefing-template-form{
+    width: 80%;
+    margin-top: 13vh
+  }
+}

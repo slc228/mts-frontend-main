@@ -296,7 +296,6 @@ class Overall extends Component {
                   }}
                   loading={loadingBaidu}
                   onChange={this.handleBaiduPageChange}
-                  style={{ fontSize: '16px' }}
                 />
               </Col>
               <Col className="gutter-row" span={8}>
@@ -310,7 +309,6 @@ class Overall extends Component {
                   }}
                   loading={loading360}
                   onChange={this.handle360PageChange}
-                  style={{ fontSize: '16px' }}
                 />
               </Col>
               <Col className="gutter-row" span={8}>
@@ -324,7 +322,6 @@ class Overall extends Component {
                   }}
                   loading={loadingBing}
                   onChange={this.handleBingPageChange}
-                  style={{ fontSize: '16px' }}
                 />
               </Col>
             </Row>

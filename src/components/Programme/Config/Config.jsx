@@ -87,7 +87,7 @@ class Config extends React.Component {
 
   addNewSword=() => {
     const {userType, programmes}=this.props;
-    if (userType==='admin')
+    if (userType==='systemAdmin')
     {
       const { swordTypes } = this.state;
       this.setState({
@@ -385,7 +385,7 @@ class Config extends React.Component {
                     <Button
                         type={'primary'}
                         onClick={() => add()}
-                        style={{ width: '20%' }}
+                        className="config-form-button"
                         icon={<PlusOutlined />}
                     >
                       添加事件关键词
@@ -411,7 +411,7 @@ class Config extends React.Component {
                             ]}
                             noStyle
                         >
-                          <Input placeholder="请输入关键字词组，以空格隔开"  style={{ width: '95%' }}/>
+                          <Input placeholder="请输入关键字词组，以空格隔开"  className="config-form-input"/>
                         </Form.Item>
                         {fields.length > 0 ? (
                             <MinusCircleOutlined
@@ -429,7 +429,7 @@ class Config extends React.Component {
           >
             <Button
                 type={'primary'}
-                style={{ width: '20%' }}
+                className="config-form-button"
                 icon={<PlusOutlined />}
                 onClick={this.addNewSword}
             >
@@ -482,7 +482,7 @@ class Config extends React.Component {
               onChange={this.handleSampleChange}
           />
         </Modal>
-        {userType==='admin'?
+        {userType==='systemAdmin'?
             <Modal
                 visible={addNewSwordVisible}
                 onCancel={this.handleAddSwordModalCancel}
@@ -490,7 +490,7 @@ class Config extends React.Component {
                 title={
                   <Button
                       icon={<PlusCircleFilled />}
-                      style={{ fontSize: '15px'}}
+                      className="config-modal-button"
                       type="primary"
                       onClick={this.addNewSwordToProgramme}
                   >
@@ -516,7 +516,7 @@ class Config extends React.Component {
                 title={
                   <Button
                       icon={<EditOutlined />}
-                      style={{ fontSize: '15px'}}
+                      className="config-modal-button"
                       type="primary"
                       onClick={this.addNewSwordToProgrammeForUser}
                   >

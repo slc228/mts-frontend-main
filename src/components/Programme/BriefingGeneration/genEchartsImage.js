@@ -3,7 +3,6 @@ import moment from 'moment';
 import getProgrammeSensiLayout from '../../../services/request/programme/getProgrammeSensiLayout';
 import doughnutPie from '../../common/Echart/getRules/doughnutPie';
 import dimension from '../Briefing/dimension';
-import genEchartRegionLayoutImage from './genEchartRegionLayoutImage';
 import getProgrammeRegionLayout from '../../../services/request/programme/getProgrammeRegionLayout';
 import china from '../../../utils/map/json/china.json';
 import chinaMap from '../../common/Echart/getRules/chinaMap';
@@ -15,8 +14,6 @@ import areaLine from '../../common/Echart/getRules/areaLine';
 import horizontalBar from '../../common/Echart/getRules/horizontalBar';
 import getProgrammeSentimentLayout from '../../../services/request/programme/getProgrammeSentimentLayout';
 import getProgrammeSentimentTrend from '../../../services/request/programme/getProgrammeSentimentTrend';
-import connGraph from '../../common/Echart/getRules/connGraph';
-import getEventTree from '../../../services/request/data/getEventTree';
 import defaultTree from '../../common/Echart/getRules/defaultTree';
 import getTraceTree from '../../../services/request/data/getTraceTree';
 import circleTree from '../../common/Echart/getRules/circleTree';
@@ -129,16 +126,13 @@ const genEchartsImages = async (fid, name, item) => {
     mychart.dispose();
   }
   if (dimension[item - 1].name === '情感分析') {
-    console.log('情感分析');
     const emotionLayout = await getProgrammeSentimentLayout(fid, undefined, undefined);
-    console.log(emotionLayout);
     const div = document.createElement('div');
     const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
     mychart.resize();
     const data = defaultPie(emotionLayout, '情感分析', 'big');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });
-    console.log(str);
     ret.name = '情感分析';
     ret.URL = str;
     mychart.dispose();

@@ -49,9 +49,9 @@ class Monitor extends React.Component {
     ];
   }
 
-  renderId = (text) => <span style={{ color: 'blue' }}>{text}</span>;
+  renderId = (text) => <span className="blueSpan">{text}</span>;
 
-  renderNickname = (text) => <span style={{ color: 'blue' }}>{text}</span>;
+  renderNickname = (text) => <span className="blueSpan">{text}</span>;
 
   renderAddButton = (text, record) => (
     <Button
@@ -229,12 +229,12 @@ class Monitor extends React.Component {
                     avatar={<Avatar src={item.user_avatar} />}
                     title={<a>{item.nickname}</a>}
                     description={(
-                      <div style={{ color: 'black' }}>
-                        <a style={{ color: '#555555' }}>{item.publish_time}</a>
+                      <div className="description">
+                        <a className="descriptionSpan">{item.publish_time}</a>
                         <Divider type="vertical" />
-                        <a style={{ color: '#555555' }}>来自  {item.publish_tool}</a>
+                        <a className="descriptionSpan">来自  {item.publish_tool}</a>
                         <Divider type="vertical" />
-                        <a style={{ color: '#555555' }}>发布于  {item.publish_place}</a>
+                        <a className="descriptionSpan">发布于  {item.publish_place}</a>
                       </div>
                     )}
                   />
@@ -279,7 +279,6 @@ class Monitor extends React.Component {
                   columns={this.columnsRender}
                   dataSource={SearchedWeiboUser}
                   loading={loading}
-                  style={{ fontSize: '16px' }}
                 />
               </Modal>
             </div>
@@ -328,22 +327,22 @@ class Monitor extends React.Component {
                         <div onClick={e => this.handleOpen(item.userid, item)}>
                           <a>{item.nickname}</a>
                           <Divider type="vertical" />
-                          {item.gender === '男' ? <ManOutlined style={{ color: '#1890FF' }} /> : <WomanOutlined style={{ color: '#FFB6C1' }} />}
+                          {item.gender === '男' ? <ManOutlined className="manIcon" /> : <WomanOutlined className="womanIcon" />}
                         </div>
                             )}
                       description={(
-                        <div style={{ color: 'black' }}>
+                        <div className="description">
                           <Space size="small" direction="vertical">
-                            <a style={{ display: 'block', color: '#555555' }}>{item.location}</a>
-                            {item.description ? <a style={{ display: 'block', color: '#555555' }}>{item.verified_reason}</a> : null}
-                            {item.description ? <a style={{ display: 'block', color: '#555555' }}>简介： {item.description}</a> : null}
-                            {item.description ? <a style={{ display: 'block', color: '#555555' }}>标签： {item.tags}</a> : null}
+                            <a className="description-detail-span">{item.location}</a>
+                            {item.description ? <a className="description-detail-span">{item.verified_reason}</a> : null}
+                            {item.description ? <a className="description-detail-span">简介： {item.description}</a> : null}
+                            {item.description ? <a className="description-detail-span">标签： {item.tags}</a> : null}
                             <div>
-                              <a style={{ color: '#555555' }}>关注  {item.following}</a>
+                              <a className="descriptionSpan">关注  {item.following}</a>
                               <Divider type="vertical" />
-                              <a style={{ color: '#555555' }}>粉丝  {item.followers}</a>
+                              <a className="descriptionSpan">粉丝  {item.followers}</a>
                               <Divider type="vertical" />
-                              <a style={{ color: '#555555' }}>微博  {item.weibo_num}</a>
+                              <a className="descriptionSpan">微博  {item.weibo_num}</a>
                             </div>
                           </Space>
                         </div>

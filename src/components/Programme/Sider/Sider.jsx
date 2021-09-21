@@ -120,7 +120,7 @@ class Sider extends React.Component {
           onCancel={() => this.handleProgrammeNew('cancel')}
           onOk={() => this.handleProgrammeNew('ok')}
         >
-          <div style={{ fontSize: '16px', marginBottom: '5px' }}>方案名称</div>
+          <div className="add-programme">方案名称</div>
           <Input
             value={newProgrammeName}
             onChange={e => this.handleProgrammeNew('name', { name: e.target.value })}

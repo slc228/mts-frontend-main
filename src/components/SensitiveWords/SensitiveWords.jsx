@@ -21,7 +21,6 @@ class SensitiveWords extends Component {
 
   handleGetSwordTypes=async () => {
     const swordTypes = await getSensitiveWordTypes();
-    console.log(swordTypes);
     this.setState({
       swordTypes,
       curSwordType: swordTypes.length === 0 ? undefined : swordTypes[0].type,
@@ -30,7 +29,6 @@ class SensitiveWords extends Component {
 
   handleGetSwords=async () => {
     const { curSwordType } = this.state;
-    console.log(curSwordType);
     const swords = await getSensitiveWords(curSwordType);
     this.setState({
       swords,
@@ -50,7 +48,6 @@ class SensitiveWords extends Component {
   };
 
   handleCheck=(value) => {
-    console.log(value);
     this.setState({
       checkSwords: value,
     });
@@ -111,18 +108,18 @@ class SensitiveWords extends Component {
         </Layout.Sider>
         <Layout.Content>
           <div className="enter-background">
-            <div style={{ width: '100%' }}>
+            <div>
               <Button
+                className="icon-button"
                 icon={<PlusCircleFilled />}
-                style={{ fontSize: '15px', margin: '10px 5px' }}
                 type="primary"
                 onClick={this.addNewSword}
               >
                 添加新敏感词
               </Button>
               <Button
+                className="icon-button"
                 icon={<DeleteFilled />}
-                style={{ fontSize: '15px', margin: '10px 5px' }}
                 type="primary"
                 danger
                 onClick={this.handleDelete}

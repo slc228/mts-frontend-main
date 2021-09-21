@@ -9,6 +9,8 @@ import changeUserEventLimiter from '../../../services/request/data/changeUserEve
 import getSensitiveWordTypes from '../../../services/request/data/getSensitiveWordTypes';
 import getSensitiveWords from '../../../services/request/data/getSensitiveWords';
 import changeUserSensitiveLimiter from '../../../services/request/data/changeUserSensitiveLimiter';
+import getJurisdictionList from './getJurisdictionList';
+import './UserList.scss';
 
 class UserList extends React.Component {
   constructor() {
@@ -149,7 +151,6 @@ class UserList extends React.Component {
   };
 
   handleChange = async (username) => {
-    console.log(username);
     const result = await changeUserState(username);
     if (result.changeUserState) {
       alert('编辑成功！');
@@ -202,98 +203,31 @@ class UserList extends React.Component {
     return (
       <Layout>
         <div className="enter-background">
-          <Button style={{ marginBottom: '10px' }} icon={<PlusCircleOutlined />} type="primary" onClick={this.handleAddNewUser}>添加新用户</Button>
+          <Button className="UserListAddUserButton" icon={<PlusCircleOutlined />} type="primary" onClick={this.handleAddNewUser}>添加新用户</Button>
           <Table
             columns={this.columns}
             rowKey={(record) => record.username}
             expandable={{
               expandedRowRender: (record) => {
-                const jurisdiction = record.userRights;
+                const jurisdictionList = getJurisdictionList(record.userRights);
+
                 return (
                   <div>
-                    <div style={{ width: '100%' }}>
-
-                      <div
-                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
-                      >
-                        数据大屏
-                        <Divider type="vertical" />
-                        <Switch
-                          size="small"
-                          defaultChecked={jurisdiction.dataScreen}
-                          checkedChildren={<CheckOutlined />}
-                          unCheckedChildren={<CloseOutlined />}
-                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'dataScreen')}
-                        />
-                      </div>
-                      <div
-                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
-                      >
-                        新建和配置方案
-                        <Divider type="vertical" />
-                        <Switch
-                          size="small"
-                          defaultChecked={jurisdiction.schemeConfiguration}
-                          checkedChildren={<CheckOutlined />}
-                          unCheckedChildren={<CloseOutlined />}
-                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'schemeConfiguration')}
-                        />
-                      </div>
-                      <div
-                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
-                      >
-                        全网搜索
-                        <Divider type="vertical" />
-                        <Switch
-                          size="small"
-                          defaultChecked={jurisdiction.globalSearch}
-                          checkedChildren={<CheckOutlined />}
-                          unCheckedChildren={<CloseOutlined />}
-                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'globalSearch')}
-                        />
-                      </div>
-                      <div
-                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
-                      >
-                        舆情分析
-                        <Divider type="vertical" />
-                        <Switch
-                          size="small"
-                          defaultChecked={jurisdiction.analysis}
-                          checkedChildren={<CheckOutlined />}
-                          unCheckedChildren={<CloseOutlined />}
-                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'analysis')}
-                        />
-                      </div>
-                      <div
-                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
-                      >
-                        舆情预警配置
-                        <Divider type="vertical" />
-                        <Switch
-                          size="small"
-                          defaultChecked={jurisdiction.warning}
-                          checkedChildren={<CheckOutlined />}
-                          unCheckedChildren={<CloseOutlined />}
-                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'warning')}
-                        />
-                      </div>
-                      <div
-                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
-                      >
-                        简报生成与发送
-                        <Divider type="vertical" />
-                        <Switch
-                          size="small"
-                          defaultChecked={jurisdiction.briefing}
-                          checkedChildren={<CheckOutlined />}
-                          unCheckedChildren={<CloseOutlined />}
-                          onChange={(checked) => this.changeUserJurisdiction(checked, record, 'briefing')}
-                        />
-                      </div>
-                      <div
-                        style={{ width: '14%', float: 'left', textAlign: 'center', fontSize: '14px' }}
-                      >
+                    <div>
+                      {jurisdictionList.map((item) => (
+                        <div className="UserListSwitch">
+                          {item.name}
+                          <Divider type="vertical" />
+                          <Switch
+                            size="small"
+                            defaultChecked={item.value}
+                            checkedChildren={<CheckOutlined />}
+                            unCheckedChildren={<CloseOutlined />}
+                            onChange={(checked) => this.changeUserJurisdiction(checked, record, item.type)}
+                          />
+                        </div>
+                      ))}
+                      <div className="UserListSwitch">
                         用户权限
                         <Divider type="vertical" />
                         <Switch
@@ -305,12 +239,10 @@ class UserList extends React.Component {
                         />
                       </div>
                     </div>
-                    <div
-                      style={{ width: '48%', float: 'left', margin: '10px 1%' }}
-                    >
+                    <div className="UserListTextArea">
                       <Tooltip
                         title={(
-                          <div style={{ textAlign: 'center' }}>
+                          <div className="UserListTextAreaTooltip">
                             <p>请直接在文本框进行修改</p>
                             <p>以空格键隔开词语</p>
                           </div>
@@ -319,15 +251,13 @@ class UserList extends React.Component {
                       >
                         <Input.TextArea rows={4} defaultValue={record.eventLimiter} onChange={(e) => this.handleEventLimiterInputChange(e, record)} />
                       </Tooltip>
-                      <Button style={{ marginTop: '10px' }} icon={<EditOutlined />} type="primary" onClick={() => this.handleChangeUserEventLimiter(record)}>修改搜索限定词</Button>
+                      <Button className="UserListTextAreaButton" icon={<EditOutlined />} type="primary" onClick={() => this.handleChangeUserEventLimiter(record)}>修改搜索限定词</Button>
                     </div>
-                    <div
-                      style={{ width: '48%', float: 'left', margin: '10px 1%' }}
-                    >
+                    <div className="UserListTextArea">
                       <Tooltip title="请点击按钮进行修改">
                         <Input.TextArea rows={4} value={record.sensitiveLimiter} />
                       </Tooltip>
-                      <Button style={{ marginTop: '10px' }} icon={<EditOutlined />} type="primary" onClick={() => this.addNewSword(record)}>修改敏感限定词</Button>
+                      <Button className="UserListTextAreaButton" icon={<EditOutlined />} type="primary" onClick={() => this.addNewSword(record)}>修改敏感限定词</Button>
                     </div>
                   </div>
                 );
@@ -351,8 +281,8 @@ class UserList extends React.Component {
             closable={false}
             title={(
               <Button
+                className="UserListAddNewSwordButton"
                 icon={<PlusCircleFilled />}
-                style={{ fontSize: '15px' }}
                 type="primary"
                 onClick={this.addNewSwordToUser}
               >

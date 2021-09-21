@@ -37,7 +37,7 @@ class DataList extends React.Component {
                 <div>
                   <div>选择素材库进行添加</div>
                   {this.props.materiallibs.length === 0 ? null : (this.props.materiallibs.map((item) => (
-                    <div style={{ marginBottom: '2px' }}>
+                    <div className="addMateriallibsButton">
                       <Button type="primary" block onClick={() => this.props.onModeifyMaterial(item.materiallib)}>{`${item.materiallib} (${item.num})`}</Button>
                     </div>
                   )))}
@@ -118,15 +118,10 @@ class DataList extends React.Component {
     return <LoadingOutlined />;
   };
 
-  renderSensi = (text) => {
-    if (text === '1') return <span style={{ color: 'red' }}>敏感</span>;
-    return <span>非敏感</span>;
-  };
-
   renderSensitiveType = (text) => {
     if (text === '正常信息 ') return text;
-    if (text === '政治敏感 ') return <span style={{ color: 'red' }}>敏感</span>;
-    if (text) return <span style={{ color: 'red' }}>{text}</span>;
+    if (text === '政治敏感 ') return <span className="redSpan">敏感</span>;
+    if (text) return <span className="redSpan">{text}</span>;
     return <LoadingOutlined />;
   };
 
@@ -144,7 +139,7 @@ class DataList extends React.Component {
         <a>
           {text}
         </a>
-        <div style={{ color: 'gray' }}>{renderTxt}</div>
+        <div className="graySpan">{renderTxt}</div>
       </div>
 
     );
@@ -204,7 +199,6 @@ class DataList extends React.Component {
             }}
             onChange={this.handlePageTurned}
             loading={loading}
-            style={{ fontSize: '16px' }}
           />
           <DataContent
             record={curRecord}
