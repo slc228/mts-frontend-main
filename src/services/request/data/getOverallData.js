@@ -18,7 +18,7 @@ const getOverallData = async (keyword, source, startPublishedDay, endPublishedDa
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {
     dataSize: rawResult.hitNumber,
-    data: rawResult.dataContent ? rawResult.dataContent : [],
+    data: rawResult.yuQingContent ? rawResult.yuQingContent : [],
   };
   console.log(result.data);
   return result;

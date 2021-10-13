@@ -151,19 +151,7 @@ class Home extends React.Component {
           loading={sensitiveLoading}
         >
           {sensitiveInfo ?
-            sensitiveInfo.map((item) => (
-              /* <div
-                className="item"
-                onClick={e => this.handleTitleClick(item)}
-              >
-                <div className="subtitle">{item.title}</div>
-                <span className="addr">
-                  [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
-                </span>
-                <div className="content">
-                  {item.content}
-                </div>
-              </div> */
+            sensitiveInfo.map((item) => (item.content ? (
               <div
                 className="item"
                 onClick={e => this.handleTitleClick(item)}
@@ -176,7 +164,7 @@ class Home extends React.Component {
                   {item.content.replace(/\\n/g, '')}
                 </span>
               </div>
-            )) :
+            ) : null)) :
             <Loading />}
         </Card>
         <Card
@@ -185,19 +173,7 @@ class Home extends React.Component {
           loading={latestLoading}
         >
           {latestInfo ?
-            latestInfo.map((item) => (
-              /* <div
-                className="item"
-                onClick={e => this.handleTitleClick(item)}
-              >
-                <div className="subtitle">{item.title}</div>
-                <span className="addr">
-                  [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
-                </span>
-                <div className="content">
-                  {item.content}
-                </div>
-              </div> */
+            latestInfo.map((item) => (item.content ? (
               <div
                 className="item"
                 onClick={e => this.handleTitleClick(item)}
@@ -207,10 +183,10 @@ class Home extends React.Component {
                   [{this.renderSource(item.source)} {moment(item.publishedDay).subtract(8, 'hours').month() + 1}/{moment(item.publishedDay).subtract(8, 'hours').date()}]
                 </span>
                 <span className="content2">
-                  {item.content ? item.content.replace(/\\n/g, '') : null}
+                  {item.content.replace(/\\n/g, '')}
                 </span>
               </div>
-            )) :
+            ) : null)) :
             <Loading />}
         </Card>
         <DataContent
