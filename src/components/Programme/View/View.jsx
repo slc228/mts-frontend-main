@@ -170,9 +170,9 @@ class View extends React.Component {
   };
 
   getEmotionLayout = async () => {
-    const { startPublishedDay, endPublishedDay } = this.state;
+    // const { startPublishedDay, endPublishedDay } = this.state;
     const { fid } = this.props.curProgramme;
-    const emotionLayout = await getProgrammeSentimentLayout(fid, startPublishedDay, endPublishedDay);
+    const emotionLayout = await getProgrammeSentimentLayout(fid, null, null);
     console.log(emotionLayout);
     const criteria = this.getCriteria();
     const newData = { ...this.state.emotionLayout };
@@ -212,8 +212,8 @@ class View extends React.Component {
 
   getRegionLayout = async () => {
     const { fid } = this.props.curProgramme;
-    const { startPublishedDay, endPublishedDay } = this.state;
-    const regionLayout = await getProgrammeRegionLayout(fid, startPublishedDay, endPublishedDay);
+    // const { startPublishedDay, endPublishedDay } = this.state;
+    const regionLayout = await getProgrammeRegionLayout(fid, null, null);
     const criteria = this.getCriteria();
     const newData = { ...this.state.regionLayout };
     newData[fid] = regionLayout;
@@ -222,8 +222,8 @@ class View extends React.Component {
 
   getSourceLayout = async () => {
     const { fid } = this.props.curProgramme;
-    const { startPublishedDay, endPublishedDay } = this.state;
-    const sourceLayout = await getProgrammeSourceLayout(fid, startPublishedDay, endPublishedDay);
+    // const { startPublishedDay, endPublishedDay } = this.state;
+    const sourceLayout = await getProgrammeSourceLayout(fid, null, null);
     const criteria = this.getCriteria();
     const newData = { ...this.state.sourceLayout };
     newData[fid] = sourceLayout;
@@ -232,8 +232,8 @@ class View extends React.Component {
 
   getSensiLayout = async () => {
     const { fid } = this.props.curProgramme;
-    const { startPublishedDay, endPublishedDay } = this.state;
-    const sensiLayout = await getProgrammeSensiLayout(fid, startPublishedDay, endPublishedDay);
+    // { startPublishedDay, endPublishedDay } = this.state;
+    const sensiLayout = await getProgrammeSensiLayout(fid, null, null);
     const criteria = this.getCriteria();
     const newData = { ...this.state.sensiLayout };
     newData[fid] = sensiLayout;

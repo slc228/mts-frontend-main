@@ -31,6 +31,7 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
     }) : [],
     yAxis: rawResult.totalAmountTrend,
   };
+  console.log(sourceAmountTrend);
   return [totalAmountTrend, sourceAmountTrend];
 };
 

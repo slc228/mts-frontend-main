@@ -12,6 +12,8 @@ const requests = {
   getSensiLayout: { url: `${curDomain}/data/globalSearch/cflagCount`, method: 'GET' },
   getSourceLayout: { url: `${curDomain}/data/globalSearch/resourceCount`, method: 'GET' },
   getAmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount`, method: 'GET' },
+  getTotalAmountTrend: { url: `${curDomain}/data/globalSearch/totalAmountTrendCount`, method: 'GET' },
+  getSourceAmountTrend: { url: `${curDomain}/data/globalSearch/sourceAmountTrendCount`, method: 'GET' },
   getRegionLayout: { url: `${curDomain}/data/globalSearch/areaCount`, method: 'GET' },
   register: { url: `${curDomain}/User/register`, method: 'POST' },
   getTraceTree: { url: `${curDomain}/data/weiboTrack`, method: 'GET' },
@@ -90,6 +92,8 @@ const requests = {
   changeUserJurisdiction: { url: `${curDomain}/User/changeUserJurisdiction`, method: 'GET' },
   changeUserEventLimiter: { url: `${curDomain}/User/changeUserEventLimiter`, method: 'GET' },
   changeUserSensitiveLimiter: { url: `${curDomain}/User/changeUserSensitiveLimiter`, method: 'GET' },
+
+  getResources: { url: `${curDomain}/data/getResources`, method: 'GET' },
 };
 
 export default requests;

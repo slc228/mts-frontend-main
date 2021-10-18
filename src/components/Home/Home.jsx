@@ -56,10 +56,9 @@ class Home extends React.Component {
     const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     const params = [
       '', // keyword
-      null, // source
       '', // startPublishDay
       '', // endPublishDay
-      1, // sensitiveFlag
+      '1', // sensitiveFlag
       0, // timeOrder
       PAGE_SIZE, // pageSize
       0, // pageId
@@ -77,7 +76,6 @@ class Home extends React.Component {
     const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     const params = [
       '', // keyword
-      null, // source
       '', // startPublishDay
       '', // endPublishDay
       null, // sensitiveFlag
@@ -151,7 +149,7 @@ class Home extends React.Component {
           loading={sensitiveLoading}
         >
           {sensitiveInfo ?
-            sensitiveInfo.map((item) => (item.content ? (
+            sensitiveInfo.map((item) => (item.content || item.title ? (
               <div
                 className="item"
                 onClick={e => this.handleTitleClick(item)}
@@ -173,7 +171,7 @@ class Home extends React.Component {
           loading={latestLoading}
         >
           {latestInfo ?
-            latestInfo.map((item) => (item.content ? (
+            latestInfo.map((item) => (item.content || item.title ? (
               <div
                 className="item"
                 onClick={e => this.handleTitleClick(item)}

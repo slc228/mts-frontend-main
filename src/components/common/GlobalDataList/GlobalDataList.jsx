@@ -30,9 +30,9 @@ class GlobalDataList extends React.Component {
       },
       {
         title: '站点',
-        dataIndex: 'fromType',
-        key: 'fromType',
-        render: this.renderSource,
+        dataIndex: 'resource',
+        key: 'resource',
+        render: (text) => text,
         width: 100,
       },
       {
@@ -85,11 +85,6 @@ class GlobalDataList extends React.Component {
   }
 
     renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'));
-
-    renderSource = (text) => {
-      const options = Lodash.find(criteria, { name: 'source' })?.options || [];
-      return Lodash.find(options, { value: text })?.label || '';
-    };
 
     renderEmotion = (text) => {
       if (text === 'happy') return '积极 🥰';

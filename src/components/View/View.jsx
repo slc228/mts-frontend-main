@@ -7,6 +7,8 @@ import getSensiLayout from '../../services/request/data/getSensiLayout';
 import getSourceLayout from '../../services/request/data/getSourceLayout';
 import getRegionLayout from '../../services/request/data/getRegionLayout';
 import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
+import getTotalAmountTrend from '../../services/request/data/getTotalAmountTrend';
+import getSourceAmountTrend from '../../services/request/data/getSourceAmountTrend';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -34,7 +36,8 @@ class View extends React.Component {
   }
 
   handleSearch = () => {
-    this.getAmountTrend();
+    this.getTotalAmountTrend();
+    this.getSourceAmountTrend();
     this.getSensiLayout();
     this.getSourceLayout();
     this.getRegionLayout();
@@ -62,13 +65,23 @@ class View extends React.Component {
     this.setState({ sensiLayout });
   };
 
-  getAmountTrend = async () => {
+  getTotalAmountTrend=async () => {
     const keyword = '';
     const { startPublishedDay, endPublishedDay } = this.state;
-    const [totalAmountTrend, sourceAmountTrend] =
-      await getAmountTrend(keyword, startPublishedDay, endPublishedDay);
+    const totalAmountTrend =
+        await getTotalAmountTrend(keyword, startPublishedDay, endPublishedDay);
     this.setState({
-      totalAmountTrend, sourceAmountTrend,
+      totalAmountTrend,
+    });
+  };
+
+  getSourceAmountTrend=async () => {
+    const keyword = '';
+    const { startPublishedDay, endPublishedDay } = this.state;
+    const sourceAmountTrend =
+        await getSourceAmountTrend(keyword, startPublishedDay, endPublishedDay);
+    this.setState({
+      sourceAmountTrend,
     });
   };
 

@@ -4,13 +4,12 @@ import requests from '../../requests';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-const getOverallData = async (keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId) => {
+const getOverallData = async (keyword, startPublishedDay, endPublishedDay, sensitiveFlag, timeOrder, pageSize, pageId) => {
   const params = {
     keyword,
     timeOrder,
     pageSize,
-    fromType: source,
-    cflag: sensi,
+    sensitiveFlag,
     page: pageId,
   };
   const url = encodeURI(`${requests.getOverallData.url}?${qs.stringify(params)}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);

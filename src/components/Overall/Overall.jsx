@@ -17,6 +17,7 @@ import getOverallDataBaidu from '../../services/request/data/getOverallDataBaidu
 import getContentTag from '../../services/request/data/getContentTag';
 import getContentEmotion from '../../services/request/data/getContentEmotion';
 import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
+import getResources from '../../services/request/data/getResources';
 import './Overall.scss';
 
 import { actions } from '../../redux/actions';
@@ -39,7 +40,7 @@ class Overall extends Component {
       source: null,
       startPublishedDay: null,
       endPublishedDay: null,
-      sensi: null,
+      sensitiveType: null,
       emotion: null,
       dateRange: null,
       timeOrder: 0,
@@ -53,6 +54,7 @@ class Overall extends Component {
       dataOfBaidu: [],
       dataOf360: [],
       dataOfBing: [],
+      resources: [],
     };
     this.columnsBaidu = [
       {
@@ -95,9 +97,16 @@ class Overall extends Component {
     );
   };
 
+  componentDidMount=async () => {
+    const result = await getResources();
+    this.setState({
+      resources: result,
+    });
+  };
+
   getCriteria = () => {
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, keywords } = this.state;
-    const criteria = { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, keywords };
+    const { keyword, source, startPublishedDay, endPublishedDay, sensitiveType, emotion, timeOrder, pageSize, pageId, keywords } = this.state;
+    const criteria = { keyword, source, startPublishedDay, endPublishedDay, sensitiveType, emotion, timeOrder, pageSize, pageId, keywords };
     return JSON.stringify(criteria);
   };
 
@@ -159,8 +168,9 @@ class Overall extends Component {
 
   handleSearchWithObject = async () => {
     await this.setState({ loading: true });
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, data, keywords } = this.state;
-    const params = [keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, keywords];
+    const { keyword, source, startPublishedDay, endPublishedDay, sensitiveType, emotion, timeOrder, pageSize, pageId, data, keywords } = this.state;
+    const params = [keyword, source, startPublishedDay, endPublishedDay, sensitiveType, emotion, timeOrder, pageSize, pageId, keywords];
+    console.log(keywords);
     if (this.props.userEventLimiter !== '' && this.props.userEventLimiter) {
       let eventLimiter = this.props.userEventLimiter ? this.props.userEventLimiter.split(/\s+/) : [];
       eventLimiter = Array.from(new Set(eventLimiter));
@@ -264,11 +274,11 @@ class Overall extends Component {
   };
 
   render() {
-    const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay', 'emotion'];
+    const params = ['sensitiveType', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay', 'emotion'];
     const criteria = this.getCriteria();
     const curPath = this.props.overallPath;
     const current = Lodash.pick(this.state, params);
-    const { pageSize, keyword, loading, radiovalue, loadingBaidu, loading360, loadingBing, dataOfBaidu, dataOf360 } = this.state;
+    const { pageSize, keyword, loading, radiovalue, loadingBaidu, loading360, loadingBing, dataOfBaidu, dataOf360, resources } = this.state;
     const data = this.state.data[criteria]?.data || [];
     const dataSize = this.state.data[criteria]?.dataSize || 0;
     const dataOfBing = this.state.dataOfBing ? this.state.dataOfBing : [];
@@ -332,6 +342,7 @@ class Overall extends Component {
           <div className="overall-wrap">
             <div className="mts-overall-container">
               <GlobalMultiFilter
+                resources={resources}
                 initialKeyword={keyword}
                 current={current}
                 userType={this.props.userType}

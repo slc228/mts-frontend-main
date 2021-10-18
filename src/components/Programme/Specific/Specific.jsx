@@ -14,6 +14,7 @@ import getOverallData from '../../../services/request/data/getOverallData';
 import getSensitiveType from '../../../services/request/data/getSensitiveType';
 import modeifyMaterial from '../../../services/request/data/modeifyMaterial';
 import getMaterial from '../../../services/request/data/getMaterial';
+import getResources from '../../../services/request/data/getResources';
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -28,7 +29,7 @@ class Specific extends React.Component {
       source: null,
       startPublishedDay: '',
       endPublishedDay: '',
-      sensi: null,
+      sensitiveType: null,
       emotion: null,
       dateRange: null,
       loading: false,
@@ -36,28 +37,32 @@ class Specific extends React.Component {
       data: {},
       selectedRowKeys: [],
       materiallibs: [],
+      resources: [],
     };
   }
 
   getCriteria = () => {
     const fid = this.props.curProgramme?.fid;
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId } = this.state;
-    const criteria = { fid, keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId };
+    const { keyword, source, startPublishedDay, endPublishedDay, sensitiveType, timeOrder, pageSize, pageId } = this.state;
+    const criteria = { fid, keyword, source, startPublishedDay, endPublishedDay, sensitiveType, timeOrder, pageSize, pageId };
     return JSON.stringify(criteria);
   };
 
   getMateriallibs= async () => {
     const { fid } = this.props.curProgramme;
     const ret = await getMaterial(fid);
-    console.log(ret);
     this.setState({
       materiallibs: ret,
     });
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.handleSearch();
     this.getMateriallibs();
+    const result = await getResources();
+    this.setState({
+      resources: result,
+    });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -71,8 +76,8 @@ class Specific extends React.Component {
   handleSearch = async () => {
     await this.setState({ loading: true });
     const fid = this.props.curProgramme?.fid;
-    const { keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId, data } = this.state;
-    const params = [fid, keyword, source, startPublishedDay, endPublishedDay, sensi, emotion, timeOrder, pageSize, pageId];
+    const { keyword, source, startPublishedDay, endPublishedDay, sensitiveType, emotion, timeOrder, pageSize, pageId, data } = this.state;
+    const params = [fid, keyword, source, startPublishedDay, endPublishedDay, sensitiveType, emotion, timeOrder, pageSize, pageId];
     const result = await getProgrammeData(...params);
     const newData = { ...data };
     newData[this.getCriteria()] = result;
@@ -169,17 +174,18 @@ class Specific extends React.Component {
   };
 
   render() {
-    const params = ['sensi', 'emotion', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
+    const params = ['sensitiveType', 'emotion', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
     const current = Lodash.pick(this.state, params);
     const criteria = this.getCriteria();
     const { curProgramme } = this.props;
-    const { pageSize, loading, selectedRowKeys, materiallibs } = this.state;
+    const { pageSize, loading, selectedRowKeys, materiallibs, resources } = this.state;
     const data = this.state.data[criteria]?.data || [];
     const dataSize = this.state.data[criteria]?.dataSize || 0;
 
     return (
       <Layout className="programme-specific-wrap">
         <MultiFilter
+          resources={resources}
           current={current}
           userType={this.props.userType}
           userEventLimiter={this.props.userEventLimiter}
