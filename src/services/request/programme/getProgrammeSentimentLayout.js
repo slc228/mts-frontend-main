@@ -8,6 +8,7 @@ const getProgrammeSentimentLayout = async (fid, startPublishedDay, endPublishedD
       method: requests.getProgrammeSentimentLayout.method,
     });
   const rawResult = response.status === 200 ? await response.json() : {};
+  console.log(rawResult);
   /* const options = [
     { label: '不限', value: null },
     { label: '敏感', value: '1' },
@@ -27,7 +28,9 @@ const getProgrammeSentimentLayout = async (fid, startPublishedDay, endPublishedD
     { name: '恐惧', label: '恐惧', value: rawResult.fear, color: 'fear' },
     { name: '惊奇', label: '惊奇', value: rawResult.surprise, color: 'yellow' },
     { name: '中立', label: '中立', value: rawResult.neutral, color: 'LightSteelBlue' },
-  ].filter(item => item.value);
+  ];
+  // .filter(item => item.value);
+  console.log(sentimentLayout);
   return sentimentLayout;
 };
 

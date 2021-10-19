@@ -23,6 +23,8 @@ import getProgrammeSentimentLayout from '../../../services/request/programme/get
 import getProgrammeSentimentTrend from '../../../services/request/programme/getProgrammeSentimentTrend';
 import DateSelector from '../../common/DateSelector/DateSelector';
 import getProgrammeSummary from '../../../services/request/programme/getProgrammeSummary';
+import getProgrammeSourceTrend from '../../../services/request/programme/getProgrammeSourceTrend';
+import getProgrammeTotalAmountTrend from '../../../services/request/programme/getProgrammeTotalAmountTrend';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -118,8 +120,8 @@ class View extends React.Component {
       case 0: if (!this.state.keywordsCloud[fid]) this.getKeywordsCloud(); break;
       case 2: if (!this.state.sensiLayout[fid]) this.getSensiLayout(); break;
       case 3: if (!this.state.sourceLayout[fid]) this.getSourceLayout(); break;
-      case 4: if (!this.state.totalAmountTrend[criteria]) this.getAmountTrend(); break;
-      case 5: if (!this.state.sourceAmountTrend[criteria]) this.getAmountTrend(); break;
+      case 4: if (!this.state.totalAmountTrend[criteria]) this.getTotalAmountTrend(); break;
+      case 5: if (!this.state.sourceAmountTrend[criteria]) this.getSourceTrend(); break;
       case 6: if (!this.state.regionLayout[fid]) this.getRegionLayout(); break;
       case 1: if (!this.state.data[fid]) this.getLatestInfo(); break;
       case 7: if (!this.state.emotionLayout[fid]) this.getEmotionLayout(); break; // 情感分布
@@ -253,6 +255,26 @@ class View extends React.Component {
     this.setState({ sourceAmountTrend: newData2, totalAmountTrend: newData1 });
   };
 
+  getSourceTrend=async () => {
+    const { fid } = this.props.curProgramme;
+    const { startPublishedDay, endPublishedDay } = this.state;
+    const sourceAmountTrend = await getProgrammeSourceTrend(fid, startPublishedDay, endPublishedDay);
+    const criteria = this.getCriteria();
+    const newData = { ...this.state.sourceAmountTrend };
+    newData[criteria] = sourceAmountTrend;
+    this.setState({ sourceAmountTrend: newData });
+  };
+
+  getTotalAmountTrend=async () => {
+    const { fid } = this.props.curProgramme;
+    const { startPublishedDay, endPublishedDay } = this.state;
+    const totalAmountTrend = await getProgrammeTotalAmountTrend(fid, startPublishedDay, endPublishedDay);
+    const criteria = this.getCriteria();
+    const newData = { ...this.state.totalAmountTrend };
+    newData[criteria] = totalAmountTrend;
+    this.setState({ totalAmountTrend: newData });
+  };
+
   getEventTree = async () => {
     const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
@@ -270,7 +292,8 @@ class View extends React.Component {
       startPublishedDay: startMoment.format(DATE_FORMAT),
       endPublishedDay: endMoment.format(DATE_FORMAT),
     }, () => {
-      this.getAmountTrend();
+      this.getSourceTrend();
+      this.getTotalAmountTrend();
       this.getEmotionTrend();
     });
   };

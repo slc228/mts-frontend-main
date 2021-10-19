@@ -1,3 +1,6 @@
+import getProgrammeTotalAmountTrend from './request/programme/getProgrammeTotalAmountTrend';
+import getProgrammeSourceTrend from './request/programme/getProgrammeSourceTrend';
+
 const domain1 = 'http://192.168.0.19:8082';
 const domain2 = 'http://localhost:3000/api';
 const domain3 = 'http://localhost:8082';
@@ -38,6 +41,8 @@ const requests = {
   getEventTree: { url: `${curDomain}/data/getEventTree`, method: 'GET' },
   getProgrammeSentimentLayout: { url: `${curDomain}/data/sentimentCount`, method: 'GET' },
   getProgrammeSentimentTrend: { url: `${curDomain}/data/sentimentTrendCount`, method: 'GET' },
+  getProgrammeTotalAmountTrend: { url: `${curDomain}/data/getProgrammeTotalAmountTrend`, method: 'GET' },
+  getProgrammeSourceTrend: { url: `${curDomain}/data/getProgrammeSourceTrend`, method: 'GET' },
 
   getSensitiveType: { url: `${curDomain}/data/textAlert`, method: 'POST' },
   getSensitiveData: { url: `${curDomain}/data/sensitiveCount`, method: 'GET' },
