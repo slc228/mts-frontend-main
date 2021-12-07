@@ -2,7 +2,6 @@ import { string } from 'prop-types';
 import requests from '../../requests';
 
 const modifyProgramme = async (rawData) => {
-  console.log(rawData);
   const data = {
     fid: rawData.fid,
     enableAlert: rawData.enableAlert,
