@@ -133,7 +133,7 @@ class Material extends React.Component {
     console.log(curmateriallib);
     const data = await getMaterialDetail(fid, curmateriallib);
     console.log(data);
-    this.setState({ data: data.dataContent, loading: false, dataSize: data.hitNumber, selectedRowKeys: [] });
+    this.setState({ data: data.yuQingContent, loading: false, dataSize: data.hitNumber, selectedRowKeys: [] });
   };
 
     renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'));
@@ -357,7 +357,7 @@ class Material extends React.Component {
                   </div>
 
                 )}
-                rowKey={(record) => record.id}
+                rowKey={(record) => record.webpageUrl}
                 columns={this.columnsRender}
                 rowSelection={rowSelection}
                 dataSource={data}

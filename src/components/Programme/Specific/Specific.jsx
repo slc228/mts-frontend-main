@@ -161,6 +161,7 @@ class Specific extends React.Component {
       return;
     }
     const fid = this.props.curProgramme?.fid;
+    console.log(selectedRowKeys);
     const ret = await modeifyMaterial(fid, materiallib, selectedRowKeys);
     if (ret === 1) {
       alert('修改成功！');

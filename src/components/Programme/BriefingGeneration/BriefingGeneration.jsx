@@ -307,7 +307,7 @@ class BriefingGeneration extends React.Component {
     const { fid } = this.props.curProgramme;
     const { curmateriallib } = this.state;
     const data = await getMaterialDetail(fid, curmateriallib);
-    this.setState({ data: data.dataContent, loading: false, dataSize: data.hitNumber });
+    this.setState({ data: data.yuQingContent, loading: false, dataSize: data.hitNumber });
   };
 
   handleGetTemplate = async () => {
@@ -561,7 +561,7 @@ class BriefingGeneration extends React.Component {
                         </div>
 
                       )}
-                      rowKey={(record) => record.id}
+                      rowKey={(record) => record.webpageUrl}
                       columns={this.columnsRender}
                       rowSelection={rowSelection}
                       dataSource={data}

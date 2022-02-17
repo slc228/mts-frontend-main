@@ -179,7 +179,7 @@ class DataList extends React.Component {
       <div className="mts-data-list">
         <div id="table">
           <Table
-            rowKey={(record) => record.id}
+            rowKey={(record) => record.webpageUrl}
             rowSelection={{
               selectedRowKeys,
               preserveSelectedRowKeys: true,
