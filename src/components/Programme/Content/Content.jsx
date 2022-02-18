@@ -15,6 +15,8 @@ import Trace from '../Trace/Trace';
 import Briefing from '../Briefing/Briefing';
 import Material from '../Material/Material';
 import BriefingGeneration from '../BriefingGeneration/BriefingGeneration';
+import WarningRecord from '../WarningRecord/WarningRecord';
+import WarningSetting from '../WarningSetting/WarningSetting';
 
 const { SubMenu } = Menu;
 
@@ -50,6 +52,10 @@ class Content extends React.Component {
               <Menu.Item key="material">简报素材管理</Menu.Item>
             </SubMenu>
           ) : null}
+          <SubMenu key="warningSubmenu" title="预警配置">
+            <Menu.Item key="warningSetting">预警设置</Menu.Item>
+            <Menu.Item key="warningRecord">发送记录</Menu.Item>
+          </SubMenu>
         </Menu>
         <Layout.Content className="site-layout-background">
           {curPageTag === 'info' && curProgramme && <Specific />}
@@ -61,6 +67,8 @@ class Content extends React.Component {
           {curPageTag === 'briefing' && curProgramme && <Briefing />}
           {curPageTag === 'material' && curProgramme && <Material />}
           {curPageTag === 'briefingen' && curProgramme && <BriefingGeneration />}
+          {curPageTag === 'warningRecord' && curProgramme && <WarningRecord />}
+          {curPageTag === 'warningSetting' && curProgramme && <WarningSetting />}
         </Layout.Content>
       </Layout.Content>
     );

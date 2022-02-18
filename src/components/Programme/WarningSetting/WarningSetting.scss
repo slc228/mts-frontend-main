@@ -1,0 +1,33 @@
+.warning-setting-wrap {
+  min-height: 100%;
+  display: flex;
+  vertical-align: center;
+  align-items: center;
+  justify-content: center;
+  .setting-form {
+    width: 90%;
+    background: white;
+    padding: 30px;
+    margin: 30px auto;
+  }
+}
+.setting-form-switch{
+  font-size: 20px;
+}
+.setting-form-title{
+  font-size: 17px;
+}
+.setting-form-span{
+  font-size: 15px;
+}
+.setting-form-blueblock{
+   background-color: #1890ff;
+ }
+.setting-form-input{
+  width:50%;
+}
+.setting-form-item{
+  width: 50%;
+  float: left;
+  margin-bottom: 30px;
+}

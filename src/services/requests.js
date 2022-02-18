@@ -99,6 +99,9 @@ const requests = {
   changeUserSensitiveLimiter: { url: `${curDomain}/User/changeUserSensitiveLimiter`, method: 'GET' },
 
   getResources: { url: `${curDomain}/data/getResources`, method: 'GET' },
+
+  getProgrammeWarning: { url: `${curDomain}/data/getFangAnWarning`, method: 'GET' },
+  modifyProgrammeWarning: { url: `${curDomain}/data/modifyFangAnWarning`, method: 'GET' },
 };
 
 export default requests;

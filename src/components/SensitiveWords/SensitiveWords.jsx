@@ -137,7 +137,7 @@ class SensitiveWords extends Component {
               </Modal>
             </div>
             <div>
-              <Checkbox.Group options={swords} onChange={this.handleCheck} />
+              <Checkbox.Group className="sen-checkbox-group" options={swords} onChange={this.handleCheck} />
             </div>
           </div>
         </Layout.Content>
