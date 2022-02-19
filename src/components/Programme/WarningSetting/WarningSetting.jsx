@@ -243,6 +243,7 @@ class WarningSetting extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { fid } = this.state;
     if (fid !== this.props.curProgramme?.fid) {
+      console.log('here');
       this.handleGetFanganWarning();
       this.handleGetAllWarningReceiver();
     }

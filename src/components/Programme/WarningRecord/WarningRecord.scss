@@ -1,0 +1,16 @@
+.warning-record-wrap {
+  min-height: 100%;
+  display: flex;
+  vertical-align: center;
+  align-items: center;
+  justify-content: center;
+  .record-list {
+    width: 90%;
+    background: white;
+    padding: 30px;
+    margin: 30px auto;
+  }
+}
+.record-list-title{
+  font-size: 20px;
+}
