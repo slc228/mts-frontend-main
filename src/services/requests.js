@@ -102,6 +102,9 @@ const requests = {
 
   getProgrammeWarning: { url: `${curDomain}/data/getFangAnWarning`, method: 'GET' },
   modifyProgrammeWarning: { url: `${curDomain}/data/modifyFangAnWarning`, method: 'GET' },
+  getAllWarningReceiver: { url: `${curDomain}/data/getAllWarningReceiver`, method: 'GET' },
+  addWarningReceiver: { url: `${curDomain}/data/addWarningReceiver`, method: 'GET' },
+  deleteWarningReceiver: { url: `${curDomain}/data/deleteWarningReceiver`, method: 'GET' },
 };
 
 export default requests;

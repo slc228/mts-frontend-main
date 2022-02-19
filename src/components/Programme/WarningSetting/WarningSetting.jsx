@@ -14,14 +14,23 @@ import {
   Cascader,
   Checkbox,
   Table,
-  Select,
+  Select, Menu, Form, Space, Tabs,
 } from 'antd';
 import { Divider } from 'antd/es';
 import './WarningSetting.scss';
-import { CheckOutlined, QuestionCircleOutlined, StarFilled } from '@ant-design/icons';
+import {
+  CheckCircleFilled,
+  CheckOutlined,
+  PlusCircleFilled,
+  QuestionCircleOutlined,
+  StarFilled,
+} from '@ant-design/icons';
 import { value } from 'lodash/seq';
 import getProgrammeWarning from '../../../services/request/programme/getProgrammeWarning';
 import modifyProgrammeWarning from '../../../services/request/programme/modifyProgrammeWarning';
+import addWarningReceiver from '../../../services/request/programme/addWarningReceiver';
+import getAllWarningReceiver from '../../../services/request/programme/getAllWarningReceiver';
+import deleteWarningReceiver from '../../../services/request/programme/deleteWarningReceiver';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -188,6 +197,9 @@ class WarningSetting extends React.Component {
       warningType: 0,
       weiboType: 0,
       words: '',
+      addNewWarningReceiverVisible: false,
+      warningReceivers: [],
+      warningReceiversNum: 0,
     };
     this.columns = [
       {
@@ -208,26 +220,31 @@ class WarningSetting extends React.Component {
       },
       {
         title: '微信',
-        dataIndex: 'weChat',
-        key: 'weChat',
+        dataIndex: 'wechat',
+        key: 'wechat',
       },
       {
         title: '操作',
         dataIndex: 'operation',
         key: 'operation',
         width: 100,
+        render: (text, record) => (
+          <a onClick={e => this.handleDeleteWarningReceiver(record.id)}>删除</a>
+        ),
       },
     ];
   }
 
   componentDidMount() {
     this.handleGetFanganWarning();
+    this.handleGetAllWarningReceiver();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { fid } = this.state;
     if (fid !== this.props.curProgramme?.fid) {
       this.handleGetFanganWarning();
+      this.handleGetAllWarningReceiver();
     }
   }
 
@@ -390,10 +407,63 @@ class WarningSetting extends React.Component {
         alert('修改失败');
       }
     }
+    if (type === 'warningType') {
+      const ret = await modifyProgrammeWarning(fid, warningSwitchNumber, words, sensitiveAttribute, similarArticle,
+        area, sourceSite, result, involve, matchingWay, weiboType, deWeight, filtrate, informationTypeString, parseInt(setting));
+      if (ret === 1) {
+        this.setState({ warningType: parseInt(setting) });
+        alert('修改成功');
+      } else {
+        alert('修改失败');
+      }
+    }
+  };
+
+  handleGetAllWarningReceiver=async () => {
+    const fid = this.props.curProgramme?.fid;
+    const ret = await getAllWarningReceiver(fid);
+    this.setState({
+      warningReceivers: ret.warningReceiverContent,
+      warningReceiversNum: ret.number,
+    });
+  };
+
+  handleDeleteWarningReceiver=async (id) => {
+    const ret = await deleteWarningReceiver(id);
+    if (ret === 1) {
+      alert('删除成功');
+    } else {
+      alert('删除失败');
+    }
+    this.handleGetAllWarningReceiver();
   };
 
   handleChangeWarningWords=(e) => {
     this.setState({ words: e.target.value });
+  };
+
+  handleAddWarningReceiverModalOpen=() => {
+    this.setState({ addNewWarningReceiverVisible: true });
+  };
+
+  handleAddWarningReceiverModalCancel=() => {
+    this.setState({ addNewWarningReceiverVisible: false });
+  };
+
+  handleFinishForm = async (values) => {
+    const fid = this.props.curProgramme?.fid;
+    const ret = await addWarningReceiver(fid, values.name, values.phone, values.email, values.wechat);
+    if (ret === 1) {
+      alert('添加联系人成功');
+      this.handleGetAllWarningReceiver();
+      this.setState({ addNewWarningReceiverVisible: false });
+    } else {
+      alert('添加联系人失败');
+    }
+  };
+
+  handleFinishFormFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
   };
 
   render() {
@@ -401,7 +471,8 @@ class WarningSetting extends React.Component {
       informationType, involve,
       matchingWay, result, sensitiveAttribute,
       similarArticle, sourceSite, warningSwitch,
-      warningType, weiboType, words } = this.state;
+      warningType, weiboType, words,
+      addNewWarningReceiverVisible, warningReceivers, warningReceiversNum } = this.state;
     return (
       <Layout className="warning-setting-wrap">
         <Card
@@ -442,7 +513,7 @@ class WarningSetting extends React.Component {
             </p>
             <div className="setting-form-item">
               <span>敏感属性：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={sensitiveAttribute} size="small" buttonStyle="solid" onChange={(event) => this.handleChangeWarningSetting(event, 'sensitiveAttribute')}>
+              <Radio.Group value={sensitiveAttribute} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'sensitiveAttribute')}>
                 <Radio.Button value={0}>全部</Radio.Button>
                 <Radio.Button value={1}>负面</Radio.Button>
                 <Radio.Button value={2}>正面</Radio.Button>
@@ -451,7 +522,7 @@ class WarningSetting extends React.Component {
             </div>
             <div className="setting-form-item">
               <span>相似文章：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={similarArticle} size="small" buttonStyle="solid" onChange={(event) => this.handleChangeWarningSetting(event, 'similarArticle')}>
+              <Radio.Group value={similarArticle} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'similarArticle')}>
                 <Radio.Button value={0}>不合并</Radio.Button>
                 <Radio.Button value={1}>合并</Radio.Button>
               </Radio.Group>
@@ -462,7 +533,7 @@ class WarningSetting extends React.Component {
             </div>
             <div className="setting-form-item">
               <span>来源网站：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={sourceSite} size="small" buttonStyle="solid" onChange={(event) => this.handleChangeWarningSetting(event, 'sourceSite')}>
+              <Radio.Group value={sourceSite} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'sourceSite')}>
                 <Radio.Button value={0}>全部</Radio.Button>
                 <Radio.Button value={1}>贴吧</Radio.Button>
                 <Radio.Button value={2}>定向信源</Radio.Button>
@@ -470,7 +541,7 @@ class WarningSetting extends React.Component {
             </div>
             <div className="setting-form-item">
               <span>结果呈现：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={result} size="small" buttonStyle="solid" onChange={(event) => this.handleChangeWarningSetting(event, 'result')}>
+              <Radio.Group value={result} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'result')}>
                 <Radio.Button value={0}>全部信息</Radio.Button>
                 <Radio.Button value={1}>正常信息</Radio.Button>
                 <Radio.Button value={2}>噪音信息</Radio.Button>
@@ -478,7 +549,7 @@ class WarningSetting extends React.Component {
             </div>
             <div className="setting-form-item">
               <span>涉及方式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={involve} size="small" buttonStyle="solid" onChange={(event) => this.handleChangeWarningSetting(event, 'involve')}>
+              <Radio.Group value={involve} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'involve')}>
                 <Radio.Button value={0}>全部</Radio.Button>
                 <Radio.Button value={1}>内容涉及</Radio.Button>
                 <Radio.Button value={2}>定向涉及</Radio.Button>
@@ -486,7 +557,7 @@ class WarningSetting extends React.Component {
             </div>
             <div className="setting-form-item">
               <span>匹配方式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={matchingWay} size="small" buttonStyle="solid" onChange={(event) => this.handleChangeWarningSetting(event, 'matchingWay')}>
+              <Radio.Group value={matchingWay} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'matchingWay')}>
                 <Radio.Button value={0}>按全文</Radio.Button>
                 <Radio.Button value={1}>按标题</Radio.Button>
                 <Radio.Button value={2}>按正文</Radio.Button>
@@ -494,7 +565,7 @@ class WarningSetting extends React.Component {
             </div>
             <div className="setting-form-item">
               <span>微博类型：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={weiboType} size="small" buttonStyle="solid" onChange={(event) => this.handleChangeWarningSetting(event, 'weiboType')}>
+              <Radio.Group value={weiboType} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'weiboType')}>
                 <Radio.Button value={0}>全部</Radio.Button>
                 <Radio.Button value={1}>原创微博</Radio.Button>
                 <Radio.Button value={2}>转发微博</Radio.Button>
@@ -502,14 +573,14 @@ class WarningSetting extends React.Component {
             </div>
             <div className="setting-form-item">
               <span>信息去重：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={deWeight} size="small" buttonStyle="solid" onChange={(event) => this.handleChangeWarningSetting(event, 'deWeight')}>
+              <Radio.Group value={deWeight} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'deWeight')}>
                 <Radio.Button value={0}>否</Radio.Button>
                 <Radio.Button value={1}>是</Radio.Button>
               </Radio.Group>
             </div>
             <div className="setting-form-item">
               <span>精准筛选：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={filtrate} size="small" buttonStyle="solid" onChange={(event) => this.handleChangeWarningSetting(event, 'filtrate')}>
+              <Radio.Group value={filtrate} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'filtrate')}>
                 <Radio.Button value={0}>关闭</Radio.Button>
                 <Radio.Button value={1}>打开</Radio.Button>
               </Radio.Group>
@@ -526,10 +597,109 @@ class WarningSetting extends React.Component {
               <span>&nbsp;&nbsp;&nbsp;</span>
               <span>预警模式设置</span><span style={{ color: 'gray' }}>(*定向预警和自动预警只能使用一种)</span>
             </p>
-            <Table columns={this.columns} />
-            <div style={{ textAlign: 'center' }}><Button>新增联系人</Button></div>
+            <Tabs activeKey={warningType.toString()} onChange={(activeKey) => this.handleChangeWarningSetting(activeKey, 'warningType')}>
+              <Tabs.TabPane tab="定向预警" key="0">
+                <Table
+                  columns={this.columns}
+                  rowKey={(record) => record.id}
+                  dataSource={warningReceivers}
+                  pagination={{
+                    position: ['none', 'bottomRight'],
+                    pageSize: 5,
+                    total: warningReceiversNum,
+                  }}
+                />
+                <div style={{ textAlign: 'center', marginTop: '10px' }}><Button type="primary" onClick={this.handleAddWarningReceiverModalOpen}>新增联系人</Button></div>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="自动预警" key="1">
+                <p className="setting-form-title">
+                  自动预警已开启
+                  <span>&nbsp;&nbsp;&nbsp;</span>
+                  <CheckCircleFilled style={{ color: 'green' }} />
+                </p>
+              </Tabs.TabPane>
+            </Tabs>
           </div>
         </Card>
+        <Modal
+          visible={addNewWarningReceiverVisible}
+          onCancel={this.handleAddWarningReceiverModalCancel}
+          closable={false}
+          title="输入相关信息，添加联系人"
+          footer={null}
+          width={600}
+        >
+          <Form
+            name="basic"
+            labelCol={{
+              span: 5,
+            }}
+            wrapperCol={{
+              span: 16,
+            }}
+            onFinish={this.handleFinishForm}
+            onFinishFailed={this.handleFinishFormFailed}
+          >
+            <Form.Item
+              label="姓名"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: '请输入姓名',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="手机号码"
+              name="phone"
+              rules={[
+                {
+                  required: true,
+                  message: '请输入手机号码',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="邮箱"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: '请输入邮箱',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="微信"
+              name="wechat"
+              rules={[
+                {
+                  required: true,
+                  message: '请输入微信',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              wrapperCol={{
+                offset: 5,
+                span: 16,
+              }}
+            >
+              <Button type="primary" htmlType="submit">
+                提交
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </Layout>
     );
   }
