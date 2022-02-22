@@ -91,6 +91,7 @@ class Alert extends React.Component {
     await this.setState({ loading: true });
     const fid = this.props.curProgramme?.fid;
     const sensitiveData = await getSensitiveData(fid);
+    console.log(sensitiveData);
     const sensiLayout = [
       { name: '正常信息', label: '正常信息', value: sensitiveData['正常信息'] || 0 },
       { name: '政治敏感', label: '政治敏感', value: sensitiveData['政治敏感'].length || 0 },
