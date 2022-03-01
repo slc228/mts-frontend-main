@@ -30,6 +30,7 @@ class Config extends React.Component {
     this.subLayout = { wrapperCol: { offset: 6, span: 999 }};
     this.radioLayout = {};
     this.state = {
+      fid: 0,
       sampleVisible: false,
       sampleText: '',
       swordTypes: [],
@@ -127,20 +128,24 @@ class Config extends React.Component {
     });
   }
 
-  addNewSwordToProgramme=()=>{
+  addNewSwordToProgramme=async () => {
     const {programmes} = this.props;
     const {checkedSwordsList} = this.state;
-      let str = [];
-      checkedSwordsList.forEach((item) => {
-        str = str.concat(item.checkedSwords);
-      });
-      const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid);
-      const sensitiveWords = curProgramme.sensitiveWord.split(/\s+/);
-      str = str.concat(sensitiveWords);
-      str = Array.from(new Set(str));
-      curProgramme.sensitiveWord = str.toString().replace(/,/g, ' ');
-      this.props.onProgrammeChange({curProgramme});
-      this.handleAddSwordModalCancel();
+    let str = [];
+    checkedSwordsList.forEach((item) => {
+      str = str.concat(item.checkedSwords);
+    });
+    const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid);
+    const sensitiveWords = curProgramme.sensitiveWord.split(/\s+/);
+    str = str.concat(sensitiveWords);
+    str = Array.from(new Set(str));
+    // curProgramme.sensitiveWord = str.toString().replace(/,/g, ' ');
+    // await this.props.onProgrammeChange({curProgramme});
+    this.form.setFieldsValue({
+      sensitiveWord:str.toString().replace(/,/g, ' '),
+    })
+    // this.resetProgrammeForm();
+    this.handleAddSwordModalCancel();
   }
 
   addNewSwordToProgrammeForUser=()=>{
@@ -182,15 +187,16 @@ class Config extends React.Component {
       userName,
       ...rawData,
     };
-    console.log(rawData);
     const result = await modifyProgramme(data);
     if (result.modifyProgramme !== 1) { alert('提交失败！'); }
     else {
       alert('提交成功！');
       await this.getProgrammes();
-      const { programmes } = this.props;
-      const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid)
-      this.props.onProgrammeChange({ curProgramme })
+      const { programmes, curProgramme } = this.props;
+      // const curProgramme = programmes.find((item) => item.fid === data.fid)
+      // console.log(curProgramme);
+      // this.props.onProgrammeChange({ curProgramme: this.props.programmes[0] || undefined });
+      this.props.onProgrammeChange({ curProgramme:programmes[programmes.length - 1] });
     }
   }
 
@@ -224,10 +230,17 @@ class Config extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    this.resetProgrammeForm();
+    const { fid } = this.state;
+    if (fid !== this.props.curProgramme?.fid) {
+      this.resetProgrammeForm();
+    }
   }
 
   resetProgrammeForm = () => {
+    const fid = this.props.curProgramme?.fid;
+    this.setState({
+      fid,
+    })
     this.form.setFieldsValue({
       ...this.props.curProgramme
     })
@@ -305,7 +318,7 @@ class Config extends React.Component {
                 placeholder="选择一个紧急程度作为方案优先级"
                 allowClear
             >
-              <Select.Option value={0} >低</Select.Option>
+              <Select.Option value={0}>低</Select.Option>
               <Select.Option value={1}>中</Select.Option>
               <Select.Option value={2}>高</Select.Option>
               <Select.Option color={"red"} value={3}>紧急</Select.Option>
@@ -506,7 +519,7 @@ class Config extends React.Component {
                 ))}
               </Menu>
               <div>
-                <Checkbox.Group options={swords} onChange={this.handleCheck} value={checkedSwords} />
+                <Checkbox.Group className="sen-checkbox-group" options={swords} onChange={this.handleCheck} value={checkedSwords} />
               </div>
             </Modal>:
             <Modal

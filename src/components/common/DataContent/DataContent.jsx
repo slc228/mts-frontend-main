@@ -108,13 +108,14 @@ class DataContent extends React.Component {
   };
 
   renderSensi = (text) => {
-    if (text === '1') return '敏感';
+    if (!text) return '';
+    if (text.indexOf('政治敏感') !== -1) return '敏感';
     return '非敏感';
   };
 
   render() {
     const { record, visible, handleModalCancel } = this.props;
-    const { title, content, url, addr, source, sensi, publishedDay } = record || {};
+    const { title, content, url, addr, resource, sensi, publishedDay, webpageUrl, sensitiveType } = record || {};
     const { contentSlice } = this.state;
     return (
       <Modal
@@ -126,15 +127,15 @@ class DataContent extends React.Component {
       >
         <div className="attr">
           <span className="title">地址： </span>
-          <span className="value">{url}</span>
+          <span className="value">{webpageUrl}</span>
         </div>
         <div className="attr">
           <span className="title">来源： </span>
-          <span className="value">{this.renderSource(source)} {addr}</span>
+          <span className="value">{resource} {addr}</span>
         </div>
         <div className="attr">
           <span className="title">敏感度： </span>
-          <span className="value">{this.renderSensi(sensi)}</span>
+          <span className="value">{this.renderSensi(sensitiveType)}</span>
         </div>
         <div className="attr">
           <span className="title">发布时间： </span>

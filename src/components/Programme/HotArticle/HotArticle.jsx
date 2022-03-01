@@ -65,6 +65,7 @@ class HotArticle extends React.Component {
     const { pageSize, pageId, data } = this.state;
     const params = [pageSize, pageId];
     const result = await getHotArticle(...params);
+    console.log(result);
     this.setState({
       loading: false,
       data: result.data,

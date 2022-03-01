@@ -75,7 +75,6 @@ class Monitor extends React.Component {
   handleGetFangAnMonitor = async () => {
     const { fid } = this.props.curProgramme;
     const result = await getFangAnMonitor(fid);
-    console.log(result);
     this.setState({
       FangAnMonitor: result,
     });

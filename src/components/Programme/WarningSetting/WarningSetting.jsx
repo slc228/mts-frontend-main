@@ -532,30 +532,30 @@ class WarningSetting extends React.Component {
               <span>信源区域：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               <Select size="small" value={area} options={options} onChange={(value) => { this.handleChangeWarningSetting(value, 'area'); }} />
             </div>
-            <div className="setting-form-item">
-              <span>来源网站：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={sourceSite} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'sourceSite')}>
-                <Radio.Button value={0}>全部</Radio.Button>
-                <Radio.Button value={1}>贴吧</Radio.Button>
-                <Radio.Button value={2}>定向信源</Radio.Button>
-              </Radio.Group>
-            </div>
-            <div className="setting-form-item">
-              <span>结果呈现：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={result} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'result')}>
-                <Radio.Button value={0}>全部信息</Radio.Button>
-                <Radio.Button value={1}>正常信息</Radio.Button>
-                <Radio.Button value={2}>噪音信息</Radio.Button>
-              </Radio.Group>
-            </div>
-            <div className="setting-form-item">
-              <span>涉及方式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={involve} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'involve')}>
-                <Radio.Button value={0}>全部</Radio.Button>
-                <Radio.Button value={1}>内容涉及</Radio.Button>
-                <Radio.Button value={2}>定向涉及</Radio.Button>
-              </Radio.Group>
-            </div>
+            {/* <div className="setting-form-item"> */}
+            {/*  <span>来源网站：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
+            {/*  <Radio.Group value={sourceSite} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'sourceSite')}> */}
+            {/*    <Radio.Button value={0}>全部</Radio.Button> */}
+            {/*    <Radio.Button value={1}>贴吧</Radio.Button> */}
+            {/*    <Radio.Button value={2}>定向信源</Radio.Button> */}
+            {/*  </Radio.Group> */}
+            {/* </div> */}
+            {/* <div className="setting-form-item"> */}
+            {/*  <span>结果呈现：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
+            {/*  <Radio.Group value={result} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'result')}> */}
+            {/*    <Radio.Button value={0}>全部信息</Radio.Button> */}
+            {/*    <Radio.Button value={1}>正常信息</Radio.Button> */}
+            {/*    <Radio.Button value={2}>噪音信息</Radio.Button> */}
+            {/*  </Radio.Group> */}
+            {/* </div> */}
+            {/* <div className="setting-form-item"> */}
+            {/*  <span>涉及方式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
+            {/*  <Radio.Group value={involve} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'involve')}> */}
+            {/*    <Radio.Button value={0}>全部</Radio.Button> */}
+            {/*    <Radio.Button value={1}>内容涉及</Radio.Button> */}
+            {/*    <Radio.Button value={2}>定向涉及</Radio.Button> */}
+            {/*  </Radio.Group> */}
+            {/* </div> */}
             <div className="setting-form-item">
               <span>匹配方式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               <Radio.Group value={matchingWay} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'matchingWay')}>
@@ -579,13 +579,13 @@ class WarningSetting extends React.Component {
                 <Radio.Button value={1}>是</Radio.Button>
               </Radio.Group>
             </div>
-            <div className="setting-form-item">
-              <span>精准筛选：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Radio.Group value={filtrate} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'filtrate')}>
-                <Radio.Button value={0}>关闭</Radio.Button>
-                <Radio.Button value={1}>打开</Radio.Button>
-              </Radio.Group>
-            </div>
+            {/* <div className="setting-form-item"> */}
+            {/*  <span>精准筛选：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
+            {/*  <Radio.Group value={filtrate} size="small" buttonStyle="outline" onChange={(event) => this.handleChangeWarningSetting(event, 'filtrate')}> */}
+            {/*    <Radio.Button value={0}>关闭</Radio.Button> */}
+            {/*    <Radio.Button value={1}>打开</Radio.Button> */}
+            {/*  </Radio.Group> */}
+            {/* </div> */}
             <div>
               <span>信息类型：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               <Checkbox.Group options={plainOptions} value={informationType} onChange={(checkedValue) => this.handleChangeWarningSetting(checkedValue, 'informationType')} />

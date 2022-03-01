@@ -28,6 +28,293 @@ import getProgrammeTotalAmountTrend from '../../../services/request/programme/ge
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
+const data1 = {
+  'name': '',
+  'children': [
+    {
+      'name': '加拿大大使馆官方微博',
+      'children': [
+        {
+          'name': '吹牛不在行',
+          'children': [
+            { 'name': '青枚煮菁瓜 ',
+              'children': [
+                { 'name': '卡李' },
+                { 'name': '勤劳慈祥狠无奈' },
+              ],
+            }],
+        },
+        {
+          'name': '铁皮人998001',
+          'children': [
+            { 'name': 'PoiPoiPoooooo' },
+          ],
+        },
+        {
+          'name': '小老头要坚定',
+          'children': [
+            { 'name': 'SH厄尔尼诺' },
+          ],
+        },
+        {
+          'name': '泡茶赏月悟无生',
+          'children': [
+            { 'name': '北京方庄几页',
+              'children': [
+                { 'name': 'Tracy0791' },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      'name': 'mj微风',
+      'children': [
+        { 'name': '复活节当天办葬礼' },
+        { 'name': '·阿菁·' },
+        { 'name': '三井寿公馆' },
+        { 'name': '新丰乔' },
+        { 'name': '微风聚起89365' },
+        {
+          'name': '武志红',
+          'children': [
+            { 'name': '埃及小猫' },
+            { 'name': 'oliviatian' },
+            { 'name': '张望欣然-曼妙如君' },
+            { 'name': '哀似冷月' },
+            { 'name': '正在成长的妈妈' },
+            { 'name': '别这样很呆啊' },
+          ],
+        },
+        { 'name': 'whowho密码',
+          'children': [
+            { 'name': 'tina咪咪' },
+          ],
+        },
+      ],
+    },
+    {
+      'name': '中国日报',
+      'children': [
+        { 'name': '清逸公子' },
+        { 'name': 'Mmin70' },
+        { 'name': '半朵桃花醉' },
+        { 'name': '羊增卉' },
+        { 'name': '天天天蓝28861' },
+        { 'name': '雯的幸福576' },
+        { 'name': '边梦龙长大不容易' },
+        { 'name': '陽光像花兒一樣多' },
+        {
+          'name': '草原900',
+          'children': [
+            { 'name': 'lower官建' },
+            { 'name': '杨朝阳80906' },
+            { 'name': '刘hulixiao' },
+          ],
+        },
+        { 'name': '闵行虹桥' },
+      ],
+    },
+    {
+      'name': '新华网',
+      'children': [
+        { 'name': '乌伦珠日格雲' },
+        { 'name': '小英子的大英子' },
+        { 'name': '容易满足的刘' },
+        { 'name': '青椒蕃茄poi' },
+        { 'name': '九州令' },
+        { 'name': '不喜欢公主喜欢女王' },
+        {
+          'name': '晴天懂',
+          'children': [
+            { 'name': '沉默呵呵' },
+            { 'name': '竹外小溪深处' },
+            { 'name': '梧凤之鸣w' },
+          ],
+        },
+        { 'name': '言轻莫劝人76846' },
+        {
+          'name': 'JW2014',
+          'children': [
+            { 'name': '半天上灰色瓶中船' },
+          ],
+        },
+      ],
+    },
+    {
+      'name': '央视新闻',
+      'children': [
+        { 'name': '盐澜HAlf' },
+        { 'name': '超极小杰' },
+        {
+          'name': '午后狂睡',
+          'children': [
+            { 'name': '泰拉乐猫' },
+            { 'name': '一健格式化' },
+            { 'name': '沙虫-剑无痕jjy' },
+            {
+              'name': 'Luuuuuuuhani',
+              'children': [
+                { 'name': '江停宝贝儿' },
+              ],
+            },
+            {
+              'name': '林六月',
+              'children': [
+                { 'name': 'CaryCox' },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      'name': '雷逍妖',
+      'children': [
+        { 'name': '少数派脉络' },
+        { 'name': '洛洛洛缇' },
+        {
+          'name': '午后狂睡',
+          'children': [
+            {
+              'name': '客官不要急',
+              'children': [
+                { 'name': '台前小子' },
+              ],
+            },
+            {
+              'name': '浪里赤条小粗林',
+              'children': [
+                { 'name': '艾琳·叶卡' },
+                { 'name': '527agp5tw47jdpgtamwg' },
+                { 'name': '吃口红豆糯米小方糕' },
+              ],
+            },
+          ],
+        },
+        {
+          'name': '卢诗翰',
+          'children': [
+            { 'name': '宸弥' },
+          ],
+        },
+        {
+          'name': '浪里赤条小粗林',
+          'children': [
+            {
+              'name': '豌豆蝴蝶结',
+              'children': [
+                { 'name': '心想事成的小圆饼儿' },
+              ],
+            },
+            {
+              'name': '酸橘子重度爱好者',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      'name': '央视新闻',
+      'children': [
+        { 'name': '一颗冰酸梅' },
+        { 'name': '没空玩的穷苦打工人' },
+        { 'name': '闪闪好闪呦' },
+        {
+          'name': '番茄酸西红柿甜',
+          'children': [
+            { 'name': 'TwentiethCenturyBot' },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+const data2 = {
+  'name': '',
+  'children': [
+    {
+      'name': '俄罗斯遭制裁',
+      'children': [
+        { 'name': '俄罗斯1亿卢布' },
+        { 'name': 'SWIFT' },
+        { 'name': '支付系统' },
+        { 'name': '俄罗斯银行' },
+        { 'name': '德国制裁',
+          'children': [
+            { 'name': '北溪二号' },
+            { 'name': '天然气' },
+          ] },
+      ],
+    },
+    {
+      'name': '泽连斯基',
+      'children': [
+        { 'name': '会谈' },
+        { 'name': '欧盟' },
+        { 'name': '导弹攻击' },
+        {
+          'name': '俄乌会谈',
+          'children': [
+            { 'name': '白俄罗斯' },
+            { 'name': '第二次俄乌会谈' },
+            { 'name': '联合国' },
+          ],
+        },
+      ],
+    },
+    {
+      'name': '俄乌冲突',
+      'children': [
+        {
+          'name': '基辅',
+          'children': [
+            { 'name': '撤离留学生' },
+            { 'name': '逼近基辅' },
+            { 'name': '自由离开基辅' },
+            { 'name': '俄乌谈判' },
+          ],
+        },
+        {
+          'name': '乌东',
+          'children': [
+            { 'name': '外交关系' },
+            { 'name': '乌克兰东部战线' },
+            { 'name': '展开特别军事行动' },
+          ],
+        },
+        {
+          'name': '北约',
+          'children': [
+            { 'name': '土耳其面临威胁' },
+            { 'name': '北约东扩' },
+            { 'name': '乌克兰危机' },
+            { 'name': '武器装备' },
+          ],
+        },
+        {
+          'name': '控制切尔诺贝利核电站',
+          'children': [
+            { 'name': '被破坏' },
+            { 'name': '利用核恐吓' },
+          ],
+        },
+      ],
+    },
+    {
+      'name': '车臣军事行动',
+      'children': [
+        { 'name': '乌克兰全境' },
+        { 'name': '特种部队遭歼灭' },
+        { 'name': '车臣士兵出现伤亡' },
+        { 'name': '效忠普京' },
+      ],
+    },
+  ],
+};
+
 class View extends React.Component {
   constructor() {
     super();
@@ -497,7 +784,7 @@ class View extends React.Component {
                 title="事件溯源"
                 type="connGraph"
                 size="big"
-                data={eventTree[fid]}
+                data={data2}
                 onClick={this.handleEventTreeClick}
               />
             </AutofitWrap>
@@ -511,7 +798,7 @@ class View extends React.Component {
                 title="微博溯源"
                 type="defaultTree"
                 size="big"
-                data={traceTree[fid]}
+                data={data1}
                 onClick={this.handleWeiboTreeClick}
               />
             </AutofitWrap>
@@ -525,7 +812,7 @@ class View extends React.Component {
                 title="微博溯源"
                 type="circleTree"
                 size="big"
-                data={traceTree[fid]}
+                data={data1}
                 onClick={this.handleWeiboTreeClick}
               />
             </AutofitWrap>
