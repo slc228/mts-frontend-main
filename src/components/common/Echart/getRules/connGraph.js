@@ -1,4 +1,3 @@
-
 const connGraph = (data, title, size) => ({
   title: {
     text: title,
@@ -10,9 +9,9 @@ const connGraph = (data, title, size) => ({
     formatter: (params) => {
       const { data } = params.data;
       return '<div style="max-width: 200px; display: inline-block; white-space: pre-wrap">' +
-        `<div>事件${data?.clusterNum}:</div>` +
+        // `<div>事件${data?.clusterNum}:</div>` +
         `<div>时间${data?.time}</div>` +
-        `<div style="max-height: 150px; overflow: hidden; text-overflow: ellipsis">${data?.summary}</div>` +
+      // `<div style="max-height: 150px; overflow: hidden; text-overflow: ellipsis">${data?.summary}</div>` +
       '</div>';
     },
     triggerOn: 'mousemove',

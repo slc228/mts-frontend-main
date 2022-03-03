@@ -3,7 +3,7 @@ import { Radio, Input, Form, Divider, DatePicker } from 'antd';
 import criteria from './criteria';
 import './MultiFilter.scss';
 
-class MultiFilter extends React.Component {
+class VideoMultiFilter extends React.Component {
   handleSelect = (event, type) => {
     if (this.props.onSelect) {
       this.props.onSelect(type, event.target.value);
@@ -176,4 +176,4 @@ class MultiFilter extends React.Component {
   }
 }
 
-export default MultiFilter;
+export default VideoMultiFilter;

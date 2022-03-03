@@ -167,7 +167,7 @@ class Overall extends Component {
   };
 
   handleSearchWithObject = async () => {
-    await this.setState({ loading: true });
+    await this.setState({ loading: true, data: {} });
     const { keyword, source, startPublishedDay, endPublishedDay, sensitiveType, emotion, timeOrder, pageSize, pageId, data, keywords } = this.state;
     const params = [keyword, source, startPublishedDay, endPublishedDay, sensitiveType, emotion, timeOrder, pageSize, pageId, keywords];
     console.log(keywords);

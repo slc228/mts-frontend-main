@@ -7,7 +7,7 @@ const defaultTree = (data, title, size) => ({
     trigger: 'item',
     formatter: (params) => {
       const { data } = params.data;
-      return `<div style="max-width: 200px; display: inline-block; white-space: pre-wrap">${data?.author || 'root'}\n${data?.content}</div>`;
+      // return `<div style="max-width: 200px; display: inline-block; white-space: pre-wrap">${data?.author || 'root'}\n${data?.content}</div>`;
     },
     triggerOn: 'mousemove',
   },

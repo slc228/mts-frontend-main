@@ -106,6 +106,8 @@ const requests = {
   addWarningReceiver: { url: `${curDomain}/data/addWarningReceiver`, method: 'GET' },
   deleteWarningReceiver: { url: `${curDomain}/data/deleteWarningReceiver`, method: 'GET' },
   getAllWarningRecord: { url: `${curDomain}/data/getWarningRecord`, method: 'GET' },
+
+  getVideoData: { url: `${curDomain}/data/getVideoData`, method: 'GET' },
 };
 
 export default requests;

@@ -102,6 +102,8 @@ class BriefingGeneration extends React.Component {
       templateId: undefined,
       title: undefined,
       header: undefined,
+      time: moment().format(DATE_FORMAT2),
+      version: '第（）期',
       echartsData: [],
     };
     this.briefingColumns = [
@@ -433,16 +435,22 @@ class BriefingGeneration extends React.Component {
     const { templateList } = this.state;
     let header = '';
     let templateId = 0;
+    let version = '';
+    let time = '';
     templateList.forEach((item) => {
       if (item.title === value) {
         header = item.institution;
         templateId = item.id;
+        version = item.version;
+        time = moment(item.time).format(DATE_FORMAT2);
       }
     });
     this.setState({
       title: value,
       header,
       templateId,
+      version,
+      time,
     });
   };
 
@@ -480,7 +488,7 @@ class BriefingGeneration extends React.Component {
 
   render() {
     const { fid } = this.props.curProgramme;
-    const { current, materiallibs, curmateriallib, loading, data, dataSize, selectedRowKeys, visible, curRecord, templateList, title, header, briefingfiles } = this.state;
+    const { current, materiallibs, curmateriallib, loading, data, dataSize, selectedRowKeys, visible, curRecord, templateList, title, header, briefingfiles, time, version } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -634,11 +642,11 @@ class BriefingGeneration extends React.Component {
                             <Input className="title-input" value={title} bordered={false} />
                           </div>
                           <div className="subtitle-div">
-                            <Input className="subtitle-input" defaultValue="第（）期" bordered={false} />
+                            <Input className="subtitle-input" value={version} bordered={false} />
                           </div>
                           <div className="tinytitle-div">
                             <Input className="institution" value={header} bordered={false} />
-                            <Input className="time" defaultValue={moment().format(DATE_FORMAT2)} bordered={false} />
+                            <Input className="time" value={time} bordered={false} />
                           </div>
                         </div>
                         <Divider className="briefing-divider" style={{ color: 'red', border: 'red' }}><StarOutlined /></Divider>
@@ -653,7 +661,7 @@ class BriefingGeneration extends React.Component {
                             </div>
                             <Divider />
                             <div className="briefing-dimension-content">
-                              <Input.TextArea rows={4} />
+                              <Input.TextArea rows={4} disabled />
                             </div>
                           </div>
                         </div>

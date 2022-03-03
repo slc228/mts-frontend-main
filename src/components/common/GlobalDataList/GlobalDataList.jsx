@@ -103,12 +103,13 @@ class GlobalDataList extends React.Component {
       return <LoadingOutlined />;
     };
 
-    renderTitle = (text, record) => {
-      const { content, source } = record;
-      let renderTxt = '';
-      if (content) {
-        renderTxt = `${content.slice(0, 100)}`;
-      }
+  renderTitle = (text, record) => {
+    const { content, resource } = record;
+    let renderTxt = '';
+    if (content) {
+      renderTxt = `${content.slice(0, 100)}`;
+    }
+    if (resource === '新浪微博') {
       return (
         <div
           onClick={() => this.handleTitleClicked(record)}
@@ -117,11 +118,23 @@ class GlobalDataList extends React.Component {
           <a>
             {text}
           </a>
-          <div className="graySpan">{renderTxt}</div>
         </div>
 
       );
-    };
+    }
+    return (
+      <div
+        onClick={() => this.handleTitleClicked(record)}
+        className="title-content"
+      >
+        <a>
+          {text}
+        </a>
+        <div className="graySpan">{renderTxt}</div>
+      </div>
+
+    );
+  };
 
     handleOpen = (text) => {
       window.open(text);

@@ -235,79 +235,88 @@ const genEchartsImages = async (fid, name, item) => {
     'children': [
       {
         'name': '俄罗斯遭制裁',
+        'data': { 'time': '2022-02-24 12:28' },
         'children': [
-          { 'name': '俄罗斯1亿卢布' },
-          { 'name': 'SWIFT' },
-          { 'name': '支付系统' },
-          { 'name': '俄罗斯银行' },
+          { 'name': '俄罗斯1万亿卢布', 'data': { 'time': '2022-03-01 20:14' } },
+          { 'name': 'SWIFT', 'data': { 'time': '2022-02-27 06:42' } },
+          { 'name': '支付系统', 'data': { 'time': '2022-02-27 01:54' } },
+          { 'name': '俄罗斯银行', 'data': { 'time': '2022-02-28 08:52' } },
           { 'name': '德国制裁',
+            'data': { 'time': '2022-02-26 15:53' },
             'children': [
-              { 'name': '北溪二号' },
-              { 'name': '天然气' },
+              { 'name': '北溪二号', 'data': { 'time': '2022-02-27 20:01' } },
+              { 'name': '天然气', 'data': { 'time': '2022-02-28 09:02' } },
             ] },
         ],
       },
       {
         'name': '泽连斯基',
+        'data': { 'time': '2022-02-22 07:24' },
         'children': [
-          { 'name': '会谈' },
-          { 'name': '欧盟' },
-          { 'name': '导弹攻击' },
+          { 'name': '会谈', 'data': { 'time': '2022-02-26 14:23' } },
+          { 'name': '欧盟', 'data': { 'time': '2022-03-01 00:08' } },
+          { 'name': '导弹攻击', 'data': { 'time': '2022-02-28 17:01' } },
           {
             'name': '俄乌会谈',
+            'data': { 'time': '2022-02-28 18:36' },
             'children': [
-              { 'name': '白俄罗斯' },
-              { 'name': '第二次俄乌会谈' },
-              { 'name': '联合国' },
+              { 'name': '白俄罗斯', 'data': { 'time': '2022-02-28 19:01' } },
+              { 'name': '第二次俄乌会谈', 'data': { 'time': '2022-03-01 19:31' } },
+              { 'name': '联合国', 'data': { 'time': '2022-03-02 01:57' } },
             ],
           },
         ],
       },
       {
+        'name': '乌东',
+        'data': { 'time': '2022-02-22 23:26' },
+        'children': [
+          { 'name': '外交关系', 'data': { 'time': '2022-02-23 07:17' } },
+          { 'name': '乌克兰东部战线', 'data': { 'time': '2022-02-24 12:56' } },
+          { 'name': '展开特别军事行动', 'data': { 'time': '2022-02-24 11:34' } },
+        ],
+      },
+      {
         'name': '俄乌冲突',
+        'data': { 'time': '2022-02-24 11:26' },
         'children': [
           {
             'name': '基辅',
+            'data': { 'time': '2022-02-24 14:42' },
             'children': [
-              { 'name': '撤离留学生' },
-              { 'name': '逼近基辅' },
-              { 'name': '自由离开基辅' },
-              { 'name': '俄乌谈判' },
-            ],
-          },
-          {
-            'name': '乌东',
-            'children': [
-              { 'name': '外交关系' },
-              { 'name': '乌克兰东部战线' },
-              { 'name': '展开特别军事行动' },
+              { 'name': '撤离留学生', 'data': { 'time': '2022-03-01 02:34' } },
+              { 'name': '逼近基辅', 'data': { 'time': '2022-02-24 20:01' } },
+              { 'name': '自由离开基辅', 'data': { 'time': '2022-02-28 19:01' } },
+              { 'name': '俄乌谈判', 'data': { 'time': '2022-02-28 18:02' } },
             ],
           },
           {
             'name': '北约',
+            'data': { 'time': '2022-02-25 21:55' },
             'children': [
-              { 'name': '土耳其面临威胁' },
-              { 'name': '北约东扩' },
-              { 'name': '乌克兰危机' },
-              { 'name': '武器装备' },
+              { 'name': '土耳其面临威胁', 'data': { 'time': '2022-02-26 02:35' } },
+              { 'name': '北约东扩', 'data': { 'time': '2022-02-26 01:05' } },
+              { 'name': '武器装备', 'data': { 'time': '2022-02-26 15:48' } },
             ],
           },
           {
             'name': '控制切尔诺贝利核电站',
+            'data': { 'time': '2022-02-25 01:25' },
             'children': [
-              { 'name': '被破坏' },
-              { 'name': '利用核恐吓' },
+              { 'name': '被破坏', 'data': { 'time': '2022-02-26 03:02' } },
+              { 'name': '利用核恐吓', 'data': { 'time': '2022-02-27 15:16' } },
             ],
           },
         ],
       },
       {
         'name': '车臣军事行动',
+        'data': { 'time': '2022-02-25 23:25' },
         'children': [
-          { 'name': '乌克兰全境' },
-          { 'name': '特种部队遭歼灭' },
-          { 'name': '车臣士兵出现伤亡' },
-          { 'name': '效忠普京' },
+          { 'name': '乌克兰全境', 'data': { 'time': '2022-02-27 16:02' } },
+          { 'name': '特种部队遭歼灭', 'data': { 'time': '2022-02-28 12:49' } },
+          { 'name': '车臣士兵出现伤亡', 'data': { 'time': '2022-03-01 16:46' } },
+          { 'name': '效忠普京', 'data': { 'time': '2022-02-26 02:03' } },
         ],
       },
     ],
@@ -316,7 +325,7 @@ const genEchartsImages = async (fid, name, item) => {
     const wordNumber = 50;
     const keywordsCloud = await getKeywordsCloud(fid, startTime, endTime, wordNumber);
     const divCloud = document.createElement('div');
-    const wordCloud = echarts.init(divCloud, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const wordCloud = echarts.init(divCloud, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     wordCloud.resize();
     const option = {
       // backgroundColor: '#100c2A',
@@ -356,7 +365,7 @@ const genEchartsImages = async (fid, name, item) => {
   if (dimension[item - 1].name === '敏感度分布') {
     const sensiLayout = await getProgrammeSensiLayout(fid, undefined, undefined);
     const div = document.createElement('div');
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
     const data = doughnutPie(sensiLayout, '敏感度分布', 'small');
     mychart.setOption(data, true);
@@ -368,9 +377,9 @@ const genEchartsImages = async (fid, name, item) => {
   if (dimension[item - 1].name === '来源分布') {
     const sourceLayout = await getProgrammeSourceLayout(fid, undefined, undefined);
     const div = document.createElement('div');
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
-    const data = defaultPie(sourceLayout, '来源分布', 'big');
+    const data = defaultPie(sourceLayout, '来源分布', 'small');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });
     ret.name = '来源分布';
@@ -381,9 +390,9 @@ const genEchartsImages = async (fid, name, item) => {
     const totalAmountTrend = await getProgrammeTotalAmountTrend(fid, startTime, endTime);
     // const [totalAmountTrend, sourceAmountTrend] = await getProgrammeAmountTrend(fid, startTime, endTime);
     const div = document.createElement('div');
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
-    const data = areaLine(totalAmountTrend, '总量趋势', 'big');
+    const data = areaLine(totalAmountTrend, '总量趋势', 'small');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });
     ret.name = '总量趋势';
@@ -394,9 +403,9 @@ const genEchartsImages = async (fid, name, item) => {
     const sourceAmountTrend = await getProgrammeSourceTrend(fid, startTime, endTime);
     // const [totalAmountTrend, sourceAmountTrend] = await getProgrammeAmountTrend(fid, startTime, endTime);
     const div = document.createElement('div');
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
-    const data = horizontalBar(sourceAmountTrend, '来源趋势', 'big');
+    const data = horizontalBar(sourceAmountTrend, '来源趋势', 'small');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });
     ret.name = '来源趋势';
@@ -407,9 +416,9 @@ const genEchartsImages = async (fid, name, item) => {
     const regionLayout = await getProgrammeRegionLayout(fid, undefined, undefined);
     const div = document.createElement('div');
     echarts.registerMap('china', china);
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
-    const data = chinaMap(regionLayout, '地域分布', 'big');
+    const data = chinaMap(regionLayout, '地域分布', 'small');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });
     ret.name = '地域分布';
@@ -419,9 +428,9 @@ const genEchartsImages = async (fid, name, item) => {
   if (dimension[item - 1].name === '情感分析') {
     const emotionLayout = await getProgrammeSentimentLayout(fid, undefined, undefined);
     const div = document.createElement('div');
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
-    const data = defaultPie(emotionLayout, '情感分析', 'big');
+    const data = defaultPie(emotionLayout, '情感分析', 'small');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });
     ret.name = '情感分析';
@@ -431,9 +440,9 @@ const genEchartsImages = async (fid, name, item) => {
   if (dimension[item - 1].name === '情感趋势图') {
     const emotionTrend = await getProgrammeSentimentTrend(fid, startTime, endTime);
     const div = document.createElement('div');
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
-    const data = horizontalBar(emotionTrend, '情感趋势图', 'big');
+    const data = horizontalBar(emotionTrend, '情感趋势图', 'small');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });
     ret.name = '情感趋势图';
@@ -461,9 +470,9 @@ const genEchartsImages = async (fid, name, item) => {
     //   });
     // }
     const div = document.createElement('div');
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
-    const data = defaultTree(data2, '事件溯源', 'big');
+    const data = defaultTree(data2, '事件溯源', 'small');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });
     ret.name = '事件溯源';
@@ -481,9 +490,9 @@ const genEchartsImages = async (fid, name, item) => {
     }
     traceTree.name = name;
     const div = document.createElement('div');
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
-    const data = defaultTree(data1, '微博溯源树形图', 'big');
+    const data = defaultTree(data1, '微博溯源树形图', 'small');
     // const data = defaultTree(traceTree, '微博溯源树形图', 'big');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });
@@ -502,9 +511,9 @@ const genEchartsImages = async (fid, name, item) => {
     }
     traceTree.name = name;
     const div = document.createElement('div');
-    const mychart = echarts.init(div, 'light', { width: '500px', height: '280px', renderer: 'canvas' });
+    const mychart = echarts.init(div, 'light', { width: '500px', height: '600px', renderer: 'canvas' });
     mychart.resize();
-    const data = circleTree(data1, '微博溯源扩散图', 'big');
+    const data = circleTree(data1, '微博溯源扩散图', 'small');
     // const data = circleTree(traceTree, '微博溯源扩散图', 'big');
     mychart.setOption(data, true);
     const str = mychart.getDataURL({ backgroundColor: '#fff' });

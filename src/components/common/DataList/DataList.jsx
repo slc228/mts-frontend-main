@@ -121,10 +121,23 @@ class DataList extends React.Component {
   };
 
   renderTitle = (text, record) => {
-    const { content, source } = record;
+    const { content, resource } = record;
     let renderTxt = '';
     if (content) {
       renderTxt = `${content.slice(0, 100)}`;
+    }
+    if (resource === '新浪微博') {
+      return (
+        <div
+          onClick={() => this.handleTitleClicked(record)}
+          className="title-content"
+        >
+          <a>
+            {text}
+          </a>
+        </div>
+
+      );
     }
     return (
       <div
