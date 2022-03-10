@@ -119,7 +119,9 @@ class DataContent extends React.Component {
     const { contentSlice } = this.state;
     return (
       <Modal
-        title={title}
+        title={
+          resource === '新浪微博' ? '' : title
+        }
         visible={visible}
         onCancel={handleModalCancel}
         wrapClassName="mts-data-list"
